@@ -14,6 +14,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/category.css">
   <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -74,32 +75,33 @@
 </nav>
 
   <div class="container nav-margin">
-    <!-- <h1>Python (2)</h1>
+    
+<h1>Python</h1>
+  
+      <div class="post-list">
+        <div class="post-card">
+          <h2><a href="/python/2021/01/18/container/" class="link-post_list">[Python] 컨테이너</a></h2>
+          <p class="post-meta">21-01-18</p>
+          <div class="post-list-content">
+              <p><br /></p>
 
-  <a href="/python/2021/01/21/errorExeption/">
-    [Python] 에러 처리
-  </a>
-  <p>21-01-21</p>
-  <hr>
-
-  <a href="/python/2021/01/18/container/">
-    [Python] 컨테이너
-  </a>
-  <p>21-01-18</p>
-  <hr>
- -->
-
-
-    <div class="post-list">
-        <h2><a href="/python/2021/01/18/container/" class="link-post_list">[Python] 컨테이너</a></h2>
-        <p class="post-meta">21-01-18</p>
-        <div class="post-list-content">
-            <p><br /></p>
-
-            <p class="text-right"><a href="/python/2021/01/18/container/">read more...</a></p>
+              <p class="text-right"><a href="/python/2021/01/18/container/">read more...</a></p>
+          </div>
         </div>
-    </div>
+      </div>
+  
 
+<script src="/assets/script/infiniteScroll.js"></script>
+<script>
+  const postWrapper = '.post-list';
+  const paginatePath = "page";
+  const hostStart = window.location.href.indexOf(window.location.hostname) + window.location.hostname.length;
+  let categoryString = window.location.href.slice(hostStart, window.location.href.length);
+  if (categoryString[0] === ':'){
+    categoryString = categoryString.slice(5, categoryString.length);
+  }
+  new InfiniteScroll(paginatePath, postWrapper, categoryString);
+</script>
 
   </div>
   <button class="up-arrow">

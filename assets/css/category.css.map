@@ -1,0 +1,14 @@
+{
+	"version": 3,
+	"file": "category.css",
+	"sources": [
+		"category.scss",
+		"assets/_sass/category.scss"
+	],
+	"sourcesContent": [
+		"@charset \"utf-8\";\n@import \"category\";",
+		".post-list {\r\n  border: 2px solid red;\r\n}\r\n.post-card {\r\n  height: 100vh;\r\n}"
+	],
+	"names": [],
+	"mappings": "ACAA,AAAA,UAAU,AAAC,CACT,MAAM,CAAE,aAAa,CACtB,AACD,AAAA,UAAU,AAAC,CACT,MAAM,CAAE,KAAK,CACd"
+}

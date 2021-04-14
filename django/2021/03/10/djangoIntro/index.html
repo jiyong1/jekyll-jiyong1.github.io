@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[django] Intro</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    
+<h1 id="django-intro">[django] Intro</h1>
+
+<h2 id="intro">Intro</h2>
+
+<blockquote>
+  <ol>
+    <li>python version 3.8 확인</li>
+    <li>vscode django extension 설치 및 설정 확인</li>
+  </ol>
+</blockquote>
+
+<p><strong>설치</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>django
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>특정 버전 설치</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span><span class="nv">django</span><span class="o">==</span>x.x.x
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>설치 확인</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip list
+<span class="c"># python -m django --version</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>프로젝트 생성</strong></p>
+
+<blockquote>
+  <p>[주의]</p>
+
+  <p>project 를 생성할 때, Python 이나 Django 에서 사용중인 이름은 피해야 한다.</p>
+
+  <p><code class="language-plaintext highlighter-rouge">-</code> 도 사용할 수 없다. (ex. django, test, class, django-test…)</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>django-admin startproject first_project
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>서버 실행</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py runserver
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>프로젝트 구조</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">__init__.py</code>
+    <ul>
+      <li>빈 파일</li>
+      <li>Python에게 이 디렉토리를 하나의 Python 패키지로 다루도록 지시</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">settings.py</code>
+    <ul>
+      <li>웹사이트의 모든 설정을 포함</li>
+      <li>우리가 만드는 어떤 application이라도 등록이 되는 곳이며, static files의 위치, database 세부 설정 등이 작성</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">urls.py</code>
+    <ul>
+      <li>사이트의 url와 view의 연결을 지정</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">wsgi.py</code>
+    <ul>
+      <li>Web Server Gateway Interface</li>
+      <li>장고 어플리케이션이 웹서버와 연결 및 소통하는 것을 도움</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">asgi.py</code>
+    <ul>
+      <li>new in 3.0</li>
+      <li>Asynchronous Server Gateway Interface</li>
+      <li>장고 어플리케이션이 비동기식 웹 서버와 연결 및 소통하는 것을 도움</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Application 생성</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py startapp articles
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>Application (app)</strong></p>
+
+<ul>
+  <li>실제로 어떠한 역할을 해주는 친구가 app.</li>
+  <li>프로젝트는 이러한 app의 집합이고, 실제 요청을 처리하고 페이지를 보여주고 하는 것들은 이 app의 역할.</li>
+  <li>하나의 프로젝트는 여러 개의 app을 가질 수 있다.
+    <ul>
+      <li>app은 하나의 역할 및 기능 단위로 쪼개는 것이 일반적</li>
+      <li>그러나 작은 규모의 서비스에서는 잘 나누지 않으며 반드시 이렇게 나눠야 한다 같은 기준 또한 없다.</li>
+    </ul>
+  </li>
+  <li><strong>일반적으로 app 이름은 <code class="language-plaintext highlighter-rouge">복수형</code>으로 작성 하는 것을 권장한다.</strong></li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Application 구조</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">admin.py</code>
+    <ul>
+      <li>관리자용 페이지 관련 기능을 작성 하는 곳.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">apps.py</code>
+    <ul>
+      <li>앱의 정보가 있는 곳.</li>
+      <li>우리는 수정할 일이 없다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">models.py</code>
+    <ul>
+      <li>앱에서 사용하는 Model(Database)를 정의하는 곳.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">tests.py</code>
+    <ul>
+      <li>테스트 코드를 작성하는 곳.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">views.py</code>
+    <ul>
+      <li>view가 정의 되는 곳.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Application 등록</strong></p>
+
+<blockquote>
+  <p>반드시 <strong>app 생성 후 등록</strong> 순서를 지켜야한다.</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>방금 생성한 app을 사용하려면 프로젝트에 등록 해야 한다.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py
+</span>  
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+	<span class="s">'articles'</span><span class="p">,</span>
+    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="s">'django.contrib.staticfiles'</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>    </div>
+
+    <blockquote>
+      <p>INSTALLED_APPS의 app order</p>
+
+      <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Local apps
+</span>    <span class="s">'blogs'</span><span class="p">,</span>
+
+    <span class="c1"># Third party apps
+</span>    <span class="s">'haystack'</span><span class="p">,</span>
+
+    <span class="c1"># Django apps
+</span>    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sites'</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>      </div>
+    </blockquote>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>MTV 패턴</strong></p>
+
+<p><img src="/assets/images/00_django_intro.assets/img_02.png" alt="img_02" /></p>
+
+<p><strong>model</strong></p>
+
+<ul>
+  <li>응용프로그램의 데이터 구조를 정의하고 데이터베이스의 기록을 관리(추가, 수정, 삭제)</li>
+</ul>
+
+<p><strong>template</strong></p>
+
+<ul>
+  <li>파일의 구조나 레이아웃을 정의</li>
+  <li>실제 내용을 보여주는 데 사용 (presentation)</li>
+</ul>
+
+<p><strong>view</strong></p>
+
+<ul>
+  <li>HTTP 요청을 수신하고 HTTP 응답을 반환</li>
+  <li>Model을 통해 요청을 충족시키는데 필요한 데이터에 접근</li>
+  <li>그리고 탬플릿에게 응답의 서식 설정을 맡김</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>.py 3대장 기억하기</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">urls.py</code> : 주소(URL) 관리</li>
+  <li><code class="language-plaintext highlighter-rouge">views.py</code> : 페이지 관리 (페이지 하나 당, 하나의 함수)</li>
+  <li><code class="language-plaintext highlighter-rouge">models.py</code> : 데이터베이스 관리</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Internationalization</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/topics/i18n/</p>
+
+  <p>http://www.i18nguy.com/unicode/language-identifiers.html</p>
+
+  <p>https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py
+</span>
+<span class="n">LANGUAGE_CODE</span> <span class="o">=</span> <span class="s">'ko-kr'</span>
+
+<span class="n">TIME_ZONE</span> <span class="o">=</span> <span class="s">'Asia/Seoul'</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">runserver</code> <strong>Automatic reloading</strong></p>
+
+<ul>
+  <li>개발 서버는 요청이 들어올 때마다(코드가 저장될 때 마다) 자동으로 Python 코드를 다시 불러온다.</li>
+  <li>코드의 변경사항을 반영하기 위해서 굳이 서버를 재가동 하지 않아도 된다.</li>
+  <li>그러나, 파일을 추가하는 등의 몇몇의 동작(커스텀 필터, 새로운 모듈 추가 등)은 개발 서버가 자동으로 인식하지 못하기 때문에, 이런 상황에서는 서버를 재가동 해야 적용되는 경우도 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h3 id="요청과-응답">요청과 응답</h3>
+
+<p><strong>urls.py</strong></p>
+
+<ul>
+  <li>
+    <p>장고 서버로 요청(request)이 들어오면, 그 요청이 어디로 가야하는지 인식하고 관련된 함수(view)로 넘겨준다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">views.py</code> 에서 만든 함수를 연결시켜준다.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># first_project/urls.py
+</span>  
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">articles</span> <span class="kn">import</span> <span class="n">views</span>
+  
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'index/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">index</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>views.py</strong></p>
+
+<ul>
+  <li>HTTP 요청을 수신하고 HTTP 응답을 반환하는 함수 작성</li>
+  <li>Model을 통해 요청에 맞는 필요 데이터에 접근</li>
+  <li>tempate에게 HTTP 응답 서식을 맡김</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span> <span class="c1"># 첫번째 인자는 반드시 request
+</span>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'index.html'</span><span class="p">)</span> <span class="c1"># render의 첫번째 인자도 반드시 request
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>Templates</strong></p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">views.py</code>에서 지정한 <code class="language-plaintext highlighter-rouge">index.html</code> 파일을 만들자.</p>
+  </li>
+  <li>
+    <p>Django에서 template이라고 부르는 HTML 파일은 기본적으로 <strong>app 폴더안의 templates 폴더 안에 위치</strong>한다.</p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/templates/index.html --&gt;</span>
+  
+<span class="nt">&lt;h1&gt;</span>만나서 반갑습니다!<span class="nt">&lt;/h1&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="template">Template</h2>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/topics/templates/#module-django.template</p>
+
+  <p>데이터 표현을 제어하는 도구이자 표현에 관련된 로직</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="django-template-language">Django template language</h3>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/templates/language/</p>
+
+  <p>https://docs.djangoproject.com/ko/3.1/ref/templates/builtins/#built-in-template-tags-and-filters</p>
+</blockquote>
+
+<ul>
+  <li>django template에서 사용하는 built-in template system</li>
+  <li>조건, 반복, 변수 치환, 필터 등의 기능을 제공</li>
+  <li>Django 템플릿 시스템은 단순히 Python이 HTML에 포함 된 것이 아님
+    <ul>
+      <li>프로그래밍적 로직이 아니라 프레젠테이션을 표현하기 위한 것</li>
+    </ul>
+  </li>
+  <li>파이썬처럼 일부 프로그래밍 구조(if, for 등)를 사용할 수 있지만 이건 해당 Python 코드로 실행되는 것이 아님</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>syntax</strong></p>
+
+<ol>
+  <li>variables</li>
+</ol>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">{{ variables }}</code></p>
+  </li>
+  <li>변수명은 영,숫자와 밑줄(_)의 조합으로 구성될 수 있으나 밑줄로는 시작 할 수 없음</li>
+  <li>변수명에 공백이나 구두점 문자를 사용할 수 없음</li>
+  <li><code class="language-plaintext highlighter-rouge">dot(.)</code>를 사용하여 변수 속성에 접근</li>
+</ul>
+
+<p><br /></p>
+
+<ol>
+  <li>Filters</li>
+</ol>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">{{ variable|filter }}</code></li>
+  <li>표시할 변수를 수정</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>파이프(</td>
+          <td>)를 사용하여 적용</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ol>
+  <li>Tags</li>
+</ol>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">{% tag %}</code></li>
+  <li>출력 테스트를 만들거나 반복 또는 논리를 수행하여 제어 흐름을 만드는 등 보다 복잡한 일들을 수행</li>
+  <li>일부 태그는 시작과 종료 태그가 필요(<code class="language-plaintext highlighter-rouge">{% tag %}</code> … <code class="language-plaintext highlighter-rouge">{% endtag %}</code>)</li>
+</ul>
+
+<p><br /></p>
+
+<ol>
+  <li>Comments</li>
+</ol>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">{# lorem #}</code></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="template-inheritance">Template inheritance</h3>
+
+<blockquote>
+  <p>https://docs.python.org/ko/3.9/library/pathlib.html#module-pathlib</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>템플릿 상속은 기본적으로 코드의 재사용성에 초점을 맞춤</p>
+  </li>
+  <li>
+    <p>템플릿 상속을 사용하면 사이트의 모든 공통 요소를 포함하고, 하위 템플릿이 재정의(override) 할 수있는 블록을 정의하는 기본 “skeleton” 템플릿을 만들 수 있음</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py
+</span>  
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="p">...,</span>
+        <span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span><span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s">'firstpjt'</span> <span class="o">/</span> <span class="s">'templates'</span><span class="p">],</span>
+<span class="p">...</span>
+<span class="p">]</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">app_name/templates</code> 디렉토리 외 추가 경로 설정</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">extends</code> tag</strong></p>
+
+<ul>
+  <li>자식(하위)템플릿이 부모 템플릿을 확장한다는 것을 알림</li>
+  <li>반드시 템플릿 최상단에 위치해야 함(== 템플릿의 첫번째 템플릿 태그여야 함)
+    <ul>
+      <li>즉, 2개 이상 사용할 수 없음</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">block</code> tag</strong></p>
+
+<ul>
+  <li>
+    <p>하위 템플릿에서 재지정(overriden)할 수 있는 블록을 정의</p>
+  </li>
+  <li>
+    <p>하위 템플릿이 채울 수 있는 공간</p>
+  </li>
+  <li>
+    <p>가독성을 높이기 위해 선택적으로 <code class="language-plaintext highlighter-rouge">{% endblock %}</code> 태그에 이름 지정</p>
+
+    <div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">content</span> <span class="cp">%}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Template system</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/ko/3.1/misc/design-philosophies/#template-system</p>
+</blockquote>
+
+<ol>
+  <li>표현과 로직(view)을 분리</li>
+</ol>
+
+<ul>
+  <li>우리는 템플릿 시스템이 표현을 제어하는 도구이자 표현에 관련된 로직일 뿐이라고 봅니다.</li>
+  <li>템플릿 시스템은 이러한 기본 목표를 넘어서는 기능을 지원하지 말아야 합니다.</li>
+</ul>
+
+<ol>
+  <li>중복을 배제</li>
+</ol>
+
+<ul>
+  <li>대다수의 동적 웹사이트는 공통 헤더, 푸터, 네이게이션 바 같은 사이트 공통 디자인을 갖습니다.</li>
+  <li>Django 템플릿 시스템은 이러한 요소를 한 곳에 저장하기 쉽게 하여 중복 코드를 없애야 합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="html-form">HTML Form</h2>
+
+<p><strong>HTML <code class="language-plaintext highlighter-rouge">&lt;form&gt;</code> element</strong></p>
+
+<ul>
+  <li>웹에서 사용자 정보를 입력하는 여러 방식(text, button, checkbox, file, hidden, image, password, radio, reset, submit)을 제공하고, 사용자로부터 할당된 데이터를 서버로 전송하는 역할을 담당</li>
+  <li>핵심 속성
+    <ul>
+      <li>action : 입력 데이터가 전송될 URL 지정</li>
+      <li>method : 입력 데이터 전달 방식 지정</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>HTML <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code> element</strong></p>
+
+<ul>
+  <li>사용자로부터 데이터를 입력 받기 위해 사용</li>
+  <li><code class="language-plaintext highlighter-rouge">type</code> 속성에 따라 동작 방식이 달라짐</li>
+  <li>핵심 속성
+    <ul>
+      <li><strong>name</strong></li>
+      <li>중복 가능, 양식을 제출했을 때 name이라는 이름에 설정된 값을 넘겨서 값을 가져올 수 있음</li>
+      <li>주요 용도는 GET/POST 방식으로 서버에 전달하는 파라미터(name 은 key , value 는 value)로 <code class="language-plaintext highlighter-rouge">?key=value&amp;key=value</code> 형태로 전달</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="http-request-methods">HTTP request methods</h3>
+
+<p><strong>HTTP</strong></p>
+
+<ul>
+  <li>HTML 문서와 같은 리소스들을 가져올 수 있도록 해주는 프로토콜(규칙, 규약)</li>
+  <li>웹에서 이루어지는 모든 데이터 교환의 기초</li>
+  <li>HTTP는 주어진 리소스가 수행 할 원하는 작업을 나타내는 request methods를 정의</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>GET</strong></p>
+
+<ul>
+  <li>서버로부터 <strong>정보를 조회</strong>하는 데 사용</li>
+  <li>데이터를 가져올 때만 사용해야 함</li>
+  <li>데이터를 서버로 전송할 때 body가 아닌 <strong>Query String Parameters</strong>를 통해 전송</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>throw &amp; catch</strong></p>
+
+<ul>
+  <li>
+    <p>throw</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># first_project/urls.py
+</span>  
+<span class="n">path</span><span class="p">(</span><span class="s">'throw/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">throw</span><span class="p">),</span>
+</code></pre></div>    </div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py 
+</span>  
+<span class="k">def</span> <span class="nf">throw</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'throw.html'</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/templates/throw.html --&gt;</span>
+  
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/catch/"</span> <span class="na">method=</span><span class="s">"GET"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"message"</span><span class="nt">&gt;</span>Throw<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"message"</span> <span class="na">name=</span><span class="s">"message"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>catch</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># first_project/urls.py
+</span>  
+<span class="n">path</span><span class="p">(</span><span class="s">'catch/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">catch</span><span class="p">),</span>
+</code></pre></div>    </div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>  
+<span class="k">def</span> <span class="nf">catch</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">GET</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'message'</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'message'</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'catch.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/templates/catch.html --&gt;</span>
+  
+<span class="nt">&lt;h1&gt;</span>너가 던져서 내가 받은건 <span class="cp">{{</span> <span class="nv">message</span> <span class="cp">}}</span>야!<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/throw/"</span><span class="nt">&gt;</span>뒤로<span class="nt">&lt;/a&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Request object</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/request-response/#module-django.http</p>
+</blockquote>
+
+<ul>
+  <li>요청 간의 모든 정보를 담고 있는 변수</li>
+  <li>페이지가 요청되면 Django는 요청에 대한 메타 데이터를 포함하는 <code class="language-plaintext highlighter-rouge">HttpRequest</code> 객체를 만들고</li>
+  <li>그런 다음 Django는 적절한 view 함수를 로드하고 <code class="language-plaintext highlighter-rouge">HttpRequest</code>를 뷰 함수의 첫 번째 인수로 전달.</li>
+  <li>그리고 각 view는 <code class="language-plaintext highlighter-rouge">HttpResponse</code> 개체를 반환한다.</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="urls">URLs</h2>
+
+<blockquote>
+  <p>웹 어플리케이션은 URL을 통한 클라이언트의 요청에서부터 시작</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="variable-routing">Variable routing</h3>
+
+<ul>
+  <li>동적 라우팅
+    <ul>
+      <li>주소 자체를 변수처럼 사용해서 동적으로 주소를 만드는 것</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># urls.py
+</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">...,</span>
+    <span class="c1"># path('hello/&lt;name&gt;/', views.hello),
+</span>    <span class="n">path</span><span class="p">(</span><span class="s">'hello/&lt;str:name&gt;/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">hello</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># views.py
+</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'name'</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'hello.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- hello.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>만나서 반가워요 <span class="cp">{{</span> <span class="nv">name</span> <span class="cp">}}</span>님!<span class="nt">&lt;/h1&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="app-url-mapping">App URL mapping</h3>
+
+<blockquote>
+  <p>하나의 프로젝트의 여러 앱이 존재한다면, 각각의 앱 안에 urls.py을 만들고 프로젝트 urls.py에서 각 앱의 urls.py 파일로 URL 매핑을 위탁하게 가능</p>
+</blockquote>
+
+<p><strong>두번째 app 생성 및 등록</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py startapp pages
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'articles'</span><span class="p">,</span>
+    <span class="s">'pages'</span><span class="p">,</span>
+    <span class="p">...,</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span> 
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'index/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">index</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'greeting/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">greeting</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'dinner/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">dinner</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'throw/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">throw</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'catch/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">catch</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'hello/&lt;str:name&gt;/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">hello</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># pages/urls.py
+</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+
+<span class="p">]</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[주의] urlpatterns list가 없는 경우 에러가 발생한다.</p>
+</blockquote>
+
+<ul>
+  <li>django는 명시적 상대경로(<code class="language-plaintext highlighter-rouge">from .module import ..</code>)를 권장한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="including-other-urlconfs">Including other URLconfs</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># firstpjt/urls.py
+</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">include</span>
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'articles/'</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">'articles.urls'</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'pages/'</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">'pages.urls'</span><span class="p">)),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">include()</code></p>
+
+<ul>
+  <li>다른 URLconf(app1/urls.py)들을 참조할 수 있도록 도움</li>
+  <li>함수 include()를 만나게 되면, URL의 그 시점까지 일치하는 부분을 잘라내고, 남은 문자열 부분을 후속 처리를 위해 include된 URLconf로 전달</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="naming-url-patterns">Naming URL patterns</h3>
+
+<ul>
+  <li>Django는 URL에 이름을 지정하는 방법을 제공하므로써 뷰 함수와 템플릿에서 특정 주소를 쉽게 참조할 수 있도록 도움</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'index/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'index'</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'greeting/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">greeting</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'greeting'</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'dinner/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">dinner</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'dinner'</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'throw/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">throw</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'throw'</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'catch/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">catch</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'catch'</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'hello/&lt;str:name&gt;/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">hello</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'hello'</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>url tag 사용하기</strong></p>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- index.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>만나서 반가워요!<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'greeting'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>greeting<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'dinner'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>dinner<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'throw'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>throw<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">{$ url '' %}</code></p>
+
+<ul>
+  <li>주어진 URL 패턴 이름 및 선택적 매개 변수와 일치하는 절대 경로 주소를 반환</li>
+  <li>템플릿에 URL을 하드 코딩하지 않고도 DRY 원칙을 위반하지 않고 링크를 출력하는 방법</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<h2 id="namespace">Namespace</h2>
+
+<blockquote>
+  <p>개체를 구분할 수 있는 범위를 나타내는 namespace</p>
+</blockquote>
+
+<p><strong>두번째 app의 index 페이지 작성</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># pages/urls.py
+</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span> 
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'index/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'index'</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># pages/views.py
+</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'index.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- pages/templates/index.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>두번째 앱의 index<span class="nt">&lt;/h1&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/templates/index.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>만나서 반가워요!<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'greeting'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>greeting<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'dinner'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>dinner<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'dtl_practice'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>dtl-practice<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'throw'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>throw<span class="nt">&lt;/a&gt;</span>
+
+  <span class="nt">&lt;h2&gt;&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>두번째 앱 index로 이동<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>2가지 문제</strong></p>
+
+<ol>
+  <li>articles app index 페이지에서 두번째 앱 index로 이동 하이퍼 링크를 클릭 시 현재 페이지로 이동
+    <ul>
+      <li>URL namespace</li>
+    </ul>
+  </li>
+  <li>pages app index url로 이동해도 articles app의 index 페이지 출력
+    <ul>
+      <li>Template namespace</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="url-namespace">URL namespace</h3>
+
+<p><strong>app_name attribute 작성</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># pages/urls.py
+</span>
+<span class="n">app_name</span> <span class="o">=</span> <span class="s">'pages'</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'index/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'index'</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">app_name</span> <span class="o">=</span> <span class="s">'articles'</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">...,</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">app_name</code> attribute</strong></p>
+
+<ul>
+  <li>URL namespace를 사용하면 서로 다른 앱에서 동일한 URL 이름을 사용하는 경우에도 이름이 지정된 URL을 고유하게 사용 할 수 있음</li>
+  <li>urls.py에 <code class="language-plaintext highlighter-rouge">app_name</code> attribute 값 작성</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>참조</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">:</code> 연산자를 사용하여 지정
+    <ul>
+      <li>예를들어, app_name이 <code class="language-plaintext highlighter-rouge">articles</code>이고 URL name이 <code class="language-plaintext highlighter-rouge">index</code>인 주소 참조는 <code class="language-plaintext highlighter-rouge">articles:index</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>URL tag 변경</strong></p>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/templates/index.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>만나서 반가워요!<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:greeting'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>greeting<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:dinner'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>dinner<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:throw'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>throw<span class="nt">&lt;/a&gt;</span>
+
+  <span class="nt">&lt;h2&gt;&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'pages:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>두번째 앱 index로 이동<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="template-namespace">Template namespace</h3>
+
+<ul>
+  <li>
+    <p>Django는 기본적으로 <code class="language-plaintext highlighter-rouge">app_name/templates/</code> 경로에 있는 templates 파일들만 찾을 수 있으며, INSTALLED_APPS에 작성한 app 순서로 tamplate을 검색 후 렌더링</p>
+  </li>
+  <li>
+    <p>임의로 templates의 폴더 구조를 <code class="language-plaintext highlighter-rouge">app_name/templates/app_name</code> 형태로 변경해 임의로 이름 공간 생성 후 변경된 추가 경로 작성</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>  
+<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/index.html'</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># pages/views.py
+</span>  
+<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'pages/index.html'</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>
