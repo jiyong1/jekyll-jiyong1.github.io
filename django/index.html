@@ -13,7 +13,6 @@
   <link rel="icon" href="/assets/images/favicon.ico">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/styles.css">
   <link rel="stylesheet" href="/assets/css/category.css">
   <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
 </head>
@@ -76,25 +75,48 @@
 
   <div class="container nav-margin">
     
-<h1>django</h1>
+<h1 class="category-title">django</h1>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 post-wrapper">
   
-      <div class="post-list">
-        <div class="post-card">
-          <h2><a href="/django/2021/03/10/djangoIntro/" class="link-post_list">[django] Intro</a></h2>
-          <p class="post-meta">21-03-10</p>
-          <div class="post-list-content">
-              
-<h1 id="django-intro">[django] Intro</h1>
-
-              <p class="text-right"><a href="/django/2021/03/10/djangoIntro/">read more...</a></p>
+      <div class="post-card-con">
+        <a href="/django/2021/03/12/djangotest/" class="link-post_list">
+          <div class="post-card">
+            <div class="post-meta">
+              <h2 class="post-title">[django] test</h2>
+              <p class="post-date">21-03-12</p>
+            </div>
+            <div class="post-img-con">
+              <img class="post-img" src="/assets/images/django.png" alt="[django] test">
+            </div>
+            <div class="post-list-content">
+              django 테스트 입니다.. 그냥 지나가세요!!!!
+            </div>
           </div>
-        </div>
+        </a>
       </div>
   
+      <div class="post-card-con">
+        <a href="/django/2021/03/10/djangoIntro/" class="link-post_list">
+          <div class="post-card">
+            <div class="post-meta">
+              <h2 class="post-title">[django] Intro</h2>
+              <p class="post-date">21-03-10</p>
+            </div>
+            <div class="post-img-con">
+              <img class="post-img" src="/assets/images/00_django_intro.assets/img_02.png" alt="[django] Intro">
+            </div>
+            <div class="post-list-content">
+              django를 시작해보자
+            </div>
+          </div>
+        </a>
+      </div>
+  
+</div>
 
 <script src="/assets/script/infiniteScroll.js"></script>
 <script>
-  const postWrapper = '.post-list';
+  const postWrapper = '.post-wrapper';
   const paginatePath = "page";
   const hostStart = window.location.href.indexOf(window.location.hostname) + window.location.hostname.length;
   let categoryString = window.location.href.slice(hostStart, window.location.href.length);
