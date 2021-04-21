@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[Python] 반복문</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="python-반복문loop-statement">[Python] 반복문(Loop Statement)</h1>
+
+<ul>
+  <li>while</li>
+  <li>for</li>
+</ul>
+
+<p><br /></p>
+
+<p><img src="/assets/images/loop_and_conditional_expression.assets/loop.jpg" alt="" /></p>
+
+<p><br /></p>
+
+<h2 id="while-반복문"><code class="language-plaintext highlighter-rouge">while</code> 반복문</h2>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">while</code> 문은 조건식이 참(<code class="language-plaintext highlighter-rouge">True</code>)인 경우 반복적으로 코드를 실행한다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">while</code> 문 역시 조건식 뒤에 콜론(<code class="language-plaintext highlighter-rouge">:</code>)이 반드시 필요하며, 이후 실행될 코드 블럭은 <strong>4spaces</strong>로 <strong>들여쓰기</strong>를 한다.</li>
+  <li><strong>반드시 종료조건을 설정해야 한다.</strong></li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>활용법</strong></p>
+
+<ul>
+  <li><strong>문법</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while</span> <span class="o">&lt;</span><span class="n">조건식</span><span class="o">&gt;</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">코드</span> <span class="n">블럭</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>예시</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while</span> <span class="bp">True</span><span class="p">:</span> <span class="c1"># True 대신 조건식
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">'조건식이 참일 때까지'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'계속 반복'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 자리 수 예제
+</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">'숫자를 입력하시오. : '</span><span class="p">))</span>
+
+<span class="k">while</span> <span class="n">n</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="o">%</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">//=</span> <span class="mi">10</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>숫자를 입력하시오. : 185
+5
+8
+1
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="for-문"><code class="language-plaintext highlighter-rouge">for</code> 문</h2>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">for</code> 문은 시퀀스(string, tuple, list, range)나 다른 순회가능한 객체(iterable)의 요소들을 순회한다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong>활용법</strong></p>
+
+<ul>
+  <li><strong>문법</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">&lt;</span><span class="n">임시변수</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">순회가능한데이터</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span><span class="o">&gt;</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">코드</span> <span class="n">블럭</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">menu</span> <span class="ow">in</span> <span class="p">[</span><span class="s">'김밥'</span><span class="p">,</span> <span class="s">'햄버거'</span><span class="p">,</span> <span class="s">'피자'</span><span class="p">,</span> <span class="s">'라면'</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="enumerate">enumerate</h3>
+
+<blockquote>
+  <p>인덱스(index)와 값(value)을 함께 활용 가능</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">enumerate()</code>를 활용하면, 추가적인 변수를 활용할 수 있다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">enumerate()</code>는 내장 함수 중 하나이며, 다음과 같이 구성되어 있다.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><img src="/assets/images/loop_and_conditional_expression.assets/61180561-3993e180-a653-11e9-9558-085c9a0ad65d.png" alt="" /></p>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>문법</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">&lt;</span><span class="n">변수1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">변수2</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">순회가능한데이터</span><span class="p">(</span><span class="n">iterable</span><span class="p">),</span> <span class="n">start</span><span class="p">):</span>
+    <span class="o">&lt;</span><span class="n">코드</span> <span class="n">블럭</span><span class="o">&gt;</span>
+    
+<span class="c1"># start = 0(default)
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lunch</span> <span class="o">=</span> <span class="p">[</span><span class="s">'짜장면'</span><span class="p">,</span> <span class="s">'초밥'</span><span class="p">,</span> <span class="s">'피자'</span><span class="p">,</span> <span class="s">'햄버거'</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">menu</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lunch</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">menu</span><span class="si">}</span><span class="s">는 lunch list의 </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s">번 원소입니다.'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="반복제어break-continue-for-else">반복제어(<code class="language-plaintext highlighter-rouge">break</code>, <code class="language-plaintext highlighter-rouge">continue</code>, <code class="language-plaintext highlighter-rouge">for-else</code>)</h2>
+
+<p><br /></p>
+
+<h3 id="break"><code class="language-plaintext highlighter-rouge">break</code></h3>
+
+<blockquote>
+  <p>반복문을 종료한다.</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">for</code> 나 <code class="language-plaintext highlighter-rouge">while</code> 문에서 빠져나간다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># break 사용 안함
+</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># break 사용
+</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># for 문
+</span><span class="n">rice</span> <span class="o">=</span> <span class="p">[</span><span class="s">'보리'</span><span class="p">,</span> <span class="s">'보리'</span><span class="p">,</span> <span class="s">'보리'</span><span class="p">,</span> <span class="s">'쌀'</span><span class="p">,</span> <span class="s">'보리'</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rice</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s">'쌀'</span><span class="p">:</span>
+        <span class="k">break</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>보리
+보리
+보리
+쌀
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="continue"><code class="language-plaintext highlighter-rouge">continue</code></h3>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">continue</code>문은 continue 이후의 코드를 수행하지 않고 <em>다음 요소부터 계속(continue)하여</em> 반복을 수행한다.</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">는 홀수입니다.'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1는 홀수입니다.
+3는 홀수입니다.
+5는 홀수입니다.
+7는 홀수입니다.
+9는 홀수입니다.
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="else"><code class="language-plaintext highlighter-rouge">else</code></h3>
+
+<p>끝까지 반복문을 실행한 이후에 실행된다.</p>
+
+<ul>
+  <li>반복에서 리스트의 소진이나 (<code class="language-plaintext highlighter-rouge">for</code> 의 경우) 조건이 거짓이 돼서 (<code class="language-plaintext highlighter-rouge">while</code> 의 경우) 종료할 때 실행된다.</li>
+  <li>하지만 반복문이 <strong><code class="language-plaintext highlighter-rouge">break</code> 문으로 종료될 때는 실행되지 않는다.</strong> (즉, <code class="language-plaintext highlighter-rouge">break</code>를 통해 중간에 종료되지 않은 경우만 실행)</li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># for 예시 1
+</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'끝!'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0
+1
+2
+끝!
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># for 예시 2
+</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'끝!'</span><span class="p">)</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'나는 print 안될거야'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0
+1
+끝!
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># while 예시
+</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'끝'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0
+1
+2
+끝
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="pass"><code class="language-plaintext highlighter-rouge">pass</code></h3>
+
+<blockquote>
+  <p>아무것도 하지 않는다.</p>
+</blockquote>
+
+<ul>
+  <li>문법적으로 문장이 필요하지만, 프로그램이 특별히 할 일이 없을 때 자리를 채우는 용도로 사용할 수 있다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  File "&lt;ipython-input-16-207c0a79ae82&gt;", line 2
+    for i in range(5):
+                      ^
+SyntaxError: unexpected EOF while parsing
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="c1"># 오류 X
+</span></code></pre></div></div>
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/python/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/python/2021/01/18/container/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[Python] 컨테이너</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/python/2021/01/20/function/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[Python] 함수</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

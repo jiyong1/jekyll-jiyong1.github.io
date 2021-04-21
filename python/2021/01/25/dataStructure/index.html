@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[Python] 자료 구조</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="python-data-structure-데이터-구조">[Python] Data Structure (데이터 구조)</h1>
+
+<blockquote>
+  <p>데이터 구조(Data Structure)란 데이터에 편리하게 접근하고, 변경하기 위해서 데이터를 저장하거나 조작하는 방법을 말한다.</p>
+</blockquote>
+
+<p><strong>Program = Data Structure + Algorithm</strong></p>
+
+<p><br /></p>
+
+<h2 id="문자열string">문자열(String)</h2>
+
+<blockquote>
+  <p>변경할 수 없고(immutable), 순서가 있고(ordered), 순회가 가능한(iterable)</p>
+</blockquote>
+
+<p><a href="https://docs.python.org/ko/3/library/stdtypes.html#string-methods">문자열의 다양한 조작법(method)</a></p>
+
+<h3 id="findx">.find(x)</h3>
+
+<ul>
+  <li>x의 <strong>첫 번째 위치</strong>를 반환한다. 없으면, -1을 반환한다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="s">'apple'</span>
+<span class="n">a</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span> <span class="c1"># p는 1번 인덱스에서 처음으로 찾을 것이기 때문에 1을 출력할 것이다.
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="indexx">.index(x)</h3>
+
+<ul>
+  <li>xdml <strong>첫 번째 위치</strong>를 반환한다. 없으면, 오류가 발생한다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="s">'apple'</span>
+<span class="n">a</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="s">'p'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="s">'apple'</span>
+<span class="n">a</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="s">'x'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+&lt;ipython-input-4-a658d21ae277&gt; in &lt;module&gt;
+      1 a = 'apple'
+----&gt; 2 a.index('x')
+
+ValueError: substring not found
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="replaceold-new-count">.replace(old, new[, count])</h3>
+
+<ul>
+  <li>바꿀 대상 글자를 새로운 글자로 바꿔서 반환한다.</li>
+  <li>count를 지정하면 해당 갯수만큼만 시행한다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">z</span> <span class="o">=</span> <span class="s">'zoo!yoyo!'</span>
+<span class="n">z</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'o'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'z!yy!'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">z</span> <span class="o">=</span> <span class="s">'zoo!yoyo!'</span>
+<span class="n">z</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'o'</span><span class="p">,</span> <span class="s">''</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'z!yoyo!'
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="stripchars">.strip([chars])</h3>
+
+<ul>
+  <li>특정한 문자들을 지정하면, 양쪽을 제거하거나 왼쪽을 제거하거나(<code class="language-plaintext highlighter-rouge">lstrip</code>), 오른쪽을 제거합니다(<code class="language-plaintext highlighter-rouge">rstrip</code>).</li>
+  <li>지정하지 않으면 공백을 제거합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">oh</span> <span class="o">=</span> <span class="s">'    oh!</span><span class="se">\n</span><span class="s">'</span>
+<span class="n">oh</span><span class="p">.</span><span class="n">strip</span><span class="p">()</span> <span class="c1"># default로 양쪽 공백을 제거!
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'oh!'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">oh</span><span class="p">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="c1"># 오른쪽 공백을 제거!
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'    oh!'
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="split">.split()</h3>
+
+<ul>
+  <li>문자열을 특정한 단위로 나누어 리스트로 반환합니다.</li>
+  <li>괄호 내에 문자를 입력하지 않으면 공백을 기준으로 나눈다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">csv</span> <span class="o">=</span> <span class="s">'1,홍길동,01012344567'</span>
+<span class="n">my_list</span> <span class="o">=</span> <span class="n">csv</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_list</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">my_list</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['1', '홍길동', '01012344567'] &lt;class 'list'&gt;
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="separatorjoiniterable">‘separator’.join(iterable)</h3>
+
+<ul>
+  <li>특정한 문자열로 만들어 반환합니다.</li>
+  <li>반복가능한(iterable) 컨테이너의 요소들을 separator를 구분자로 합쳐(<code class="language-plaintext highlighter-rouge">join()</code>) 문자열로 반환합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">'1'</span><span class="p">,</span> <span class="s">'2'</span><span class="p">,</span> <span class="s">'3'</span><span class="p">]</span>
+<span class="s">'&lt;'</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_list</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'1&lt;2&lt;3'
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="capitalize-title-upper">.capitalize(), .title(), .upper()</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.capitalize()</code> : 앞글자를 대문자로 만들어 반환한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">.title()</code> : 어포스트로피나 공백 이후를 대문자로 만들어 반환한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">.upper()</code> : 모두 대문자로 만들어 반환한다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="s">'hI! Everyone, I</span><span class="se">\'</span><span class="s">m kim'</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">capitalize</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">title</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">upper</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hi! everyone, i'm kim
+Hi! Everyone, I'M Kim
+HI! EVERYONE, I'M KIM
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="lower-swapcase">.lower(), .swapcase()</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">lower()</code> : 모두 소문자로 만들어 반환한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">swapcase()</code> : 대 &lt;-&gt; 소문자로 변경하여 반환한다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="s">'hI! Everyone, I</span><span class="se">\'</span><span class="s">m kim'</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">lower</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">swapcase</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hi! everyone, i'm kim
+Hi! eVERYONE, i'M KIM
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="기타-문자열-관련-검증-메서드--truefalse-반환">기타 문자열 관련 검증 메서드 : True/False 반환</h3>
+
+<ul>
+  <li>.isalpha()</li>
+  <li>.isdecimal()</li>
+  <li>.isdigit()</li>
+  <li>.isnumeric()</li>
+  <li>.isspace()</li>
+  <li>.isupper()</li>
+  <li>.istitle()</li>
+  <li>.islower()</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="리스트list">리스트(List)</h2>
+
+<blockquote>
+  <p>변경 가능하고(mutable), 순서가 있고(ordered), 순회 가능한(iterable)</p>
+</blockquote>
+
+<p><a href="https://docs.python.org/ko/3/tutorial/datastructures.html#more-on-lists">데이터 구조로서의 리스트(list)와 조작법(method)</a></p>
+
+<p><br /></p>
+
+<h3 id="값-추가-및-삭제">값 추가 및 삭제</h3>
+
+<h4 id="appendx">.append(x)</h4>
+
+<ul>
+  <li>리스트에 값을 추가할 수 있다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cafe</span> <span class="o">=</span> <span class="p">[</span><span class="s">'starbucks'</span><span class="p">,</span> <span class="s">'tomntoms'</span><span class="p">,</span> <span class="s">'hollys'</span><span class="p">]</span>
+<span class="n">cafe</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">'twosome'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cafe</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['starbucks', 'tomntoms', 'hollys', 'twosome']
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="extenditerable">.extend(iterable)</h4>
+
+<ul>
+  <li>리스트에 iterable(list, range, tuple, string<strong>[주의]</strong>) 값을 붙일 수가 있습니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cafe</span><span class="p">.</span><span class="n">extend</span><span class="p">([</span><span class="s">'bluebottle'</span><span class="p">])</span> <span class="c1"># 리스트 안에 넣지 않고 진행하면 개별 char가 리스트의 원소로 들어간다.
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['starbucks', 'tomntoms', 'hollys', 'twosome', 'bluebottle']
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="inserti-x">.insert(i, x)</h4>
+
+<ul>
+  <li>정해진 위치 <code class="language-plaintext highlighter-rouge">i</code>에 값을 추가합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cafe</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">'angel'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['angel', 'starbucks', 'tomntoms', 'hollys', 'twosome', 'bluebottle']
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="removex">.remove(x)</h4>
+
+<ul>
+  <li>리스트에서 값이 x인 것을 삭제합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">numbers</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[2, 3, 1, 2]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="popi">.pop(i)</h4>
+
+<ul>
+  <li>정해진 위치 i에 있는 값을 삭제하며, 그 항목을 <code class="language-plaintext highlighter-rouge">반환</code>합니다.</li>
+  <li>i가 지정되지 않으면 마지막 항목을 삭제하고 되돌려줍니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="n">num</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 [2, 3, 4, 5, 6]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="n">num</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>6 [1, 2, 3, 4, 5]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="clear">.clear()</h4>
+
+<ul>
+  <li>리스트의 모든 항목을 삭제합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="n">a</span><span class="p">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="탐색-및-정렬">탐색 및 정렬</h3>
+
+<h4 id="indexx-1">.index(x)</h4>
+
+<ul>
+  <li>x 값을 찾아 해당 index 값을 반환합니다.</li>
+  <li>없을 시 오류가 발생합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+&lt;ipython-input-41-cc78ef4b3025&gt; in &lt;module&gt;
+      1 a = [1, 2, 3, 4, 5]
+----&gt; 2 print(a.index(7))
+
+ValueError: 7 is not in list
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="countx">.count(x)</h4>
+
+<ul>
+  <li>원하는 값의 개수를 확인할 수 있습니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2
+</code></pre></div></div>
+
+<ul>
+  <li>원하는 값 모두 삭제하기</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="k">while</span> <span class="n">a</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">a</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1, 2, 1, 1]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="sort">.sort()</h4>
+
+<ul>
+  <li>정렬 합니다.</li>
+  <li>내장함수 <code class="language-plaintext highlighter-rouge">sorted()</code> 와는 다르게 <strong>원본 list를 변형</strong>시키고, <code class="language-plaintext highlighter-rouge">None</code>을 리턴합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>None [1, 1, 1, 2, 5, 5]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="reverse">.reverse()</h4>
+
+<ul>
+  <li>반대로 뒤집습니다. <strong>(정렬 아님)</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">classroom</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Tom'</span><span class="p">,</span> <span class="s">'David'</span><span class="p">,</span> <span class="s">'Justin'</span><span class="p">]</span>
+<span class="n">classroom</span><span class="p">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">classroom</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['Justin', 'David', 'Tom']
+</code></pre></div></div>
+<p><br /></p>
+
+<h3 id="리스트-복사">리스트 복사</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="c1"># 두 리스트의 0번 인덱스 값이 변경된다.
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[100, 2, 3, 4, 5] [100, 2, 3, 4, 5]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="리스트-복사-방법">리스트 복사 방법</h4>
+
+<ul>
+  <li>slice 연산자 사용([:])</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:]</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1, 2, 3, 4, 5] [100, 2, 3, 4, 5]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li>list() 활용</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1"># list를 새로운 list로 형변환
+</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1, 2, 3, 4, 5] [100, 2, 3, 4, 5]
+</code></pre></div></div>
+
+<p><strong>하지만, 이렇게 하는 것도 일부 상황에만 서로 다른 <code class="language-plaintext highlighter-rouge">얕은 복사(shallow copy)</code> 이다.</strong></p>
+
+<p><br /></p>
+
+<h4 id="2차원-배열-복사">2차원 배열 복사</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:]</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[100, 2, 3], 4, 5] [[100, 2, 3], 4, 5]
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">깊은 복사(deep copy)</code>를 해야한다.</li>
+</ul>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">copy</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">copy</span><span class="p">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[1, 2, 3], 4, 5] [[100, 2, 3], 4, 5]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="list-comprehension">List Comprehension</h3>
+
+<ul>
+  <li>List Comprehension은 표현식과 제어문을 통해 리스트를 생성합니다.</li>
+  <li>
+    <p>여러 줄의 코드를 한 줄로 줄일 수 있습니다.</p>
+  </li>
+  <li><strong>활용법</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">expression</span> <span class="k">for</span> <span class="n">변수</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">]</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">expression</span> <span class="k">for</span> <span class="n">변수</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 세제곱 리스트를 만들어 보자 (1 ~ 10)
+</span>
+<span class="n">cubic_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">num</span><span class="o">**</span><span class="mi">3</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cubic_list</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1, 8, 27, 64, 125, 216, 343, 512, 729, 1000]
+</code></pre></div></div>
+<p><br /></p>
+
+<h4 id="-조건문">+ 조건문</h4>
+
+<ul>
+  <li>
+    <p>조건문에 참인 식으로 리스트를 생성합니다.</p>
+  </li>
+  <li>
+    <p><strong>활용법</strong></p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">expression</span> <span class="k">for</span> <span class="n">변수</span> <span class="ow">in</span> <span class="n">iterable</span> <span class="k">if</span> <span class="n">조건식</span><span class="p">]</span>
+
+<span class="p">[</span><span class="n">expression</span> <span class="k">if</span> <span class="n">조건식</span> <span class="k">else</span> <span class="n">식</span> <span class="k">for</span> <span class="n">변수</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 짝수 리스트를 작성해보자 (1 ~ 10)
+</span>
+<span class="n">even_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">num</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span> <span class="k">if</span> <span class="n">num</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">even_list</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[2, 4, 6, 8, 10]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_list</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_list</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1, -2, 3, -4, 5, -6, 7, -8, 9, -10]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="세트set">세트(Set)</h2>
+
+<blockquote>
+  <p>변경 가능하고(mutable), 순서가 없고(unordered), 순회 가능한(iterable)</p>
+</blockquote>
+
+<p><a href="https://docs.python.org/ko/3/library/stdtypes.html#set-types-set-frozenset">데이터 구조로서의 set와 조작법(method)</a></p>
+
+<h3 id="추가-및-삭제">추가 및 삭제</h3>
+
+<h4 id="addelem">.add(elem)</h4>
+
+<ul>
+  <li>elem을 세트에 추가합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s">'사과'</span><span class="p">,</span> <span class="s">'바나나'</span><span class="p">,</span> <span class="s">'수박'</span><span class="p">}</span>
+<span class="n">a</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">'토마토'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'사과', '토마토', '바나나', '수박'}
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="updateothers">.update(*others)</h4>
+
+<ul>
+  <li>여러가지의 값을 추가합니다.</li>
+  <li>인자로는 반드시 iterable 데이터 구조를 전달해야합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s">'사과'</span><span class="p">,</span> <span class="s">'바나나'</span><span class="p">,</span> <span class="s">'수박'</span><span class="p">}</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s">'배'</span><span class="p">,</span> <span class="s">'복숭아'</span><span class="p">,</span> <span class="s">'토마토'</span><span class="p">]</span>
+<span class="n">a</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'사과', '복숭아', '토마토', '배', '바나나', '수박'}
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="removeelem">.remove(elem)</h4>
+
+<ul>
+  <li>elem을 세트에서 삭제하고, 없으면 KeyError가 발생합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s">'사과'</span><span class="p">,</span> <span class="s">'바나나'</span><span class="p">,</span> <span class="s">'수박'</span><span class="p">}</span>
+<span class="n">a</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">'바나나'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'사과', '수박'}
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="discardelem">.discard(elem)</h4>
+
+<ul>
+  <li>elem을 세트에서 삭제하고 없어도 에러가 발생하지 않습니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s">'사과'</span><span class="p">,</span> <span class="s">'바나나'</span><span class="p">,</span> <span class="s">'수박'</span><span class="p">}</span>
+<span class="n">a</span><span class="p">.</span><span class="n">discard</span><span class="p">(</span><span class="s">'수박'</span><span class="p">)</span>
+<span class="n">a</span><span class="p">.</span><span class="n">discard</span><span class="p">(</span><span class="s">'복숭아'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'사과', '바나나'}
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="pop">.pop()</h4>
+
+<ul>
+  <li><strong>임의의 원소</strong>를 제거해 반환합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s">'사과'</span><span class="p">,</span> <span class="s">'바나나'</span><span class="p">,</span> <span class="s">'수박'</span><span class="p">,</span> <span class="s">'아보카도'</span><span class="p">}</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>사과 {'바나나', '수박', '아보카도'}
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="딕셔너리dictionary">딕셔너리(Dictionary)</h2>
+
+<blockquote>
+  <p>변경 가능하고(mutable), 순서가 없고(unordered), 순회 가능한(iterable)</p>
+
+  <p><code class="language-plaintext highlighter-rouge">Key: Value</code> 페어(pair)의 자료구조</p>
+</blockquote>
+
+<h3 id="조회">조회</h3>
+
+<h4 id="getkey-default">.get(key[, default])</h4>
+
+<ul>
+  <li>
+    <p>key를 통해 value를 가져옵니다.</p>
+  </li>
+  <li>
+    <p>절대로 KeyError가 발생하지 않습니다. default는 기본적으로 None입니다.</p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">'apple'</span><span class="p">:</span> <span class="s">'사과'</span><span class="p">,</span> <span class="s">'banana'</span><span class="p">:</span> <span class="s">'바나나'</span><span class="p">,</span> <span class="s">'melon'</span><span class="p">:</span> <span class="s">'멜론'</span><span class="p">}</span>
+<span class="n">my_dict</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'apple'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'사과'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">'apple'</span><span class="p">:</span> <span class="s">'사과'</span><span class="p">,</span> <span class="s">'banana'</span><span class="p">:</span> <span class="s">'바나나'</span><span class="p">,</span> <span class="s">'melon'</span><span class="p">:</span> <span class="s">'멜론'</span><span class="p">}</span>
+<span class="n">my_dict</span><span class="p">[</span><span class="s">'pineapple'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+&lt;ipython-input-19-d3cdd6ee6d26&gt; in &lt;module&gt;
+      1 # get을 사용해봅시다.
+      2 my_dict = {'apple': '사과', 'banana': '바나나', 'melon': '멜론'}
+----&gt; 3 my_dict['pineapple']
+
+KeyError: 'pineapple'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">'apple'</span><span class="p">:</span> <span class="s">'사과'</span><span class="p">,</span> <span class="s">'banana'</span><span class="p">:</span> <span class="s">'바나나'</span><span class="p">,</span> <span class="s">'melon'</span><span class="p">:</span> <span class="s">'멜론'</span><span class="p">}</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">my_dict</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'pineapple'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>None
+</code></pre></div></div>
+
+<ul>
+  <li><strong>중요 예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">input_str</span> <span class="o">=</span> <span class="s">'himynameisjiyong'</span>
+<span class="n">count</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">input_str</span><span class="p">:</span>
+    <span class="n">count</span><span class="p">[</span><span class="n">char</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'h': 1, 'i': 3, 'm': 2, 'y': 2, 'n': 2, 'a': 1, 'e': 1, 's': 1, 'j': 1, 'o': 1, 'g': 1}
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="추가-및-삭제-1">추가 및 삭제</h3>
+
+<h4 id="popkey-default">.pop(key[, default]).</h4>
+
+<ul>
+  <li>key가 딕셔너리에 있으면 제거하고 그 값을 돌려줍니다. 그렇지 않으면 default를 반환합니다.</li>
+  <li>default가 없는 상태에서 딕셔너리에 없으면 KeyError가 발생합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">'apple'</span><span class="p">:</span> <span class="s">'사과'</span><span class="p">,</span> <span class="s">'banana'</span><span class="p">:</span> <span class="s">'바나나'</span><span class="p">}</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">my_dict</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">'apple'</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">my_dict</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>사과 {'banana': '바나나'}
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">'apple'</span><span class="p">:</span> <span class="s">'사과'</span><span class="p">,</span> <span class="s">'banana'</span><span class="p">:</span> <span class="s">'바나나'</span><span class="p">}</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">my_dict</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">'pineapple'</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">my_dict</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>False {'apple': '사과', 'banana': '바나나'}
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="딕셔너리-순회반복문-활용">딕셔너리 순회(반복문 활용)</h3>
+
+<ul>
+  <li>딕셔너리에 <code class="language-plaintext highlighter-rouge">for</code> 문을 실행하면 기본적으로 다음과 같이 동작합니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grades</span> <span class="o">=</span> <span class="p">{</span><span class="s">'john'</span><span class="p">:</span>  <span class="mi">80</span><span class="p">,</span> <span class="s">'eric'</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s">'justin'</span><span class="p">:</span> <span class="mi">90</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">grades</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>john
+eric
+justin
+</code></pre></div></div>
+
+<ul>
+  <li>value를 출력하기 4가지 방법</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 0. dictionary 순회 (key 활용)
+</span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+
+<span class="c1"># 1. `.keys()` 활용
+</span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+
+<span class="c1"># 2. `.values()` 활용    
+</span><span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+
+<span class="c1"># 3. `.items()` 활용
+</span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="데이터-구조에-적용가능한-built-in-function">데이터 구조에 적용가능한 Built-in Function</h2>
+
+<blockquote>
+  <p>순회 가능한(iterable) 데이터 구조에 적용가능한 Built-in Function</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">map()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">filter()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">zip()</code></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="mapfunction-iterable">map(function, iterable)</h3>
+
+<ul>
+  <li>순회가능한 데이터 구조(iterable)의 모든 요소에 function을 적용한 후 그 결과를 돌려준다.</li>
+  <li>return은 <code class="language-plaintext highlighter-rouge">map_object</code> 형태이다</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># string '123'으로 만들기
+</span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">strlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">numbers</span><span class="p">))</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="s">''</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">strlist</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">i</span>
+    
+<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>123
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><strong>코딩 테스트의 기본</strong></p>
+
+    <ul>
+      <li>두 정수를 입력 받아 더한 값을 출력하시오</li>
+    </ul>
+
+    <p><br /></p>
+  </li>
+</ul>
+
+<p><strong>[입력 예시]</strong></p>
+
+<p>3 5</p>
+
+<p><strong>[출력 예시]</strong></p>
+
+<p>8</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">input_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">input</span><span class="p">().</span><span class="n">split</span><span class="p">()))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">input_list</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">num</span>
+    
+<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3 5
+8
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="filterfunction-iterable">filter(function, iterable)</h3>
+
+<ul>
+  <li>iterable에서 function의 반환된 결과가 <code class="language-plaintext highlighter-rouge">True</code>인 것들만 구성하여 반환한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">filter object</code>를 반환한다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 홀수를 판별하는 함수
+</span><span class="k">def</span> <span class="nf">odd</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="c1"># 홀수면 1 -&gt; True
+</span>
+<span class="n">odd_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">odd</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">odd_list</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1, 3, 5, 7, 9]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="zipiterables">zip(*iterables)</h3>
+
+<ul>
+  <li>복수의 iterable 객체를 모아<code class="language-plaintext highlighter-rouge">(zip())</code>준다</li>
+  <li>결과는 튜플의 모음으로 구성된 <code class="language-plaintext highlighter-rouge">zip object</code>를 반환한다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">girls</span> <span class="o">=</span> <span class="p">[</span><span class="s">'jane'</span><span class="p">,</span> <span class="s">'ashley'</span><span class="p">,</span> <span class="s">'mary'</span><span class="p">]</span>
+<span class="n">boys</span> <span class="o">=</span> <span class="p">[</span><span class="s">'justin'</span><span class="p">,</span> <span class="s">'eric'</span><span class="p">,</span> <span class="s">'david'</span><span class="p">]</span>
+<span class="n">pair</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">girls</span><span class="p">,</span> <span class="n">boys</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[('jane', 'justin'), ('ashley', 'eric'), ('mary', 'david')]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="mutable-복사">Mutable 복사</h2>
+
+<h3 id="1-할당">1. 할당</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">list_a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">list_b</span> <span class="o">=</span> <span class="n">list_a</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/data_structure.assets/ggg.PNG" alt="" /></p>
+
+<p><br /></p>
+
+<h3 id="2-얕은-복사-shallow-copy">2. 얕은 복사 (shallow copy)</h3>
+
+<ul>
+  <li>새로운 리스트를 생성한다.</li>
+  <li>얕은 복사 세 가지 방법
+    <ol>
+      <li>슬라이싱 : <code class="language-plaintext highlighter-rouge">list_b = list_a[:]</code></li>
+      <li>list() : `list_b = list(list_a)</li>
+      <li>copy 모듈 : list_b = copy.copy(list_a)</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">list_a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">list_b</span> <span class="o">=</span> <span class="n">list_a</span><span class="p">[:]</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/data_structure.assets/shallow1.PNG" alt="" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">list_a</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">list_b</span> <span class="o">=</span> <span class="n">list_a</span><span class="p">[:]</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/data_structure.assets/shallow2.PNG" alt="" /></p>
+
+<p><br /></p>
+
+<h3 id="3-깊은-복사-deep-copy">3. 깊은 복사 (deep copy)</h3>
+
+<ul>
+  <li>새로운 리스트를 생성하고, 그 안에 있는 리스트들도 새롭게 생성한다.</li>
+  <li>copy 모듈 : <code class="language-plaintext highlighter-rouge">list_b = copy.deepcopy(list_a)</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">copy</span>
+<span class="n">list_a</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">list_b</span> <span class="o">=</span> <span class="n">copy</span><span class="p">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">list_a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/data_structure.assets/deep1.PNG" alt="" /></p>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/python/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/python/2021/01/21/errorExeption/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[Python] 에러 & 처리</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/python/2021/01/27/oop1/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[Python] OOP (1)</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

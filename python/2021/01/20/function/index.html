@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[Python] 함수</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="python-함수function">[Python] 함수(Function)</h1>
+
+<blockquote>
+  <p>특정한 기능(function)을 하는 코드의 묶음</p>
+</blockquote>
+
+<p><img src="/assets/images/function.assets/f1.png" alt="" /></p>
+
+<p><br /></p>
+
+<h2 id="함수를-쓰는-이유">함수를 쓰는 이유</h2>
+
+<ul>
+  <li>높은 가독성 : 짧아짐</li>
+  <li>재사용성</li>
+  <li>유지보수 : 코드의 기능별 분화</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="함수의-선언과-호출">함수의 선언과 호출</h2>
+
+<ul>
+  <li>
+    <p>함수 선언은 <code class="language-plaintext highlighter-rouge">def</code>로 시작하여 <code class="language-plaintext highlighter-rouge">:</code>으로 끝나고, 다음은 <code class="language-plaintext highlighter-rouge">4spaces 들여쓰기</code>로 코드 블록을 만든다.</p>
+  </li>
+  <li>
+    <p>함수는 <code class="language-plaintext highlighter-rouge">매개변수(parameter)</code>를 넘겨줄 수도 있다.</p>
+  </li>
+  <li>
+    <p>함수는 동작후에 <code class="language-plaintext highlighter-rouge">return</code>을 통해 결과값을 전달 할 수도 있다. (<code class="language-plaintext highlighter-rouge">return</code> 값이 없으면, <code class="language-plaintext highlighter-rouge">None</code>을 반환한다.)</p>
+  </li>
+  <li>
+    <p>함수는 호출을 <code class="language-plaintext highlighter-rouge">func()</code> / <code class="language-plaintext highlighter-rouge">func(val1, val2)</code>와 같이 한다.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 세제곱 함수
+</span><span class="k">def</span> <span class="nf">cube</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">3</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">cube</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>8
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 사각형의 넓이를 구하는 함수
+</span><span class="k">def</span> <span class="nf">rectangle</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">width</span> <span class="o">*</span> <span class="n">height</span>
+    <span class="n">perimeter</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">area</span><span class="p">,</span> <span class="n">perimeter</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">rectangle</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">rectangel</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">70</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(600, 100)
+(3500, 240)
+</code></pre></div></div>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="내장-함수">내장 함수</h2>
+
+<ul>
+  <li>python에서 활용하는 print문도 파이썬에 지정된 함수이다.</li>
+  <li><a href="https://docs.python.org/ko/3/library/functions.html">파이썬 내장함수</a>에서 내장함수 목록을 볼 수 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 내장함수 max()를 사용해보자
+</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>5
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># my_max 함수를 작성해보자
+</span><span class="k">def</span> <span class="nf">my_max</span><span class="p">(</span><span class="o">*</span><span class="n">param</span><span class="p">):</span> <span class="c1"># 가변 매개변수
+</span>    <span class="n">result</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">param</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="n">my_max</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>23
+</code></pre></div></div>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="함수의-output">함수의 Output</h2>
+
+<ul>
+  <li>앞서 언급한 바와 같이 함수는 반환되는 값이 있으며, 이때 그 값은 어떠한 종류라도 상관 없다.</li>
+  <li>단, <strong>오직 한 개의 객체</strong>만 반환된다.
+    <ul>
+      <li>return 1, 2 같이 여러개를 반환하는 것은 tuple 객체 <strong>하나</strong>를 반환하는 것이다.</li>
+      <li>함수 내에서 return을 선언하지 않으면 None 객체가 반환된다.</li>
+    </ul>
+  </li>
+  <li>함수가 return 되거나 종료되면, 함수를 호출한 곳으로 돌아간다.</li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 리스트를 두개 받아 각각 더한 결과를 비교하여 큰 리스트를 반환하라.
+</span><span class="k">def</span> <span class="nf">my_list_max</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span> <span class="n">list2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">list1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">list2</span><span class="p">):</span> <span class="c1">#내장함수 sum 사용
+</span>        <span class="k">return</span> <span class="n">list1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">list2</span>
+ 
+<span class="n">my_list_max</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[5, 9]
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># return을 정의하지 않으면 어떤 것을 반환하는지 확인해보자
+</span><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    
+<span class="n">a</span> <span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s">'jiyong'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hello, jiyong
+None &lt;class 'NoneType'&gt;
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 여러개를 출력하는 것의 타입을 확인해보자
+</span><span class="k">def</span> <span class="nf">tuple_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">tuple_func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(2, 3) &lt;class 'tuple'&gt;
+</code></pre></div></div>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="함수의-입력input">함수의 입력(Input)</h2>
+
+<blockquote>
+  <p>매개변수(parameter) &amp; 인자(argument)</p>
+
+  <p>주로 혼용해서 사용하지만 엄밀하게 따지면 둘은 다르게 구분되어 사용된다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="매개변수parameter">매개변수(Parameter)</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">x</code>는 매개변수</li>
+  <li>입력을 받아 함수 내부에서 활용할 변수라고 생각하면 된다.</li>
+  <li>함수의 정의 부분에서 볼 수 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="전달인자argument">전달인자(argument)</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">func</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">2</code>는 인자이다.</li>
+  <li>실제로 전달되는 <code class="language-plaintext highlighter-rouge">입력값</code>이라고 생각하면 된다.</li>
+  <li>함수를 호출하는 부분에서 볼 수 있다.</li>
+  <li>함수는 기본적으로 인자를 <code class="language-plaintext highlighter-rouge">위치</code>로 판단한다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">키워드 인자</code>로 직접 변수의 이름으로 특정 인자를 전달할 수 있다.</li>
+      <li>그러나 <code class="language-plaintext highlighter-rouge">키워드 인자</code>를 활용한 다음에 <code class="language-plaintext highlighter-rouge">위치 인자</code>를 활용할 수 없다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 원기둥의 부피
+</span><span class="kn">import</span> <span class="nn">math</span>
+<span class="k">def</span> <span class="nf">cylinder</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">radius</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="p">.</span><span class="n">pi</span><span class="o">*</span><span class="n">height</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">cylinder</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cylinder</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span> <span class="c1"># 순서를 바꾸면 다른 값이 나옵니다.
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>157.08
+62.83
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 인자를 전달할 때 매개변수를 지정하자
+</span><span class="kn">import</span> <span class="nn">math</span>
+<span class="k">def</span> <span class="nf">cylinder</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">radius</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="p">.</span><span class="n">pi</span><span class="o">*</span><span class="n">height</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 내장함수 round(반올림)
+</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cylinder</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cylinder</span><span class="p">(</span><span class="n">height</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="mi">5</span><span class="p">))</span> <span class="c1"># 같은 값이 나올 것입니다.
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>157.08
+157.08
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 키워드 변수 다음에 위치 변수 선언 불가능하다.
+</span><span class="kn">import</span> <span class="nn">math</span>
+<span class="k">def</span> <span class="nf">cylinder</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">radius</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="p">.</span><span class="n">pi</span><span class="o">*</span><span class="n">height</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 내장함수 round(반올림)
+</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cylinder</span><span class="p">(</span><span class="n">height</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> <span class="c1"># syntaxerror
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  File "&lt;ipython-input-2-cbef59c8bb6d&gt;", line 5
+    print(cylinder(height = 2, 5))
+                               ^
+SyntaxError: positional argument follows keyword argument
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 기본 인자 값 활용
+</span><span class="k">def</span> <span class="nf">greeting</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">'익명'</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">, 안녕'</span><span class="p">)</span>
+    
+<span class="n">greeting</span><span class="p">()</span> <span class="c1"># 오류가 일어나지 않는다.
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>익명, 안녕
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="가변-인자-리스트arbitrary-argument-lists">가변 인자 리스트(Arbitrary Argument Lists)</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">print()</code>처럼 개수가 정해지지 않은 임의의 인자를 바기 위해서는 가변 인자 리스트 <code class="language-plaintext highlighter-rouge">*args</code>를 활용한다.</li>
+  <li>
+    <p>가변 인자 리스트는 <code class="language-plaintext highlighter-rouge">tuple</code>형태로 처리가 되며, 매개변수에 <code class="language-plaintext highlighter-rouge">*</code>로 표현한다.</p>
+  </li>
+  <li>보통 가변 인자 리스트는 매개변수 목록의 마지막에 온다.</li>
+  <li>가변 인자 다음에 위치 인자를 선언하고자 한다면 <code class="language-plaintext highlighter-rouge">키워드 인자</code> 활용한다.</li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">my_class</span><span class="p">(</span><span class="n">prof</span><span class="p">,</span> <span class="o">*</span><span class="n">students</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'students의 타입은 </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">students</span><span class="p">)</span><span class="si">}</span><span class="s"> 입니다.'</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">students</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'존경하는 </span><span class="si">{</span><span class="n">prof</span><span class="si">}</span><span class="s">교수님'</span><span class="p">)</span>
+    
+<span class="n">my_class</span><span class="p">(</span><span class="s">'유창오'</span><span class="p">,</span> <span class="s">'김지용'</span><span class="p">,</span> <span class="s">'김싸피'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>students의 타입은 &lt;class 'tuple'&gt; 입니다.
+김지용
+김싸피
+존경하는 유창오교수님
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 가변 인자 다음 위치 인자를 사용하자
+</span><span class="k">def</span> <span class="nf">my_class</span><span class="p">(</span><span class="o">*</span><span class="n">students</span><span class="p">,</span> <span class="n">prof</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">students</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'존경하는 </span><span class="si">{</span><span class="n">prof</span><span class="si">}</span><span class="s">교수님'</span><span class="p">)</span>
+    
+<span class="n">my_class</span><span class="p">(</span><span class="s">'김지용'</span><span class="p">,</span> <span class="s">'김싸피'</span><span class="p">,</span> <span class="n">prof</span> <span class="o">=</span> <span class="s">'유창오'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>김지용
+김싸피
+존경하는 유창오교수님
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="가변임의-키워드-인자arbitrary-keyword-arguments">가변(임의) 키워드 인자(Arbitrary Keyword Arguments)</h4>
+
+<ul>
+  <li>
+    <p>정해지지 않은 키워드 인자들은 <strong><code class="language-plaintext highlighter-rouge">dict</code></strong> 형태로 처리가 되며, <code class="language-plaintext highlighter-rouge">**</code>로 표현한다.</p>
+  </li>
+  <li>
+    <p>보통 <code class="language-plaintext highlighter-rouge">kwagrs</code>라는 이름을 사용하며, <code class="language-plaintext highlighter-rouge">**kwargs</code>를 통해 인자를 받아 처리할 수 있다.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>예시</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">my_dict</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">kwargs</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">my_dict</span><span class="p">(</span><span class="n">한국어</span><span class="o">=</span><span class="s">'안녕'</span><span class="p">,</span> <span class="n">영어</span><span class="o">=</span><span class="s">'hi'</span><span class="p">,</span> <span class="n">독일어</span><span class="o">=</span><span class="s">'Guten Tag'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;class 'dict'&gt;
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"인사를 3개 국어로 말해봅시다."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s">로는 </span><span class="se">\'</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">\'</span><span class="s"> 입니다.'</span><span class="p">)</span>
+
+<span class="n">say_hello</span><span class="p">(</span><span class="n">한국어</span><span class="o">=</span><span class="s">'안녕'</span><span class="p">,</span> <span class="n">영어</span><span class="o">=</span><span class="s">'hi'</span><span class="p">,</span> <span class="n">독일어</span><span class="o">=</span><span class="s">'Guten Tag'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>인사를 3개 국어로 말해봅시다.
+한국어로는 '안녕' 입니다.
+영어로는 'hi' 입니다.
+독일어로는 'Guten Tag' 입니다.
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># url 생성기
+</span><span class="k">def</span> <span class="nf">my_url</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">'https://api.go.kr?'</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s">&amp;'</span>
+    <span class="k">return</span> <span class="n">url</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="n">my_url</span><span class="p">(</span><span class="n">sidoname</span><span class="o">=</span><span class="s">'서울'</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">'asdf'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://api.go.kr?sidoname=서울&amp;key=asdf&amp;
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="함수와-스코프scope">함수와 스코프(scope)</h2>
+
+<blockquote>
+  <p>함수는 코드 내부에 공간(scope)를 생성합니다. 함수로 생성된 공간은 <code class="language-plaintext highlighter-rouge">지역 스코프(local scope)</code>라고 불리며, 그 외의 공간인 <code class="language-plaintext highlighter-rouge">전역 스코프(global scope)</code>와 구분됩니다.</p>
+</blockquote>
+
+<ul>
+  <li><strong>전역 스코프(<code class="language-plaintext highlighter-rouge">global scope</code>)</strong>: 코드 어디에서든 참조할 수 있는 공간</li>
+  <li>
+    <p><strong>지역 스코프(<code class="language-plaintext highlighter-rouge">local scope</code>)</strong>: 함수가 만든 스코프로 함수 내부에서만 참조할 수 있는 공간</p>
+  </li>
+  <li><strong>전역 변수(<code class="language-plaintext highlighter-rouge">global variable</code>)</strong>: 전역 스코프에 정의된 변수</li>
+  <li><strong>지역 변수(<code class="language-plaintext highlighter-rouge">local variable</code>)</strong>: 로컬 스코프에 정의된 변수</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="이름-검색resolution-규칙">이름 검색(resolution) 규칙</h3>
+
+<blockquote>
+  <p>파이썬에서 사용되는 이름(식별자)들은 이름공간(namespace)에 저장되어 있다. 이것을, <strong><code class="language-plaintext highlighter-rouge">LEGB Rule</code></strong> 이라고 부르며, 아래와 같은 순서로 이름을 찾아나간다.</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">L</code>ocal scope: 정의된 함수</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">E</code>nclosed scope: 상위 함수</p>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">G</code>lobal scope: 함수 밖의 변수 혹은 import된 모듈
+    <ul>
+      <li>로컬 스코프내에서 글로벌 변수를 변경하고자 한다면 변수 앞에 <code class="language-plaintext highlighter-rouge">global</code> 입력</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">B</code>uilt-in scope: 파이썬안에 내장되어 있는 함수 또는 속성</li>
+</ul>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># print 라는 이름으로 변수를 선언해보자
+</span><span class="k">print</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># G
+</span><span class="k">print</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># B
+</span></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">---------------------------------------------------------------------------</span>
+<span class="nb">TypeError</span>                                 <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">309</span><span class="n">de644a96c</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+      <span class="mi">1</span> <span class="k">print</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="o">----&gt;</span> <span class="mi">2</span> <span class="k">print</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="nb">TypeError</span><span class="p">:</span> <span class="s">'int'</span> <span class="nb">object</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">callable</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'func에서 print : </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    
+<span class="n">func</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>    
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'전역 스코프에서 print : </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func에서 print : 2
+전역 스코프에서 print : 1
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">a</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'func에서 print : </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    
+<span class="n">func</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>    
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'전역 스코프에서 print : </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func에서 print : 2
+전역 스코프에서 print : 2
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="변수의-수명주기lifecycle">변수의 수명주기(lifecycle)</h3>
+
+<blockquote>
+  <p>변수의 이름은 각자의 <code class="language-plaintext highlighter-rouge">수명주기(lifecycle)</code>가 있다.</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p><strong>빌트인 스코프<code class="language-plaintext highlighter-rouge">(built-in scope)</code></strong>: 파이썬이 실행된 이후부터 영원히 유지</p>
+  </li>
+  <li>
+    <p><strong>전역 스코프<code class="language-plaintext highlighter-rouge">(global scope)</code></strong>: 모듈이 호출된 시점 이후 혹은 이름 선언된 이후부터 인터프리터가 끝날때 까지 유지</p>
+  </li>
+  <li>
+    <p><strong>지역(함수) 스코프<code class="language-plaintext highlighter-rouge">(local scope)</code></strong>: 함수가 호출될 때 생성되고, 함수가 가 종료될 때까지 유지 (함수 내에서 처리되지 않는 예외를 일으킬 때 삭제됨)</p>
+  </li>
+</ul>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="재귀-함수recursive-function">재귀 함수(recursive function)</h2>
+
+<blockquote>
+  <p>재귀 함수는 함수 내부에서 자기 자신을 호출 하는 함수를 뜻합니다. 알고리즘을 설계 및 구현에서 유용하게 활용됩니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="팩토리얼-계산">팩토리얼 계산</h3>
+
+<p>팩토리얼은 1부터 n 까지 양의 정수를 차례대로 곱한 값이며 <code class="language-plaintext highlighter-rouge">!</code> 기호로 표기합니다. 예를 들어 3!은 3 * 2 * 1이며 결과는 6 입니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">팩토리얼(factorial)</code>을 계산하는 함수 <code class="language-plaintext highlighter-rouge">fact(n)</code>를 작성하세요.</p>
+
+<p>n은 1보다 큰 정수라고 가정하고, 팩토리얼을 계산한 값을 반환합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 팩토리얼
+</span><span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
+        <span class="k">return</span> <span class="n">num</span>
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="k">return</span> <span class="n">factorial</span><span class="p">(</span><span class="n">num</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">num</span>
+    
+<span class="k">print</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>120
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="피보나치-수열">피보나치 수열</h3>
+
+<blockquote>
+  <p>첫째 및 둘째 항이 1이며 그 뒤의 모든 항은 바로 앞 두 항의 합인 수열입니다.</p>
+</blockquote>
+
+<p><img src="/assets/images/function.assets/fib.PNG" alt="" /></p>
+
+<p><del>피보나치 문제는 동적계획법(DP)에서 사용되지 않나..?</del></p>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 피보나치
+</span><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># 첫째 둘째 항 1
+</span>        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">num</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">num</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+<span class="k">print</span><span class="p">(</span><span class="n">fib</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>8
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="하노이-탑">하노이 탑</h3>
+
+<blockquote>
+  <p>개인적으로 재귀함수를 이해하게 된 문제로서 적고싶었다..</p>
+
+  <p>하노이 탑은 서로 다른 크기의 N개의 블럭과 3개의 기둥으로 구성되어져 있다.</p>
+
+  <p>이때 모든 블럭은 기둥 중 하나에 반드시 꽂혀야 하며, 자신보다 작은 블럭이 자신의 위에 꽂혀서는 안된다.</p>
+</blockquote>
+
+<p><del>내가 그린 그림..</del></p>
+
+<p><img src="/assets/images/function.assets/hanoi.jpg" alt="" /></p>
+
+<p><img src="/assets/images/function.assets/hanoi2.jpg" alt="" /></p>
+
+<p><br /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 하노이 탑
+</span><span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">fr</span><span class="p">,</span> <span class="n">to</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">block</span><span class="si">}</span><span class="s">번 블럭을 </span><span class="si">{</span><span class="n">fr</span><span class="si">}</span><span class="s">에서 </span><span class="si">{</span><span class="n">to</span><span class="si">}</span><span class="s">로 이동'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">hanoi</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">fr</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">to</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">block</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">move</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">fr</span><span class="p">,</span> <span class="n">to</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hanoi</span><span class="p">(</span><span class="n">block</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">fr</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span> <span class="n">by</span><span class="p">)</span>
+        <span class="n">move</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">fr</span><span class="p">,</span> <span class="n">to</span><span class="p">)</span>
+        <span class="n">hanoi</span><span class="p">(</span><span class="n">block</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">fr</span><span class="p">,</span> <span class="n">to</span><span class="p">)</span>
+        
+<span class="n">hanoi</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1번 블럭을 1에서 3로 이동
+2번 블럭을 1에서 2로 이동
+1번 블럭을 3에서 2로 이동
+3번 블럭을 1에서 3로 이동
+1번 블럭을 2에서 1로 이동
+2번 블럭을 2에서 3로 이동
+1번 블럭을 1에서 3로 이동
+</code></pre></div></div>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/python/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/python/2021/01/19/loopAndConditioanlExpression/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[Python] 반복문</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/python/2021/01/21/errorExeption/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[Python] 에러 & 처리</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

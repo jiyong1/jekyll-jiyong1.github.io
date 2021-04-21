@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[WEB 기초] CSS</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <p><img src="/assets/images/css.assets/css.png" alt="css 이미지" /></p>
+
+<h1 id="web-기초-css">[WEB 기초] CSS</h1>
+
+<blockquote>
+  <p>스타일, 레이아웃 등을 통해 HTML이 사용자에게 어떻게 표시 되는지를 지정하는 언어</p>
+
+  <p>사용자에게 문서(HTML)를 표시하는 방법을 지정하는 언어</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="css-구문">CSS 구문</h2>
+
+<ul>
+  <li>구문은 선택자와 함께 열린다.</li>
+  <li>스타일을 지정할 html 요소를 선택.</li>
+  <li>다음 중괄호가 있는데 이 안에는 속성과 값 쌍 형태를 가지는 하나 또는 그 이상의 선언(declaration)이 있다.</li>
+  <li>각 쌍은 우리가 선택한 요소의 속성을 지정하고 속성에 부여할 값을 지정한다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>선언문</strong></p>
+
+<ul>
+  <li>속성 (Property)
+    <ul>
+      <li>사람이 읽을 수 있는 식별자로, 어떤 (글꼴, 너비, 배경색 등) 스타일 기능을 변경할지 나타냅니다.</li>
+    </ul>
+  </li>
+  <li>값 (Value)
+    <ul>
+      <li>각 속성에는 값을 부여한다.</li>
+      <li>값은 어떻게 (글꼴을 이걸로, 배경 색을 저걸로 등)스타일 기능을 변경할 건지 나타낸다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>CSS 정의 방법</strong></p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">Inline style</code></li>
+  <li>내부 참조 (<code class="language-plaintext highlighter-rouge">Embedding style</code>)</li>
+  <li>외부 참조 (<code class="language-plaintext highlighter-rouge">Link style</code>)</li>
+</ol>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="css-selector">CSS Selector</h2>
+
+<blockquote>
+  <p>선택자는 스타일을 지정할 웹 페이지의 HTML 요소를 대상으로 하는 데 사용</p>
+</blockquote>
+
+<p><strong>클래스(class) 선택자</strong></p>
+
+<ul>
+  <li>클래스 선택자는 마침표( .) 문자로 시작 하며 해당 클래스가 적용된 문서의 모든 항목을 선택</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>아이디(id) 선택자</strong></p>
+
+<ul>
+  <li>아이디 선택자는 <code class="language-plaintext highlighter-rouge">#</code> 문자로 시작하며 기본적으로 클래스 선택자와 같은 방식으로 사용</li>
+  <li>그러나 아이디는 문서 당 한 번만 사용할 수 있으며 요소에는 단일 id값만 적용 할 수 있다</li>
+  <li>문서에서 동일한 아이디를 여러 번 사용해도 동작하나 그렇게 하면 안된다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>결합자</strong>(combinators)</p>
+
+<ul>
+  <li>자손 결합자
+    <ul>
+      <li>셀렉터A  ` `(공백) 셀렉터B</li>
+      <li>셀렉터A의 모든 후손 요소(level n) 중 셀렉터B와 일치하는 요소 선택</li>
+    </ul>
+  </li>
+  <li>자식 결합자
+    <ul>
+      <li>셀렉터A <code class="language-plaintext highlighter-rouge">&gt;</code> 셀렉터B</li>
+      <li>셀렉터A의 모든 자식 요소(level 1) 중 셀렉터B와 일치하는 요소 선택</li>
+    </ul>
+  </li>
+  <li>일반 형제 결합자
+    <ul>
+      <li>셀렉터A <code class="language-plaintext highlighter-rouge">~</code> 셀렉터B</li>
+      <li>셀렉터A의 형제 요소 중 셀렉터A 뒤에 위치하는 셀렉터B 요소를 모두 선택</li>
+    </ul>
+  </li>
+  <li>인접 형제 결합자
+    <ul>
+      <li>셀렉터A <code class="language-plaintext highlighter-rouge">+</code> 셀렉터B</li>
+      <li>셀렉터A의 형제 요소 중 셀렉터A 바로 뒤에 위치하는 셀렉터B 요소를 선택</li>
+      <li>단, A와 B 사이에 다른 요소가 존재하면 선택되지 않음</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>적용 우선순위</strong></p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">!important</code>
+    <ul>
+      <li>다른 사람들의 코드에서 발견할 때 그 의미를 알 수 있는 것은 좋다.</li>
+      <li>하지만 반드시 필요한 경우가 아니면 절대 사용하지 않는 것이 좋다.,</li>
+      <li><code class="language-plaintext highlighter-rouge">!important</code> 는 cascading이 정상적으로 작동하는 방식을 변경하므로, CSS 스타일 문제를 해결하기가 어렵습니다.</li>
+    </ul>
+  </li>
+  <li>inline style</li>
+  <li>id 선택자
+    <ul>
+      <li>id는 대부분의 다른 선택자보다 우선순위가 높기 때문에 다루기가 어려워 질 수 있다.</li>
+      <li>대부분의 경우 id 보다는 모두  class 선택자로 작성하는 것이 좋다.</li>
+      <li>만약 문서 내 <code class="language-plaintext highlighter-rouge">링크 이동</code>이나 <code class="language-plaintext highlighter-rouge">for</code>를 사용하는 특별한 경우에만 아이디를 사용한다.</li>
+    </ul>
+  </li>
+  <li>class 선택자</li>
+  <li>요소 선택자</li>
+  <li>소스 순서</li>
+</ol>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="css-단위">CSS 단위</h2>
+
+<p><strong>(상대) 크기 단위</strong></p>
+
+<p><strong>px</strong></p>
+
+<ul>
+  <li>모니터 해상도의 한 화소인 ‘픽셀’을 기준</li>
+  <li>픽셀의 크기는 변하지 않기 때문에 고정적인 단위</li>
+</ul>
+
+<p><strong>%</strong></p>
+
+<ul>
+  <li>백분율 단위</li>
+  <li>가변적인 레이아웃에서 자주 사용</li>
+</ul>
+
+<p><strong>em</strong></p>
+
+<ul>
+  <li>em은 상속의 영향 받음, rem은 최상위 요소(html)를 기준으로 결정됨.</li>
+  <li>상황에 따라 각기 다른 값을 가질 수 있다.</li>
+</ul>
+
+<p><strong>rem</strong></p>
+
+<ul>
+  <li>최상위 요소인 html(root em)을  절대 단위를 기준으로 삼음. 상속의 영향을 받지 않음.</li>
+  <li>상속에 영향을 받지 않기 때문에 대부분의 경우 <code class="language-plaintext highlighter-rouge">rem</code> 을 많이 사용한다.</li>
+</ul>
+
+<p><strong>viewport</strong></p>
+
+<ul>
+  <li>(스크롤을 내리지 않은 상태에서) 웹 페이지를 방문한 유저에게 현재 보이는 웹 컨텐츠의 영역</li>
+  <li>viewport를 기준으로한 상대적인 사이즈</li>
+  <li>주로 스마트폰이나 테블릿 디바이스의 화면을 일컫는 용어로 사용된다.</li>
+  <li>vw, vh</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>색상 표현 단위</strong></p>
+
+<ol>
+  <li>색상 키워드
+    <ul>
+      <li>색상 키워드는 대소문자를 구분하지 않는 식별자로, red, blue, black처럼 특정 색을 나타낸다</li>
+    </ul>
+  </li>
+  <li>RGB 색상
+    <ul>
+      <li>빨강, 초록, 파랑을 통해 특정 색을 표현</li>
+      <li>16진수 표기법이나 함수형 표기법으로 사용</li>
+      <li>a는 alpha(투명도)가 추가된 것</li>
+    </ul>
+  </li>
+  <li>HSL 색상
+    <ul>
+      <li>색상, 채도, 명도를 통해 특정 색상을 표현</li>
+      <li>a는 alpha(투명도)가 추가된 것</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="box-model">Box Model</h2>
+
+<blockquote>
+  <p>웹 디자인은 contents를 담을 box model을 정의하고 CSS 속성을 통해 스타일(배경, 폰트와 텍스트 등)과 위치 및 정렬을 지정하는 것.</p>
+</blockquote>
+
+<ul>
+  <li>모든 HTML 요소는 box 형태로 되어있다.</li>
+  <li>하나의 박스는 네 부분(영역)으로 이루어 진다.
+    <ul>
+      <li>content / padding / border / margin</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ol>
+  <li>Content
+    <ul>
+      <li>글이나 이미지, 비디오 등 요소의 실제 내용</li>
+    </ul>
+  </li>
+  <li>Padding (안쪽 여백)
+    <ul>
+      <li>Border(테두리) 안쪽의 내부 여백</li>
+      <li>배경색, 이미지 지정 가능</li>
+    </ul>
+  </li>
+  <li>Border</li>
+  <li>Margin (바깥쪽 여백)
+    <ul>
+      <li>테두리 바깥의 외부 여백</li>
+      <li>배경색 지정 불가</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<p><strong>마진 상쇄</strong></p>
+
+<ul>
+  <li>block의 top 및 bottom margin이 때로는 (결합되는 마진 중 크기가) 가장 큰 한 마진으로 결합(combine, 상쇄(collapsed))된다.</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="display">Display</h2>
+
+<blockquote>
+  <p>display CSS 속성은 요소를 블록과 인라인 요소 중 어느 쪽으로 처리할지와 함께 자식 요소를 배치할 때 사용할 레이아웃을 설정한다.</p>
+</blockquote>
+
+<p><strong>block</strong></p>
+
+<ul>
+  <li>쌓이는 박스</li>
+  <li>요소는 블록 요소 상자를 생성하여 일반 흐름에서 요소 앞뒤에 줄 바꿈을 생성한다.</li>
+  <li>블록 레벨 요소안에 인라인 레벨 요소가 들어갈 수 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>inline</strong></p>
+
+<ul>
+  <li>줄바꿈이 일어나지 않는 행의 일부 요소</li>
+  <li>content 너비만큼 가로 폭을 차지</li>
+  <li>width, height, margin-top, margin-bottom을 지정할 수 없음</li>
+  <li>상하 여백은 line-height로 지정</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>inline-block</strong></p>
+
+<ul>
+  <li>inline 처럼 텍스트 흐름대로 나열, block처럼 박스 형태이기 block 속성 사용가능</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>none</strong></p>
+
+<ul>
+  <li>해당 요소를 화면에서 사라지게 하며 요소의 공간조차 사라지게 한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">visibility: hidden;</code>은 해당 요소를 화면에서 사라지게는 하나 공간은 사라지지 않는다.</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="position">Position</h2>
+
+<blockquote>
+  <p>CSS Position 요약</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">position</code> 속성을 통해 <strong>문서 상에 요소를 배치하는 방법</strong>을 지정한다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">top</code>, <code class="language-plaintext highlighter-rouge">right</code>, <code class="language-plaintext highlighter-rouge">bottom</code>, <code class="language-plaintext highlighter-rouge">left</code> 속성을 통해 <strong>요소의 최종 위치</strong>를 결정한다.</p>
+  </li>
+  <li>
+    <p>사용법은 간단하다.</p>
+    <ol>
+      <li>기준을 잡는다.  (예- <code class="language-plaintext highlighter-rouge">position: relative;</code>)</li>
+      <li>이동시킨다. (예- <code class="language-plaintext highlighter-rouge">top: 50px;</code>)</li>
+    </ol>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="position-속성">Position 속성</h3>
+
+<blockquote>
+  <p>요소를 옮기려면 일단 위치를 옮길 기준점을 잡는다.</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th>값</th>
+      <th>의미</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>static</td>
+      <td>기준 없음 (배치 불가능 / 기본값)</td>
+    </tr>
+    <tr>
+      <td>relative</td>
+      <td>요소 자기 자신을 기준으로 배치</td>
+    </tr>
+    <tr>
+      <td>absolute</td>
+      <td>부모(조상) 요소를 기준으로 배치</td>
+    </tr>
+    <tr>
+      <td>fixed</td>
+      <td>뷰포트 기준으로 배치</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h3 id="top-bottom-left-right-속성">Top, Bottom, Left, Right 속성</h3>
+
+<blockquote>
+  <p>기준점을 잡았으면 다음 네 가지 속성을 이용해서 요소의 위치를 옮길 수 있다.</p>
+
+  <p>요소의 Position 기준에 맞춰 위쪽, 아래쪽, 왼쪽, 오른쪽에서의 거리를 설정한다.</p>
+</blockquote>
+
+<ul>
+  <li>top : 요소의 position 기준에 맞는 위쪽에서의 거리(위치)를 설정</li>
+  <li>bottom : 요소의 position 기준에 맞는 아래쪽에서의 거리(위치)를 설정</li>
+  <li>left : 요소의 position 기준에 맞는 왼쪽에서의 거리(위치)를 설정</li>
+  <li>right : 요소의 position 기준에 맞는 오른쪽쪽에서의 거리(위치)를 설정</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>원본</strong></p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nt">body</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"grand-parent"</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"parent"</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"child"</span><span class="o">&gt;</span><span class="nt">첫째</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"child relative"</span><span class="o">&gt;</span><span class="nt">둘째</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"child"</span><span class="o">&gt;</span><span class="nt">셋째</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+  <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="nt">body</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nt">style</span><span class="o">&gt;</span>
+    <span class="nc">.grand-parent</span> <span class="p">{</span>
+      <span class="nl">width</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+      <span class="nl">height</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+      <span class="nl">border</span><span class="p">:</span> <span class="m">5px</span> <span class="nb">dotted</span> <span class="no">lightsalmon</span><span class="p">;</span>
+      <span class="nl">padding</span><span class="p">:</span> <span class="m">50px</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nc">.parent</span> <span class="p">{</span>
+      <span class="nl">width</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+      <span class="nl">height</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+      <span class="nl">border</span><span class="p">:</span> <span class="m">5px</span> <span class="nb">dotted</span> <span class="no">lightslategray</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nc">.child</span> <span class="p">{</span>
+      <span class="nl">width</span><span class="p">:</span> <span class="m">150px</span><span class="p">;</span>
+      <span class="nl">height</span><span class="p">:</span> <span class="m">100px</span><span class="p">;</span>
+      <span class="nl">border</span><span class="p">:</span> <span class="m">3px</span> <span class="nb">dotted</span> <span class="no">red</span><span class="p">;</span>
+      <span class="nl">border-radius</span><span class="p">:</span> <span class="m">12px</span><span class="p">;</span>
+      <span class="nl">background-color</span><span class="p">:</span> <span class="no">lightpink</span><span class="p">;</span>
+
+      <span class="nl">display</span><span class="p">:</span> <span class="n">flex</span><span class="p">;</span>
+      <span class="nl">justify-content</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+      <span class="nl">align-items</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+      <span class="nl">font-size</span><span class="p">:</span> <span class="m">30px</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="o">&lt;/</span><span class="nt">style</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><img src="/assets/images/CSS.assets/cssimg.PNG" alt="" /></p>
+
+<p><br /></p>
+
+<h3 id="relative">Relative</h3>
+
+<blockquote>
+  <p>요소를 일반적인 문서 흐름에 따라 배치한다.</p>
+
+  <p><strong>요소 자기 자신의 원래 위치를 기준으로 배치</strong>한다. (static일때의 position)</p>
+</blockquote>
+
+<ul>
+  <li>원래 위치를 기준으로 위쪽(top), 아래쪽(bottom), 왼쪽(left), 오른쪽(right)에서 얼마만큼 떨어질 지 결정한다.</li>
+  <li>위치를 이동하면서 다른 요소에 영향을 주지 않는다.</li>
+  <li>문서 상 원래 위치가 그대로 유지된다.</li>
+</ul>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.relative</span> <span class="p">{</span>
+    <span class="nl">position</span><span class="p">:</span> <span class="nb">relative</span><span class="p">;</span>
+    <span class="nl">left</span><span class="p">:</span> <span class="m">100px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/CSS.assets/cssimg2.PNG" alt="" /></p>
+
+<p><br /></p>
+
+<h3 id="absolute">Absolute</h3>
+
+<blockquote>
+  <p>요소를 일반적인 문서 흐름에서 제거한다.</p>
+
+  <p><strong>가장 가까운 위치에 있는 조상 요소를 기준으로 배치</strong>한다.</p>
+</blockquote>
+
+<ul>
+  <li>조상 요소 위치를 기준으로 위쪽(top), 아래쪽(bottom), 왼쪽(left), 오른쪽(right)에서 얼마만큼 떨어질 지 결정한다.</li>
+  <li>조상 중 Position을 가진 요소가 없다면 초기 컨테이닝 블록를 기준으로 삼는다. (static을 제외한 값)</li>
+  <li>문서 상 원래 위치를 잃어버린다. (아래에 있는 div가 해당 자리를 차지한다)</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="부모-relative--자식-absolute">부모 relative &amp; 자식 absolute</h3>
+
+<blockquote>
+  <p>Parent에게 Position 값이 있는 경우?</p>
+</blockquote>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/* parent absolute */</span>
+<span class="nc">.parent</span> <span class="p">{</span>
+    <span class="nl">width</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+    <span class="nl">height</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+    <span class="nl">border</span><span class="p">:</span> <span class="m">5px</span> <span class="nb">dotted</span> <span class="no">lightslategray</span><span class="p">;</span>
+
+    <span class="nl">position</span><span class="p">:</span> <span class="nb">relative</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.absolute</span> <span class="p">{</span>
+    <span class="nl">position</span><span class="p">:</span> <span class="nb">absolute</span><span class="p">;</span>
+    <span class="c">/* left: 100px; */</span>
+    <span class="nl">bottom</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span>
+    <span class="nl">right</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"grand-parent"</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"parent"</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"child"</span><span class="o">&gt;</span><span class="nt">첫째</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"child absolute"</span><span class="o">&gt;</span><span class="nt">둘째</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s1">"child"</span><span class="o">&gt;</span><span class="nt">셋째</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+  <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/CSS.assets/cssimg3.PNG" alt="" /></p>
+
+<p><br /></p>
+
+<h3 id="조상-relative--자식-absolute">조상 relative &amp; 자식 absolute</h3>
+
+<blockquote>
+  <p>Grandparent에게 Position 값이 있는 경우?</p>
+</blockquote>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/*grandparent만 relative*/</span>
+<span class="nc">.grand-parent</span> <span class="p">{</span>
+  <span class="nl">width</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+  <span class="nl">height</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="m">5px</span> <span class="nb">dotted</span> <span class="no">lightsalmon</span><span class="p">;</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">50px</span><span class="p">;</span>
+
+  <span class="nl">position</span><span class="p">:</span> <span class="nb">relative</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.parent</span> <span class="p">{</span>
+  <span class="nl">width</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+  <span class="nl">height</span><span class="p">:</span> <span class="m">500px</span><span class="p">;</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="m">5px</span> <span class="nb">dotted</span> <span class="no">lightslategray</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/CSS.assets/cssimg4.PNG" alt="" /></p>
+
+<p><br /></p>
+
+<h3 id="조상-position-없음--자식-absolute">조상 Position 없음 &amp; 자식 absolute</h3>
+
+<blockquote>
+  <p>부모, 조상 전부 뒤져봐도 Position 값이 없는 경우? (Parent, GrandParent, body태그, html태그까지), <strong>window 객체의 뷰포트를 기준점으로 삼는다.</strong></p>
+</blockquote>
+
+<hr />
+
+<p><br /></p>
+
+<h3 id="fixed">Fixed</h3>
+
+<blockquote>
+  <p>viewport를 기준으로</p>
+
+  <p><code class="language-plaintext highlighter-rouge">absolute</code>를 사용해서 똑같이 구현할 수 있지만, <code class="language-plaintext highlighter-rouge">absolute</code>는 조상 요소의 위치를 기준점으로 삼는 개념이므로 viewport를 기준점으로 삼으려면 <code class="language-plaintext highlighter-rouge">fixed</code>를 사용한다.</p>
+</blockquote>
+
+<ul>
+  <li>요소를 일반적인 문서 흐름에서 제거한다. 페이지 레이아웃에 어떠한 공간도 배정하지 않는다.</li>
+  <li>뷰포트를 기준점으로 붙어있다 (==화면에 붙어있다.)
+    <ul>
+      <li>쇼핑몰 우측 하단</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.absolute</span> <span class="p">{</span>
+  <span class="nl">position</span><span class="p">:</span> <span class="nb">fixed</span><span class="p">;</span>
+  <span class="nl">bottom</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span>
+  <span class="nl">right</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/CSS.assets/cssimg5.PNG" alt="" /></p>
+
+<p><br /></p>
+
+<h2 id="참고문헌">참고문헌</h2>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors</a></p>
+
+<p><a href="https://developer.mozilla.org/ko/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance">https://developer.mozilla.org/ko/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance</a></p>
+
+<p><a href="https://developer.mozilla.org/ko/docs/Web/CSS/inheritance">https://developer.mozilla.org/ko/docs/Web/CSS/inheritance</a></p>
+
+<p><a href="https://developer.mozilla.org/ko/docs/Web/HTML/Block-level_elements">https://developer.mozilla.org/ko/docs/Web/HTML/Block-level_elements</a></p>
+
+<p><a href="https://developer.mozilla.org/ko/docs/Web/HTML/Inline_elements">https://developer.mozilla.org/ko/docs/Web/HTML/Inline_elements</a></p>
+
+<p><a href="https://developer.mozilla.org/ko/docs/Web/CSS/display">https://developer.mozilla.org/ko/docs/Web/CSS/display</a></p>
+
+<p><a href="https://docs.emmet.io/cheat-sheet/">https://docs.emmet.io/cheat-sheet/</a></p>
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/webBasic/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/webbasic/2021/02/02/HTML/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[WEB 기초] HTML</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/webbasic/2021/02/04/CSSLayout/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[WEB 기초] CSS Layout & Bootstrap</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>
