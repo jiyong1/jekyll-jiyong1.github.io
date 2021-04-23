@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[JavaScript] 스코프와 var, let 그리고 const</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="js-스코프와-var-let-그리고-const">[JS] 스코프와 var, let 그리고 const</h1>
+
+<p>모든 식별자는 자신이 선언된 위치에 의해 다른 코드가 식별자 자신을 참조할 수 있는 유효 범위가 결정된다. 이를 <code class="language-plaintext highlighter-rouge">스코프</code>라고 한다.</p>
+
+<p>즉, 스코프는 식별자가 유효한 범위를 말한다.</p>
+
+<ul>
+  <li>함수 내부에서 선언된 변수는 해당 함수 외부에서는 참조할 수 없다.</li>
+  <li>스코프를 통해 변수 이름의 충돌을 방지할 수 있다.</li>
+  <li>스코프라는 개념이 존재하지 않는다면 코드 내부에 변수 이름은 오직 유일해야 한다.</li>
+  <li>우리가 컴퓨터에 파일을 저장할 때, 같은 범위(scope)에서는 같은 이름으로 파일을 저장할 순 없지만 다른 범위(다른 폴더)나 해당 범위 내의 폴더 내(자식 폴더)에는 같은 이름으로 파일을 저장할 수 있는 개념과 비슷하다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="var과-let-const">var과 let, const</h2>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="c1">// 중복 선언을 허용한다..</span>
+    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span> <span class="c1">//2</span>
+<span class="p">}</span>
+<span class="nx">foo</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// SyntaxError: Identifier 'x' has already been declared</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">foo</span><span class="p">();</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">var</code> 키워드로 선언된 변수는 같은 스코프 내에서 중복 선언이 허용된다. 이는 의도치 않게 변수 값이 재할당되어 변경되는 부작용을 발생시킨다.</li>
+  <li><code class="language-plaintext highlighter-rouge">let</code> 이나 <code class="language-plaintext highlighter-rouge">const</code>로 선언된 변수는 같은 스코프 내에서 중복 선언이 불가하다!</li>
+</ul>
+
+<p><br /></p>
+
+<p>대부분의 프로그래밍 언어는 함수 몸체만이 아니라 모든 코드 블록이 지역 스코프를 만든다. 이러한 특성을 <code class="language-plaintext highlighter-rouge">블록 레벨 스코프(block level scope)</code> 라 한다. <strong>하지만 var로 선언된 변수는 오로지 함수 코드 블록만을 지역 스코프로 인정한다.</strong></p>
+
+<p>하지만 <strong>let, const 키워드는 블록 레벨 스코프를 지원한다</strong></p>
+
+<p><br /></p>
+
+<h3 id="변수-호이스팅">변수 호이스팅</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span> <span class="c1">// ReferenceError</span>
+<span class="kd">let</span> <span class="nx">x</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>var 키워드와 다르게 let 키워드로 선언한 변수는 호이스팅이 발생하지 않는 것 처럼 동작한다.</p>
+
+<p><br /></p>
+
+<p>사실은 var 키워드로 선언한 변수는 런타임 이전에 <code class="language-plaintext highlighter-rouge">선언 단계</code>와 <code class="language-plaintext highlighter-rouge">초기화 단계</code>를 한번에 진행한다.</p>
+
+<p>즉, var 키워드로 선언한 변수는 변수의 존재를 알리는 것과 동시에 <code class="language-plaintext highlighter-rouge">undefined</code>로 초기화 한다.</p>
+
+<p>그러나 <code class="language-plaintext highlighter-rouge">let</code> 키워드로 선언한 변수는 선언 단계와 초기화 단계가 분리되어 진행된다. 선언 단계는 런타임 이전에 실행되지만, <strong>초기화 단계는 변수 선언문에 도달했을 때 실행된다.</strong></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 전역 변수</span>
+
+<span class="p">{</span>	
+    <span class="c1">// 지역 변수 x 선언문에 도달하지 않았으므로 초기화 단계가 실행되지 않았다.</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span> <span class="c1">// ReferenceError: Cannot access 'x' before initialization</span>
+    <span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// let 키워드로 선언한 변수는 블록 레벨 스코프이므로 지역변수</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="const-키워드">const 키워드</h3>
+
+<p><strong>const 키워드로 선언한 변수는 선언과 동시에 초기화를 해야한다.</strong></p>
+
+<p>const도 let과 마찬가지로 블록 레벨 스코프를 가지며, 선언 단계와 초기화 단계가 분리되어 진행된다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">const x = 1</code> 에 도달해야 초기화 단계를 거치게 된다.</li>
+</ul>
+
+<p><br />const 키워드로 선언한 변수는 재할당이 금지된다. 여기서 주의해야 할 점이 있다.</p>
+
+<p>const 키워드로 선언한 변수의 값이 <code class="language-plaintext highlighter-rouge">원시 타입 (객체 타입이 아닌)</code>인 경우 값을 변경하려면 <code class="language-plaintext highlighter-rouge">재할당</code>을 해야한다. 하지만 <strong>객체 타입의 경우 주소 값을 저장하고 있으므로 객체 내의 값을 변경하고자 할때는 재할당이 이루어지지 않는다.</strong> 따라서 객체를 할당한 경우 값을 변경할 수 있다.</p>
+
+<p><strong>const 키워드는 재할당을 금지할 뿐, 불변을 의미하지 않는다.</strong></p>
+
+<p><br /></p>
+
+<h2 id="스코프의-종류">스코프의 종류</h2>
+
+<blockquote>
+  <p>전역 스코프</p>
+
+  <p>지역 스코프</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th>구분</th>
+      <th>설명</th>
+      <th>스코프</th>
+      <th>변수</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>전역</td>
+      <td>코드의 바깥 영역</td>
+      <td>전역 스코프</td>
+      <td>전역 변수</td>
+    </tr>
+    <tr>
+      <td>지역</td>
+      <td>함수의 내부</td>
+      <td>지역 스코프</td>
+      <td>지역 변수</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>전역 변수는 어디서든지 참조할 수 있다.</li>
+  <li>지역 변수는 자신의 영역 혹은 하위 지역 스코프에서 유효하다.</li>
+</ul>
+
+<p><img src="/assets/images/jsscope.assets/scope.jpg" alt="" /></p>
+
+<p><br /></p>
+
+<h2 id="스코프-체인">스코프 체인</h2>
+
+<p>모든 스코프는 하나의 계층적 구조로 연결되며, 이렇게 스코프가 계층적으로 연결된 것을 <code class="language-plaintext highlighter-rouge">스코프 체인(scope chain)</code> 이라고 한다.</p>
+
+<p>변수를 참조할 때 자바스크립트 엔진은 스코프 체인을 통해 해당 스코프에서 시작하여 상위 스코프 방향으로 이동하며 선언된 변수를 검색한다. (identifier resolution)</p>
+
+<p><img src="/assets/images/jsscope.assets/scopechain.jpg" alt="" /></p>
+
+<p><br /></p>
+
+<p>스코프 체인은 물리적으로 존재한다. 자바스크립트 엔진은 코드를 실행하기 전에 <code class="language-plaintext highlighter-rouge">렉시컬 환경(Lexical Environment)</code>을 생성한다.</p>
+
+<p><br /></p>
+
+<h2 id="렉시컬-스코프">렉시컬 스코프</h2>
+
+<ul>
+  <li>동적 스코프(dynamic scope) : <strong>함수를 호출하는 시점</strong>에 동적으로 상위 스코프를 결정한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">렉시컬 스코프(Lexical scope)</code> : <strong>함수를 정의하는 시점</strong>에 따라 상위 스코프를 결정한다. 즉, ㅈ함수의 상위 스코프는 언제나 자신이 정의된 스코프이다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">foo</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="nx">bar</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">bar</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">foo</span><span class="p">();</span> <span class="c1">// 1 : foo에서 bar를 실행했지만 bar의 상위 스코프는 전역 스코프</span>
+<span class="nx">bar</span><span class="p">();</span> <span class="c1">// 1 : 전역 스코프의 x</span>
+</code></pre></div></div>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/javascript/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/javascript/2021/04/21/jsre/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[JavaScript] 값 재할당</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/javascript/2021/04/23/jsobject/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[JavaScript] 생성자 함수와 객체 생성</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>
