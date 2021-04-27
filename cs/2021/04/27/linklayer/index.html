@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[Network] Link layer</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="network-link-layer">[Network] Link layer</h1>
+
+<blockquote>
+  <p>두개 이상의 packet이 나올 경우 전달이 제대로 되지 않는다.</p>
+
+  <p>이러한 충돌을 어떻게 해결할 것인가?</p>
+</blockquote>
+
+<p>app layer (message) -&gt; transfer layer (segment) -&gt; network layer (packet) -&gt; <code class="language-plaintext highlighter-rouge">link layer (frame)</code></p>
+
+<p><br /></p>
+
+<p><img src="/assets/images/linklayer.assets/linklayer.jpg" alt="" /></p>
+
+<h2 id="multiple-access-links-protocols-mac">Multiple access links, protocols (MAC)</h2>
+
+<p><br /></p>
+
+<h3 id="tdma-time-division-multiple-access">TDMA (time division multiple access)</h3>
+
+<blockquote>
+  <p>channel partitioning</p>
+
+  <p>이동통신 lte, 3g에서 사용한다.</p>
+</blockquote>
+
+<ul>
+  <li>정해진 시간에만 말한다.</li>
+  <li>충돌은 일어나지 않을 것이다.</li>
+  <li>근데 한명만 이야기 하고 있으면..? - <code class="language-plaintext highlighter-rouge">단점</code></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="fdma-frequency-division-multiple-access">FDMA (frequency division multiple access)</h3>
+
+<blockquote>
+  <p>channel partitioning</p>
+
+  <p>이동통신 lte, 3g에서 사용한다.</p>
+</blockquote>
+
+<ul>
+  <li>주파수를 나누어서 하는 것</li>
+  <li>서로 다른 주파수 사용하니까 충돌은 일어나지 않을 것</li>
+  <li>마찬가지로 낭비가 일어날 수 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="csma-carrier-sense-multiple-access">CSMA (carrier sense multiple access)</h3>
+
+<blockquote>
+  <p>random access</p>
+
+  <p>ethernet이랑 wifi에서 사용한다.</p>
+</blockquote>
+
+<ul>
+  <li>누군가 이야기하는지 들어보고 조용하면 내가 이야기 한다.</li>
+  <li>말이 끝자나마자 말하려고 하면 collision이 발생할 수 있다.</li>
+  <li>물리적인 속도를 가지고 있기 때문에 propagation delay에 의해 충돌이 일어날 수 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="csmacd-collision-detection">CSMA/CD (collision detection)</h4>
+
+<blockquote>
+  <p>말이 겹치면 데이터 전송을 멈춘다.</p>
+</blockquote>
+
+<ul>
+  <li>말이 겹치게 되면 데이터를 다 전송하더라도 듣는 입장에서는 무슨 말인지 못알아듣기 때문에 시간이 낭비된다.</li>
+  <li>이러한 낭비를 줄이고자 해서 collision이 감지되면 데이터 전송을 멈춘다.</li>
+  <li>랜덤 타임을 돌리고 끝나면 다시 재전송 시도 (반복)
+    <ul>
+      <li>랜덤 타임의 범위가 좁으면 빠르게 재전송할 수 있지만 또 충돌이 날 가능성이 있다.</li>
+      <li>첫 충돌에 대해서는 빠른 시간 내에 재전송하기 위해 랜덤 타임 범위가 좁다.</li>
+      <li>또 충돌이 발생하면 다음 충돌부터는 랜덤 타임 범위가 넓어진다.</li>
+      <li>그러니 인터넷을 사용하는 사람이 많아질수록 느리다는 느낌을 받는 것!</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p>사용자가 많으면 <strong>TDMA, FDMA</strong> 가 효율적, 사용자가 적으면 <strong>CSMA</strong>가 효율적</p>
+
+<p>link layer에서는 <code class="language-plaintext highlighter-rouge">feedback (ACK)</code>이 없기 때문에 collision detect가 100%로 일어나야한다.</p>
+
+<p><br /></p>
+
+<h4 id="충돌이-일어났는데-충돌-탐지를-하지-못하는-경우">충돌이 일어났는데 충돌 탐지를 하지 못하는 경우</h4>
+
+<ul>
+  <li>A에서 frame을 전송한다. (아주 작은 frame)</li>
+  <li>frame을 다 전송하자마자 다른 곳에서 충돌되는 frame을 보냈다.</li>
+</ul>
+
+<p>이러한 경우를 방지하기 위해서 <code class="language-plaintext highlighter-rouge">propagation delay</code>에 연관지어 <code class="language-plaintext highlighter-rouge">Minimum frame</code>사이즈 지정해놓았고,  Minimum frame 사이즈 이상의 frame을 보내야한다.</p>
+
+<p>만약 minimum보다 작은 사이즈만 보내는 경우라면 <code class="language-plaintext highlighter-rouge">padding</code>을 넣어서 보낸다.</p>
+
+<p><br /></p>
+
+<h3 id="taking-turns-mac-protocols">Taking turns Mac protocols</h3>
+
+<p>토큰이 있는 host가 데이터를 전송한다.</p>
+
+<p>토큰 잃어버리면 큰일난다.. 잘 사용하지 않는다고 함</p>
+
+<p><br /></p>
+
+<h2 id="ethernet-physical-topology">Ethernet: physical topology</h2>
+
+<blockquote>
+  <p>유선 상황</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="ethernet-frame-structure">Ethernet frame structure</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">header</code>
+    <ul>
+      <li>preamble - ethernet frame 이다</li>
+      <li>destination address : <code class="language-plaintext highlighter-rouge">MAC address</code> (48 bits)</li>
+      <li>source address : <code class="language-plaintext highlighter-rouge">MAC address</code> (48 bits)</li>
+      <li>type</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">data</code>
+    <ul>
+      <li>IP packet</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="mac-address">MAC address</h2>
+
+<blockquote>
+  <p>IP 주소는 위치에 종속되어 계속 바뀔 수 있지만</p>
+
+  <p>MAC 주소는 unique 하다.</p>
+</blockquote>
+
+<ul>
+  <li>앞 24bit : 제조사</li>
+  <li>뒤 24bit : 제품 번호</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="arp-address-resolution-protocol">ARP (address resolution protocol)</h2>
+
+<blockquote>
+  <p>IP주소를 가지고 MAC 주소를 얻어온다.</p>
+</blockquote>
+
+<p>최초에 DHCP(Dynamic Host Configuration Protocol)을 통해서 GateWayRouter의 IP주소를 얻어오지만,  해당 interface의 MAC 주소는 알지 못한다. 이를 어떻게 해결할 것인가?</p>
+
+<ul>
+  <li>지금 1.1.1.1 IP 주소를 가지고 있는 분은 MAC 주소 좀 알려주세요~ (<code class="language-plaintext highlighter-rouge">broadcast</code>)
+    <ul>
+      <li>위의 packet을 <code class="language-plaintext highlighter-rouge">ARP query</code> 라고 한다.</li>
+      <li>frame header type에 ARP query임을 명시한다.
+        <ul>
+          <li>이외에도 IP packet, ARP response 등의 type이 존재한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li>frame header
+    <ul>
+      <li>type : ARP query</li>
+      <li>src : 나의 MAC address</li>
+      <li>dst : FF-FF-FF-FF-FF-FF (broadcast)</li>
+    </ul>
+  </li>
+  <li>data
+    <ul>
+      <li>1.1.1.1 주소를 가지고 있는 분 MAC 주소 좀 알려주세요.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p>이후 알게된 정보를 <code class="language-plaintext highlighter-rouge">ARP TABLE</code>에 정보를 남겨둔다. 이를 참조하여 다음 interface로 이동한다.</p>
+
+<p>router와 router 사이에서도 forwarding table을 참조하여 dst IP address를 알아내고, dst IP address와 ARP TABLE을 통해 다음 interface의 MAC주소를 얻어내는 형식으로 최종 목적지까지 이동한다.</p>
+
+<p><br /></p>
+
+<h2 id="switch">Switch</h2>
+
+<blockquote>
+  <p>bus vs <strong>star</strong></p>
+
+  <p>broadcast domain을 분리한다.</p>
+
+  <p>host 입장에서는 carrier sense를 했을 때 항상 조용하다.</p>
+</blockquote>
+
+<ul>
+  <li>switch내에 switch table이 존재하여 어떤 interface에 host가 존재하는지 알고있다.</li>
+  <li>switch table을 얻기 위해 <code class="language-plaintext highlighter-rouge">self-running</code>이 이루어진다.
+    <ul>
+      <li>frame을 받았을 때 frame의 source address를 보고 하나를 배운다.</li>
+      <li>destination address(MAC)을 모른다면 flood(주소 정보를 아는 interface 말고 모든 interface에 다 보낸다.)</li>
+    </ul>
+  </li>
+  <li>switch도 한정된 interface 개수만 호환하기 때문에 <code class="language-plaintext highlighter-rouge">계층화</code>를 시켜 연결한다.</li>
+  <li>switch가 하는 일을 <code class="language-plaintext highlighter-rouge">switching</code> 이라고 한다.</li>
+  <li>switch에게 MAC address는 없다.</li>
+</ul>
+
+<p><br /></p>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+      
+      
+      
+      
+      
+  <a href="/cs/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/cs/2021/04/23/networklayer/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[Network] Network layer</p>
+        </div>
+      </a>
+    
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

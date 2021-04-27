@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[Network] Network layer</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="network-network-layer">[Network] Network layer</h1>
+
+<blockquote>
+  <p>전송계층을 배웠으니 이제 뚜껑을 열어 Network 계층에 대해 알아보자.</p>
+
+  <p>TCP segment가 IP packet으로 들어온다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="네트워크-계층의-주요한-기능">네트워크 계층의 주요한 기능</h2>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">forwarding</code>
+    <ul>
+      <li>input interface로 packet이 들어오면 그 packet이 가고자하는 목적지에 따라서 알맞은 interface로 forwarding 해주어야 한다.</li>
+      <li>router안에 <code class="language-plaintext highlighter-rouge">forwarding table</code>을 참조하여 보낸다.</li>
+      <li>forwarding table은 어떻게.. 채워져있지..?</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">routing</code>
+    <ul>
+      <li>forwarding table을 채우는 것을 routing이라고 한다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h2 id="forwarding-table">forwarding table</h2>
+
+<p>forwarding table entry에 목적지의 주소가 모두 담겨있게 되면 table의 크기가 너무 커진다.</p>
+
+<p>주소 자체가 들어가는 것이 아니라 <strong>주소 range</strong>가 들어간다.</p>
+
+<p><img src="/assets/images/networklayer.assets/forwardingTable.jpg" alt="" /></p>
+
+<ul>
+  <li>별 표시를 통해 범위를 지정한 것이다.</li>
+  <li><code class="language-plaintext highlighter-rouge">longest prefix matching</code>
+    <ul>
+      <li>여러개 entry와 매칭이 되었을 때, <strong>가장 길게 매칭되는 곳으로 forwarding !!</strong></li>
+      <li>ex) 광주광역시, 광주광역시 서구..</li>
+      <li>광주광역시 서구라고 한다면 당연히 광주광역시 서구의 interface로 가야지..</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="router-architecture-overview">Router architecture overview</h2>
+
+<p><img src="/assets/images/networklayer.assets/routerArchitecture.jpg" alt="" /></p>
+
+<ul>
+  <li>forwarding table을 <code class="language-plaintext highlighter-rouge">routing processor</code>가 만들어 준다.</li>
+  <li>만들어진 forwarding table은 각 <strong>input port에 독립적으로 저장된다.</strong>
+    <ul>
+      <li>병렬적으로 처리하여 속도를 빠르게 하기 위해서</li>
+    </ul>
+  </li>
+  <li>아무리 연산속도가 빨라도 packet이 들어오는 속도가 더 빠를 수 있기 때문에 각 input port에 queue가 존재한다.</li>
+  <li>output port에도 몰릴 수 있기 때문에 queue가 존재한다.</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="ip-packet의-형태">IP packet의 형태</h2>
+
+<p><img src="/assets/images/networklayer.assets/packet.jpg" alt="" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">TTL (Time To Live)</code> : 최초의 숫자를 시작으로 router에서 forwarding 할 때 1씩 감소시킨다.
+    <ul>
+      <li>영원히 packet이 살아있는 것을 방지하기 위해서</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Upper layer</code> : TCP, UDP 등 상위 layer 어디로 올려보내야 되는지..</li>
+  <li><code class="language-plaintext highlighter-rouge">source IP address</code> 와 <code class="language-plaintext highlighter-rouge">destination IP address</code>가 중요하다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="ip-address-ipv4">IP Address (IPv4)</h2>
+
+<ul>
+  <li>IP는 특정 host를 지칭하는 것이 아니다!</li>
+  <li><strong>IP 주소란 interface를 지칭하는 것이다.</strong></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="scalability-challenge">Scalability Challenge</h3>
+
+<ul>
+  <li>host들이 각자 IP주소를 배정받아 가지고 있다고 가정해보자.</li>
+  <li>이렇게 되면 사용자가 많아질 때 forwarding table entry 개수가 무지하게 많아진다.</li>
+  <li>결과적으로 matching의 속도가 느려지게 된다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="hierarchical-addressing">Hierarchical Addressing</h3>
+
+<blockquote>
+  <p>스케일이 커지면 무조건 계층화</p>
+
+  <p>IP 주소 역시 계층화가 되어있다.</p>
+</blockquote>
+
+<ul>
+  <li>앞 24bits : Network id (<code class="language-plaintext highlighter-rouge">==prefix==subnet</code>) - 사실 가변적이다.</li>
+  <li>뒤 8bits: Host</li>
+  <li><code class="language-plaintext highlighter-rouge">Subnet Mask</code> : 어디까지 Network id(prefix)인지 machine이 이해할 수 있도록 존재한다.
+    <ul>
+      <li>bitwise AND</li>
+    </ul>
+  </li>
+  <li>근데 이렇게 되면 256개의 host만 network 통신이 가능한가..?</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="가변적인-prefix-크기">가변적인 prefix 크기</h3>
+
+<blockquote>
+  <p>Classless Inter-Domain Routing (CIDR)</p>
+</blockquote>
+
+<p>각 기관의 size에 맞게 유연하게 prefix 크기를 정한다.</p>
+
+<p><br /></p>
+
+<h3 id="subnets">Subnets</h3>
+
+<ul>
+  <li>router를 거치지 않고 접근할 수 있는 interface들의 집합</li>
+  <li>router의 interface들은 각자 다른 subnet</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="ipv6">IPv6</h2>
+
+<p>주소 공간이 128bits</p>
+
+<p>아직까지 IPv4를 사용하고 있다. 못갈아타는데는 이유가 있다..</p>
+
+<ul>
+  <li>기존에 사용하고 있던 IPv4 라우터 장비를 교체해야 한다.</li>
+  <li>기존의 IPv4 생태계를 뒤집기는 힘들다..</li>
+  <li>근데 진짜 문제가 된다면 무슨 수를 써서라도 바꿔야하는데 바꾸지 않아도 문제가 되지 않는다</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="network-address-translation-nat">Network Address Translation (NAT)</h2>
+
+<ul>
+  <li>IP 주소는 실질적으로 unique 해야한다.</li>
+  <li><strong>내부적으로만 유일한 주소를 사용자에게 배정한다.</strong></li>
+  <li>source 에서 나가거나 들어올 때 IP를 변경한다.</li>
+</ul>
+
+<p><img src="/assets/images/networklayer.assets/nat.jpg" alt="" /></p>
+
+<ul>
+  <li><strong>다시 서버측에서 들어올 때 port번호를 가지고 누구인지 판단할 것이다.</strong></li>
+  <li>사실은 host를 구분하기 위해서 IP 주소를 사용해야하는데 port번호를 사용하고 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="dynamic-host-configuration-protocol-dhcp">Dynamic Host Configuration Protocol (DHCP)</h2>
+
+<blockquote>
+  <p>애플리케이션 계층의 이야기</p>
+</blockquote>
+
+<ul>
+  <li>DHCP server가 존재한다.</li>
+  <li>DHCP서버에게 IP주소를 요청하고, IP주소를 임대받는다.</li>
+  <li>임대 절차
+    <ol>
+      <li>DHCP Discover (클라이언트 -&gt; DHCP 서버 / 브로드캐스트 메시지)
+        <ul>
+          <li>단말이 DHCP 서버를 찾기 위한 메시지</li>
+          <li>혹시 DHCP 서버 있나요?</li>
+        </ul>
+      </li>
+      <li>DHCP Offer (서버 -&gt; 클라이언트)
+        <ul>
+          <li>단순히 서버의 존재만을 알리지 않고, 클라이언트에 할당할 IP 주소 정보를 포함한 다양한 정보를 실어서 클라이언트에게 전달한다.</li>
+          <li>저 여기있어요.. 그리고…</li>
+        </ul>
+      </li>
+      <li>DHCP Request (클라이언트 -&gt; 서버)
+        <ul>
+          <li>클라이언트가 사용할 네트워크 정보를 요청</li>
+        </ul>
+      </li>
+      <li>DHCP ACK (서버 -&gt; 클라이언트)</li>
+    </ol>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="ip-fragmentation-reassembly">IP fragmentation, reassembly</h2>
+
+<p>router들 사이의 link에서 지원할 수 있는 최대 packet 크기가 다르다.</p>
+
+<p>link에서 지원할 수 있는 최대의 packet 사이즈를 <code class="language-plaintext highlighter-rouge">MTU (Maximum Transmission Unit)</code> 라고 한다.</p>
+
+<p>따라서 packet사이즈가 MTU보다 크게 되면 못지나가게 되는데 데이터를 버리는 것은 너무 아까우니 데이터를 쪼갠다. ( <strong>fragmentation</strong> )</p>
+
+<p>결국 도착점에 도착했을 때 다시 조립(assemble)을 해야하는데 assemble하기 위한 기록을 packet에 해놓는다. - <code class="language-plaintext highlighter-rouge">fragflag, 16-bit identifier, offset, length</code></p>
+
+<h3 id="fragmentation-example">fragmentation example</h3>
+
+<blockquote>
+  <p>4000 byte의 데이터</p>
+
+  <p>MTU = 1500 bytes</p>
+</blockquote>
+
+<ol>
+  <li>header : 20bytes / data : 1480bytes - <code class="language-plaintext highlighter-rouge">length : 1500</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">fragflag</code> : 1 (저 .. 뒤에 동생이 있습니다.)</li>
+      <li><code class="language-plaintext highlighter-rouge">offset</code> : 0 (원래 데이터에서 0번부터 시작했습니다)</li>
+    </ul>
+  </li>
+  <li>header : 20bytes / data : 1480bytes - <code class="language-plaintext highlighter-rouge">length : 1500</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">fragflag</code> : 1 (저 .. 뒤에 동생이 있습니다.)</li>
+      <li><code class="language-plaintext highlighter-rouge">offset</code> : 185 (1480/8) - header의 3bit를 줄이고자..</li>
+    </ul>
+  </li>
+  <li>header : 20bytes / data : 1020bytes - <code class="language-plaintext highlighter-rouge">length : 1040</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">fragflag</code> : 1 (제가 마지막입니다.)</li>
+      <li><code class="language-plaintext highlighter-rouge">offset</code> : 370 (2960/8)</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="routing-algorithms">routing algorithms</h2>
+
+<p><br /></p>
+
+<h3 id="dijkstras-algorithm">Dijkstra’s Algorithm</h3>
+
+<blockquote>
+  <p>라우팅 알고리즘</p>
+</blockquote>
+
+<p><del>알고리즘을 정리하는 곳은 아니니 간단하게..</del></p>
+
+<p><br /></p>
+
+<h4 id="초기화">초기화</h4>
+
+<p>모든 노드에 대해서 나랑 이웃한 노드에 대해서만 link cost로 distance를 초기화 하고 연결되지 않은 애들은 무한대로 초기화 한다.</p>
+
+<p>distance를 초기화하 할 때 바로 이전 노드도 함께 적어준다.</p>
+
+<p><br /></p>
+
+<h4 id="loop">Loop</h4>
+
+<p>최단 거리를 찾은 노드(N에 저장한 노드)를 제외한 노드 중 거리가 현재까지 가장 작은 노드를 선택한다.</p>
+
+<p>해당 노드를 최단 거리를 찾았다고 저장(N에 저장)하고 해당 노드와 이웃한 노드에 대해 최단 거리를 update 해준다. 마찬가지로 이전 노드에 대한 정보도 함께 저장한다.</p>
+
+<p><br /></p>
+
+<p>위와 같은 알고리즘을 통해 <code class="language-plaintext highlighter-rouge">forwarding table</code>을 만들어 낸다.</p>
+
+<p><br /></p>
+
+<h4 id="icmp-internet-controll-message-protocol">ICMP (Internet Controll Message Protocol)</h4>
+
+<blockquote>
+  <p>네트워크 내부에서 발생하는 이벤트들에 대해서 서로 주고 받기 위한 signaling을 위한 프로토콜</p>
+
+  <p>IP packet에 담겨서 간다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p>위에서 언급한 다익스트라 알고리즘을 사용하려면 연결되는 링크에 대한 cost를 알아야하는데 이러한 정보들도 ICMP 통신을 통해 서로 주고 받는다.</p>
+
+<p>IP packet의 헤더의 필드 중 <code class="language-plaintext highlighter-rouge">destination addr</code>은 브로드캐스트 address (255.255.255.255)</p>
+
+<p><br /></p>
+
+<h3 id="distance-vector-algorithm">Distance vector algorithm</h3>
+
+<blockquote>
+  <p>Bellman-Ford equation (dynamic programming)</p>
+</blockquote>
+
+<p><del>알고리즘을 정리하는 곳은 아니니 간단하게..</del></p>
+
+<ul>
+  <li>dx(y) = x에서 y까지의 최소 비용</li>
+  <li>cost(x, v) = x에서 v까지 가는데 걸리는 비용</li>
+</ul>
+
+<p><br /></p>
+
+<p>결국 dx(y)는 인접 노드 중 하나로 시작될 것이다. 인접 노드에서 가지고 있는 <code class="language-plaintext highlighter-rouge">Distance array (Distance vector)</code>를 전달받아 목적지까지의 최소값을 알아낸다.</p>
+
+<ul>
+  <li>x 노드에서 인접 노드가 3개라고 했을 때, 결국 아래 세가지 중 하나일 것이다.
+    <ul>
+      <li>c(x, v1) + dv1(y)</li>
+      <li>c(x, v2) + dv2(y)</li>
+      <li>c(x, v3) + dv3(y)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>결국 link state (다익스트라 알고리즘)과 다른 점은 주변 이웃이랑만 데이터를 주고 받는다.</strong></p>
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/cs/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/cs/2021/04/19/tcp/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[Network] TCP</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/cs/2021/04/27/linklayer/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[Network] Link layer</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

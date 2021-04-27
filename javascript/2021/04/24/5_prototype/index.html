@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[JavaScript] 프로토타입</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="js-프로토타입">[JS] 프로토타입</h1>
+
+<blockquote>
+  <p>자바스크립트는 프로토타입 기반의 객체지향 프로그래밍 언어다.</p>
+</blockquote>
+
+<p>ES6부터 클래스가 도입되었다. 하지만 ES6의 클래스가 기존 <code class="language-plaintext highlighter-rouge">프로토타입 기반 객체지향 모델</code>을 없애고 새로운 객체지향 모델을 제공하는 것은 아니다.</p>
+
+<p>하지만 생성자 함수와 정확히 동일하게 동작하지는 않는다. 이는 나중에 <code class="language-plaintext highlighter-rouge">클래스</code>에서 다루도록 한다.</p>
+
+<p>객체는 <strong>상태 데이터와 동작을 하나의 논리적인 단위로 묶은 복합적인 자료구조</strong>라고 할 수 있다. 이때 객체의 상태 데이터를 <code class="language-plaintext highlighter-rouge">프로퍼티(property)</code>, 동작을 <code class="language-plaintext highlighter-rouge">메서드(method)</code>라고 한다.</p>
+
+<p><br /></p>
+
+<p>자바스크립트는 프로토타입 기반으로 상속을 구현하여 불필요한 중복을 제거한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">greeting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">안녕하세요. 저는 </span><span class="dl">'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">jiyong</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="dl">'</span><span class="s1">jiyong</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">seventwo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="dl">'</span><span class="s1">seventwo</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>생성자 함수는 위와 같이 동일한 프로퍼티 구조를 갖는 객체를 여러 개 생성할 때 매우 유용하다. 하지만 <strong>Person 생성자는 객체를 생성할 때마다 greeting 메서드를 중복 생성하고 모든 인스턴스가 중복 소유한다.</strong></p>
+
+<p><img src="/assets/images/05_prototype.assets/objectmethod.jpg" alt="" /></p>
+
+<p><br /></p>
+
+<p>자바스크립트는 프로토타입을 기반으로 상속을 구현한다. 상속을 통해 중복을 제거하면 다음과 같다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">Person</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">greeting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">안녕하세요. 저는 </span><span class="dl">'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>  
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/05_prototype.assets/prototype.jpg" alt="" /></p>
+
+<p>greeting 메서드를 하나만 생성하여 Person.prototype의 메서드로 할당하였다. 따라서 Person 생성자가 생성하는 모든 객체들은 greeting 메서드를 상속받아 사용할 수 있다.</p>
+
+<p><br /></p>
+
+<h2 id="프로토타입-객체">프로토타입 객체</h2>
+
+<p><code class="language-plaintext highlighter-rouge">프로토타입</code> 객체는 객체지향 프로그래밍에서 <strong>상속</strong>을 구현하기 위해 사용된다. 프로토타입은 어떤 객체의 상위 객체의 역할을 하는 객체로서 상속받은 하위 객체는 상위 객체의 프로퍼트를 자신의 프로퍼티처럼 자유롭게 사용할 수 있다.</p>
+
+<p>객체 리터럴에 의해 생성된 객체의 프로토타입은 <code class="language-plaintext highlighter-rouge">Object.prototype</code>이고 생성자 함수에 의해 생성된 객체의 프로토타입은 생성자 함수의 prototype 프로퍼티에 바인딩되어 있는 객체다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">__proto__ </code> 접근자 프로퍼티 대신 <code class="language-plaintext highlighter-rouge">Object.getPrototyeOf</code> 메서드와 <code class="language-plaintext highlighter-rouge">Object.setPrototypeOf</code>메서드를 사용하는 것을 권장한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">parent</span> <span class="o">=</span> <span class="p">{</span> <span class="na">x</span><span class="p">:</span> <span class="mi">1</span> <span class="p">};</span>
+<span class="kd">const</span> <span class="nx">child</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="nb">Object</span><span class="p">.</span><span class="nx">setPrototypeOf</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">parent</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">getPrototypeOf</span><span class="p">(</span><span class="nx">child</span><span class="p">));</span> <span class="c1">// { x: 1 }</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span> <span class="c1">// 1</span>
+</code></pre></div></div>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/javascript/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/javascript/2021/04/23/jsobject/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[JavaScript] 생성자 함수와 객체 생성</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/javascript/2021/04/26/6_executioncontext/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[JavaScript] 실행 컨텍스트</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>
