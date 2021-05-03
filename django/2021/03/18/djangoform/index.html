@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[django] form</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    
+<h1 id="django-form">[django] form</h1>
+
+<blockquote>
+  <p>Django 프로젝트의 주요 유효성 검사 도구들 중 하나이며, 공격 및 데이터 손상에 대한 중요한 방어 수단이다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="djangos-role-in-forms">Django’s role in forms</h2>
+
+<p>Django는 forms에 관련된 작업의 세 부분을 처리한다.</p>
+
+<ol>
+  <li>렌더링을 위한 데이터 준비 및 재구성</li>
+  <li>데이터에 대한 HTML forms 생성</li>
+  <li>클라이언트로 부터 받은 데이터 수신 및 처리</li>
+</ol>
+
+<p>이 모든 작업을 수동으로 수행하는 코드를 작성할 수 있지만 Django가 모든 작업을 처리 할 수 있다.</p>
+
+<p><br /></p>
+
+<h2 id="form-class">Form Class</h2>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/ko/3.1/topics/forms/#working-with-forms</p>
+</blockquote>
+
+<ul>
+  <li>Django form 관리 시스템의 핵심이다.</li>
+  <li>form내 field들, field 배치, 디스플레이 widget, label, 초기값, 유효한 값과 (유효성 체크이후에) 비유효 field에 관련된 에러메시지를 결정한다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Form 선언</strong></p>
+
+<ul>
+  <li>view까지 작성해서 템플릿에서 출력까지 확인</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/forms.py
+</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+
+
+<span class="k">class</span> <span class="nc">ArticleForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">Textarea</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>  
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">ArticleForm</span>
+  
+  
+<span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/new.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/new.html --&gt;</span>
+  
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+  
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+    <span class="nt">&lt;h1&gt;</span>NEW<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:create'</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+        <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+        <span class="cp">{{</span> <span class="nv">form.as_p</span> <span class="cp">}}</span>
+        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;hr&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>개발자 도구로 만들어진 input 태그 확인해보자.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Outputting forms as HTML</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/ko/3.1/ref/forms/api/#outputting-forms-as-html</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">as_p()</code> : 각 필드가 단락(paragraph)으로 렌더링</li>
+  <li><code class="language-plaintext highlighter-rouge">as_ul()</code> : 각 필드가 목록항목(list item)으로 렌더링</li>
+  <li><code class="language-plaintext highlighter-rouge">as_table()</code> : 각 필드가 테이블 행으로 렌더링</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Django의 HTML input 요소 표현 2가지</strong></p>
+
+<ol>
+  <li>Form fields
+    <ul>
+      <li>입력에 대한 유효성 검사 로직을 처리하며 템플릿에서 직접 사용됨</li>
+    </ul>
+  </li>
+  <li>Widgets
+    <ul>
+      <li>웹 페이지의 HTML 양식 입력 요소 렌더링 및 제출 된 원시 데이터 추출을 처리</li>
+      <li>위젯은 반드시 form fields에 할당 됨</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="form-fields">Form fields</h3>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/forms/fields/#module-django.forms.fields</p>
+
+  <p>https://docs.djangoproject.com/en/3.1/internals/contributing/writing-code/coding-style/#model-style</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArticleForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">REGION_A</span> <span class="o">=</span> <span class="s">'sl'</span>
+    <span class="n">REGION_B</span> <span class="o">=</span> <span class="s">'dj'</span>
+    <span class="n">REGION_C</span> <span class="o">=</span> <span class="s">'gj'</span>
+    <span class="n">REGION_D</span> <span class="o">=</span> <span class="s">'gm'</span>
+    <span class="n">REGIONS_CHOICES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">REGION_A</span><span class="p">,</span> <span class="s">'서울'</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">REGION_B</span><span class="p">,</span> <span class="s">'대전'</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">REGION_C</span><span class="p">,</span> <span class="s">'광주'</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">REGION_D</span><span class="p">,</span> <span class="s">'구미'</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">Textarea</span><span class="p">)</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">REGIONS_CHOICES</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">RadioSelect</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="modelform">ModelForm</h2>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/topics/forms/modelforms/#creating-forms-from-models</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>Django에서는 model을 통해 Form Class를 만들수 있는 Helper(도우미)를 제공한다.</p>
+
+    <ul>
+      <li>ModelForm Helper 클래스를 사용하여 모델에서 form을 작성</li>
+      <li>ModelForm은 일반 Form과 완전히 같은 방식(객체생성)으로 view에서 사용할 수 있다.</li>
+    </ul>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/forms.py
+</span>  
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span>
+  
+<span class="c1"># class ArticleForm(forms.Form):
+#     title = forms.CharField(max_length=10)
+#     content = forms.CharField(widget=forms.Textarea)
+</span>  
+<span class="k">class</span> <span class="nc">ArticleForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">ModelForm</span><span class="p">):</span>
+      
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s">'__all__'</span>
+        <span class="c1"># exclude = ('title',)
+</span></code></pre></div>    </div>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">new.html</code> 변화 확인</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="create">CREATE</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">form</span><span class="p">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="n">article</span> <span class="o">=</span> <span class="n">form</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:new'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>The <code class="language-plaintext highlighter-rouge">save()</code> method</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/ko/3.1/topics/forms/modelforms/#the-save-method</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="change-view-structure">Change view structure</h3>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/topics/forms/#the-view</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/forms.py
+</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="n">form</span><span class="p">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">article</span> <span class="o">=</span> <span class="n">form</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/create.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>new.html → <code class="language-plaintext highlighter-rouge">create.html</code> 이름변경</p>
+</blockquote>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/create.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>CREATE<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:create'</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nv">form.as_p</span> <span class="cp">}}</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>input 태그에 공백 데이터를 넣어보고 제출 후 에러 메세지 확인</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="widgets">Widgets</h3>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/forms/widgets/#module-django.forms.widgets</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArticleForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">label</span><span class="o">=</span><span class="s">'제목'</span><span class="p">,</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">TextInput</span><span class="p">(</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'class'</span><span class="p">:</span> <span class="s">'my-title'</span><span class="p">,</span> 
+                <span class="s">'placeholder'</span><span class="p">:</span> <span class="s">'Enter the title'</span><span class="p">,</span>
+                <span class="s">'maxlength'</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">label</span><span class="o">=</span><span class="s">'내용'</span><span class="p">,</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">Textarea</span><span class="p">(</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'class'</span><span class="p">:</span> <span class="s">'my-content'</span><span class="p">,</span>
+                <span class="s">'placeholder'</span><span class="p">:</span> <span class="s">'Enter the content'</span><span class="p">,</span>
+                <span class="s">'rows'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s">'cols'</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+        <span class="n">error_messages</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">'required'</span><span class="p">:</span> <span class="s">'Please enter your content'</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s">'__all__'</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>Form과 ModelForm의 핵심 차이점</strong></p>
+
+<ul>
+  <li>Form
+    <ul>
+      <li>어떤 모델에 저장해야 하는지 알 수 없기 때문에 유효성 검사를 하고 실제로 DB에 저장할 때는  <code class="language-plaintext highlighter-rouge">cleaned_data</code> 와 <code class="language-plaintext highlighter-rouge">article = Article(title=title, content=content)</code> 를 사용해서 따로 <code class="language-plaintext highlighter-rouge">.save()</code> 를 해야 한다.</li>
+      <li>Form Class가 <code class="language-plaintext highlighter-rouge">cleaned_data</code> 로 딕셔너리로 만들어서 제공해 주고, 우리는 <code class="language-plaintext highlighter-rouge">.get</code> 으로 가져와서 Article 을 만드는데 사용한다.</li>
+    </ul>
+  </li>
+  <li>ModelForm
+    <ul>
+      <li>django 가 해당 모델에서 양식에 필요한 대부분의 정보를 이미 정의한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">forms.py</code> 에 Meta 정보로 <code class="language-plaintext highlighter-rouge">models.py</code> 에 이미 정의한  Article 을 넘겼기 때문에 어떤 모델에 레코드를 만들어야 할지 알고 있어서 바로 <code class="language-plaintext highlighter-rouge">.save()</code> 가 가능하다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="update">Update</h3>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/ko/3.1/topics/forms/modelforms/#the-save-method</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>인자 <code class="language-plaintext highlighter-rouge">instance</code>는 <strong>수정 대상이 되는 객체를 지정</strong>한다.</p>
+  </li>
+  <li>
+    <p>create 로직과 다른 점은 기존의 데이터를 가져와 수정을 한다는 점이다.</p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">request.POST</code> : 사용자가 form을 통해 전송한 데이터</li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">instance</code> : 수정이 되는 대상</p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'&lt;int:pk&gt;/update/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">update</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'update'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="c1"># Create a form to edit an existing Article,
+</span>        <span class="c1"># but use POST data to populate the form.
+</span>        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">article</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="p">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Creating a form to change an existing article.
+</span>        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">article</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/update.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/update.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>UPDATE<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:update'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nv">form.as_p</span> <span class="cp">}}</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:detail'</span> <span class="nv">aritlce.pk</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:update'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>UPDATE<span class="nt">&lt;/a&gt;&lt;br&gt;</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="p">...</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+        <span class="s">'article'</span><span class="p">:</span> <span class="n">article</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/update.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="delete">Delete</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'&lt;int:pk&gt;/delete/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">delete</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'delete'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">article</span><span class="p">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:index'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:delete'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"DELETE"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">forms.py</code>  위치</strong></p>
+
+<ul>
+  <li>Form class는 <code class="language-plaintext highlighter-rouge">forms.py</code> 뿐만 아니라 다른 위치 어느 곳에 두어도 상관없다.</li>
+  <li>하지만 되도록 app 폴더에 두며, Form class는 <code class="language-plaintext highlighter-rouge">forms.py</code> 에 작성하는 것이 일반적이다.</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="rendering-fields-manually">Rendering fields manually</h2>
+
+<blockquote>
+  <p>다양한 방법으로 form 커스터마이징</p>
+
+  <p>https://docs.djangoproject.com/ko/3.1/topics/forms/#rendering-fields-manually</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="수동으로-form-작성">수동으로 Form 작성</h3>
+
+<ol>
+  <li>
+    <p>Rendering fields manually</p>
+
+    <div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/create.html --&gt;</span> 
+   
+<span class="nt">&lt;h1&gt;</span>CREATE<span class="nt">&lt;/h1&gt;</span>
+...
+<span class="nt">&lt;hr&gt;</span>
+   
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+  <span class="nt">&lt;div&gt;</span>
+    <span class="cp">{{</span> <span class="nv">form.title.errors</span> <span class="cp">}}</span>
+    <span class="cp">{{</span> <span class="nv">form.title.label_tag</span> <span class="cp">}}</span>
+    <span class="cp">{{</span> <span class="nv">form.title</span> <span class="cp">}}</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+    <span class="cp">{{</span> <span class="nv">form.content.errors</span> <span class="cp">}}</span>
+    <span class="cp">{{</span> <span class="nv">form.content.label_tag</span> <span class="cp">}}</span>
+    <span class="cp">{{</span> <span class="nv">form.content</span> <span class="cp">}}</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span><span class="nt">&gt;</span>작성<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Looping over the form’s fields (<code class="language-plaintext highlighter-rouge">{% for %}</code>)</p>
+
+    <div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/create.html --&gt;</span> 
+   
+...
+   
+<span class="nt">&lt;hr&gt;</span>
+   
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+  <span class="cp">{%</span> <span class="k">for</span> <span class="nv">field</span> <span class="ow">in</span> <span class="nv">form</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nv">field.errors</span> <span class="cp">}}</span>
+    <span class="cp">{{</span> <span class="nv">field.label_tag</span> <span class="cp">}}</span>
+    <span class="cp">{{</span> <span class="nv">field</span> <span class="cp">}}</span>
+  <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span><span class="nt">&gt;</span>작성<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="bootstrap-form">Bootstrap Form</h3>
+
+<blockquote>
+  <p>https://getbootstrap.com/docs/5.0/forms/overview/</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">form-control</code></p>
+
+    <div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/create.html --&gt;</span>
+  
+...
+  
+<span class="nt">&lt;hr&gt;</span>
+  
+<span class="nt">&lt;h2&gt;</span>Bootstrap Form<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+  <span class="cp">{%</span> <span class="k">for</span> <span class="nv">field</span> <span class="ow">in</span> <span class="nv">form</span> <span class="cp">%}</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"mb-3"</span><span class="nt">&gt;</span>
+      <span class="cp">{{</span> <span class="nv">field.errors</span> <span class="cp">}}</span>
+      <span class="cp">{{</span> <span class="nv">field.label_tag</span> <span class="cp">}}</span> 
+      <span class="cp">{{</span> <span class="nv">field</span> <span class="cp">}}</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span><span class="nt">&gt;</span>작성<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div>    </div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/forms.py
+</span>  
+<span class="k">class</span> <span class="nc">ArticleForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">label</span><span class="o">=</span><span class="s">'제목'</span><span class="p">,</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">TextInput</span><span class="p">(</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'class'</span><span class="p">:</span> <span class="s">'my-title form-control'</span><span class="p">,</span> 
+                <span class="s">'placeholder'</span><span class="p">:</span> <span class="s">'Enter the title'</span><span class="p">,</span>
+        <span class="p">}),</span>
+    <span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">label</span><span class="o">=</span><span class="s">'내용'</span><span class="p">,</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">Textarea</span><span class="p">(</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'class'</span><span class="p">:</span> <span class="s">'my-content form-control'</span><span class="p">,</span>
+                <span class="s">'placeholder'</span><span class="p">:</span> <span class="s">'Enter the content'</span><span class="p">,</span>
+                <span class="s">'rows'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s">'cols'</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="p">}),</span>
+        <span class="n">error_messages</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">'required'</span><span class="p">:</span> <span class="s">'내용 넣어라...'</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="error-message-with-bootstrap">Error message with Bootstrap</h3>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/create.html --&gt;</span>
+
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+  <span class="cp">{%</span> <span class="k">for</span> <span class="nv">field</span> <span class="ow">in</span> <span class="nv">form</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">if</span> <span class="nv">field.errors</span> <span class="cp">%}</span>
+      <span class="cp">{%</span> <span class="k">for</span> <span class="nv">error</span> <span class="ow">in</span> <span class="nv">field.errors</span> <span class="cp">%}</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"alert alert-warning"</span> <span class="na">role=</span><span class="s">"alert"</span><span class="nt">&gt;</span><span class="cp">{{</span> <span class="nv">error</span><span class="o">|</span><span class="nf">escape</span> <span class="cp">}}</span><span class="nt">&lt;/div&gt;</span>
+      <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"form-group"</span><span class="nt">&gt;</span>
+      <span class="cp">{{</span> <span class="nv">field.label_tag</span> <span class="cp">}}</span> 
+      <span class="cp">{{</span> <span class="nv">field</span> <span class="cp">}}</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span><span class="nt">&gt;</span>작성<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="django-bootstrap-library">Django Bootstrap Library</h2>
+
+<h3 id="django-bootstrap5">django-bootstrap5</h3>
+
+<blockquote>
+  <p>https://django-bootstrap-v5.readthedocs.io/en/latest/installation.html</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>django-bootstrap-v5
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py
+</span>
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">...</span>
+  <span class="s">'bootstrap5'</span><span class="p">,</span>
+   <span class="p">...</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip freeze <span class="o">&gt;</span> requirements.txt
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/base.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="nv">load</span> <span class="nv">bootstrap5</span> <span class="cp">%}</span>
+
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"ko"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="nv">bootstrap_css</span> <span class="cp">%}</span>
+  <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="cp">{%</span> <span class="nv">bootstrap_javascript</span> <span class="cp">%}</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/update.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="nv">load</span> <span class="nv">bootstrap5</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  ...
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="nv">bootstrap_form</span> <span class="nv">form</span> <span class="nv">layout</span><span class="o">=</span><span class="s1">'horizontal'</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="nv">buttons</span> <span class="nv">submit</span><span class="o">=</span><span class="s2">"Submit"</span> <span class="nv">reset</span><span class="o">=</span><span class="s2">"Cancel"</span> <span class="cp">%}{%</span> <span class="nv">endbuttons</span> <span class="cp">%}</span>
+  <span class="nt">&lt;/form&gt;</span>
+  ...
+  <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="view-decorators">View decorators</h2>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/topics/http/decorators/#module-django.views.decorators.http</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong>데코레이터(decorator)</strong></p>
+
+<ul>
+  <li>
+    <p>어떤 함수에 기능을 추가하고 싶을 때, 해당 함수를 수정하지 않고 기능을 <code class="language-plaintext highlighter-rouge">연장</code>하게 해주는 <code class="language-plaintext highlighter-rouge">함수</code></p>
+  </li>
+  <li>
+    <p>Django는 다양한 HTTP 기능을 지원하기 위해 뷰에 적용 할 수있는 여러 데코레이터를 제공</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="allowed-http-methods">Allowed HTTP methods</h3>
+
+<blockquote>
+  <p>일치하지 않는 메서드 요청이라면 <code class="language-plaintext highlighter-rouge">405 Method Not Allowed</code> 에러를 발생</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">require_http_methods()</code></strong></p>
+
+<ul>
+  <li>
+    <p>view가 특정한 요청 method만 허용하도록하는 데코레이터</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.views.decorators.http</span> <span class="kn">import</span> <span class="n">require_http_methods</span><span class="p">,</span> <span class="n">require_POST</span>
+  
+  
+<span class="o">@</span><span class="n">require_http_methods</span><span class="p">([</span><span class="s">'GET'</span><span class="p">,</span> <span class="s">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">pass</span>
+  
+    
+<span class="o">@</span><span class="n">require_http_methods</span><span class="p">([</span><span class="s">'GET'</span><span class="p">,</span> <span class="s">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">require_POST()</code></strong></p>
+
+<ul>
+  <li>
+    <p>view가 POST 메서드만 요청만 승인하도록 하는 데코레이터</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.views.decorators.http</span> <span class="kn">import</span> <span class="n">require_http_methods</span><span class="p">,</span> <span class="n">require_POST</span>
+  
+  
+<span class="o">@</span><span class="n">require_POST</span>
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:index'</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li>url 로 delete 시도 후 405 에러페이지 &amp; terminal 로그 확인하기</li>
+    </ul>
+  </li>
+</ul>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/django/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/django/2021/03/13/djangocrud/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[django] CRUD</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/django/2021/03/19/djangostatic/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[django] Static files</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

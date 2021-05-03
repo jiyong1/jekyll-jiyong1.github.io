@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[JavaScript] Array</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="js-배열">[JS] 배열</h1>
+
+<blockquote>
+  <p>자바스크립트에 배열이라는 타입은 존재하지 않는다. 배열은 객체 타입이다.</p>
+</blockquote>
+
+<p>자바스크립트에서 배열은 객체이지만 일반 객체와 구별되는 독특한 특징이 있다.</p>
+
+<p><br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>구분</th>
+      <th>객체</th>
+      <th>배열</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>구조</td>
+      <td>프로퍼티 키와 프로퍼티 값</td>
+      <td>인덱스와 요소</td>
+    </tr>
+    <tr>
+      <td>값의 참조</td>
+      <td>프로퍼티 키</td>
+      <td>인덱스</td>
+    </tr>
+    <tr>
+      <td>값의 순서</td>
+      <td>X</td>
+      <td>O</td>
+    </tr>
+    <tr>
+      <td>length</td>
+      <td>X</td>
+      <td>O</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h2 id="자바스크립트-배열은-배열이-아니다">자바스크립트 배열은 배열이 아니다.</h2>
+
+<p>배열은 일반적으로 동일한 크기를 갖는 메모리 공간이 연속적으로 나열된 자료구조를 말한다. 이러한 배열을 <strong>밀집 배열</strong>이라고 한다.</p>
+
+<p>이러한 배열은 인접해서 위치해 있기 때문에, <strong>요소에 효율적으로 접근할 수 있다는 장점이 있다.</strong> 하지만, 정렬되지 않은 배열에서 특정한 요소를 검색하는 경우 모든 요소를 처음부터 발견할 때까지 검색해야한다. (시간 복잡도 O(N))</p>
+
+<p>그리고 요소를 삭제하거나 추가할 때 배열의 요소들을 연속적으로 유지하기 위해 요소들을 이동시켜야하는 단점도 있다.</p>
+
+<p>하지만 자바스크립트의 배열은 요소 각각의 메모리 공간이 동일하지 않을 수 있고, 연속적으로 이어져 있지 않을 수 있다. 이처럼 배열의 요소가 연속적으로 이어져 있지 않는 배열을 <strong>희소 배열(Sparse array)</strong>라고 한다.</p>
+
+<p>즉, 자바스크립트의 배열은 배열의 동작을 따라하는 특수한 객체인 것이다.</p>
+
+<p><br /></p>
+
+<h2 id="희소-배열">희소 배열</h2>
+
+<p>희소 배열은 요소가 연속적으로 위치하지 않고 일부가 비어 있는 배열을 희소 배열이라고 한다.</p>
+
+<p>자바스크립트는 희소 배열을 허용한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">sparseArr</span> <span class="o">=</span> <span class="p">[,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">,</span> <span class="mi">4</span><span class="p">];</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sparseArr</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span> <span class="c1">// 4</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sparseArr</span><span class="p">);</span> <span class="c1">// [empty, 2, empty, 4]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="배열-생성">배열 생성</h2>
+
+<p><br /></p>
+
+<h3 id="배열-리터럴">배열 리터럴</h3>
+
+<blockquote>
+  <p>0개 이상의 요소를 쉼표로 구분하여 대괄호 ([])로 묶는다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="array-생성자">Array 생성자</h3>
+
+<blockquote>
+  <p>Array 생성자 함수를 이용하여 배열을 생성할 수 있다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">);</span> <span class="c1">// [empty x 4]</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 인수가 숫자가 아니거나 2개 이상이면 인수를 요소로 갖는 배열을 생성한다.</span>
+<span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">;)</span> <span class="c1">// [1, 2, 3]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="array-of">Array of</h3>
+
+<blockquote>
+  <p>Array 생성자 함수와는 다르게 인수가 숫자이고 한개이더라도 인수를 요소로하는 배열을 만든다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">)</span> <span class="c1">// [1]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="array-from">Array from</h3>
+
+<blockquote>
+  <p>유사 배열객체 또는 iterable 객체를 인수로 받아 배열로 변환하여 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="dl">'</span><span class="s1">jiyong</span><span class="dl">'</span><span class="p">)</span> <span class="c1">// ['j', 'i', 'y', 'o', 'n', 'g']</span>
+
+<span class="c1">// 설명하기 위해 같은 변수명을 입력한 것이다. 사실 const는 같은 변수명을 입력하면 오류가 발생한다.</span>
+<span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">({</span><span class="na">length</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">i</span><span class="p">);</span> <span class="c1">// [1, 2, 3]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="배열-요소의-추가">배열 요소의 추가</h2>
+
+<p>자바스크립트 객체에 프로퍼티를 동적으로 추가할 수 있는 것처럼 배열에도 요소를 동적으로 추가할 수 있다.</p>
+
+<p>즉, 존재하지 않는 인덱스를 사용해 값을 할당하면 새로운 요소가 추가된다. length 프로퍼티도 자동으로 갱신된다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="c1">// 2</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="nx">arr</span><span class="p">[</span><span class="mi">99</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="c1">// 100 (희소 배열 !!)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="배열-요소-삭제">배열 요소 삭제</h2>
+
+<p>배열은 객체이기 때문에 특정 요소를 삭제하기 위해 delete 연산자를 사용할 수 있다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="k">delete</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">)</span> <span class="c1">// [1, empty, 3]</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="c1">// 3 -&gt; length 프로퍼티는 갱신되지 않는다. 희소 배열이 된다 !</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="배열-메서드">배열 메서드</h2>
+
+<blockquote>
+  <p>자바스크립트 배열 빌트인 메서드</p>
+</blockquote>
+
+<p>Array 생성자 함수는 정적 메서드를 제공하며, 배열 객체의 프로토타입 <code class="language-plaintext highlighter-rouge">Array.prototype</code>은 프로토타입 메서드를 제공한다.</p>
+
+<p><br /></p>
+
+<h3 id="arrayisarray">Array.isArray</h3>
+
+<blockquote>
+  <p>전달된 인수가 배열인가 아닌가?</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// true</span>
+<span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">([]);</span>
+<span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+
+<span class="c1">// false</span>
+<span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="dl">'</span><span class="s1">Array</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypeindexof">Array.prototype.indexOf</h3>
+
+<blockquote>
+  <p>원본 배열에서 인수로 전달된 요소를 검색하여 인덱스를 반환한다.</p>
+
+  <p>존재하지 않는다면 -1을 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,];</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// 1</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span> <span class="c1">// -1</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypepush">Array.prototype.push</h3>
+
+<blockquote>
+  <p>인수로 전달받은 모든 값을 원본 배열의 마지막 요소로 추가한다.</p>
+
+  <p>변경된 length 프로퍼티를 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="kd">let</span> <span class="nx">newLength</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">newLength</span><span class="p">);</span> <span class="c1">// 5</span>
+</code></pre></div></div>
+
+<ul>
+  <li>원소 값을 하나 추가할 때는 push 보다는 다음과 같이 하는 것이 성능면에서 좋다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="nx">arr</span><span class="p">[</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>ES6의 스프레드 문법을 사용하는 것이 더 좋다.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">newArr</span> <span class="o">=</span> <span class="p">[...</span><span class="nx">arr</span><span class="p">,</span> <span class="mi">4</span><span class="p">];</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">newArr</span><span class="p">);</span> <span class="c1">// [1, 2, 3, 4]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypepop">Array.prototype.pop</h3>
+
+<blockquote>
+  <p>마지막 요소를 원본 배열에서 제거하고 제거한 요소를 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">pop</span><span class="p">());</span> <span class="c1">// 3 </span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">);</span> <span class="c1">// [1, 2]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h4 id="push-pop을-이용한-stack-자료구조-구현">push, pop을 이용한 Stack 자료구조 구현</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Stack</span> <span class="p">{</span>
+    <span class="err">#</span><span class="nx">array</span><span class="p">;</span>
+    
+    <span class="kd">constructor</span><span class="p">(</span><span class="nx">array</span> <span class="o">=</span> <span class="p">[]){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">array</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">array</span><span class="p">}</span><span class="s2"> is not an array`</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">array</span> <span class="o">=</span> <span class="nx">array</span><span class="p">;</span>
+    <span class="p">}</span>
+	
+	<span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">array</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">}</span>
+	
+	<span class="nx">pop</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">array</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+    <span class="p">}</span>
+	
+	<span class="c1">// 원본 배열 복사본 반환</span>
+	<span class="nx">entries</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[...</span><span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">array</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Stack</span><span class="p">();</span>
+<span class="nx">s</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">entries</span><span class="p">());</span> <span class="c1">// [1]</span>
+<span class="nx">s</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">pop</span><span class="p">())</span> <span class="c1">// 2</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypeunshift">Array.prototype.unshift</h3>
+
+<blockquote>
+  <p>인수로 전달받은 값을 원본 배열의 앞에 요소로 추가하고 변경된 length 프로퍼티 값을 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">];</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">));</span> <span class="c1">// 4</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">)</span> <span class="c1">// [3, 4, 1, 2]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypeshift">Array.prototype.shift</h3>
+
+<blockquote>
+  <p>첫 번째 요소를 제거하고 제거한 요소를 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">];</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">shift</span><span class="p">());</span> <span class="c1">// 1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">);</span> <span class="c1">// [2, 3, 4]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypesplice">Array.prototype.splice</h3>
+
+<blockquote>
+  <p>원본 배열의 중간에 요소를 제거하고 인자로 전달된 값을 추가한다.</p>
+
+  <p>제거된 요소가 배열로 반환된다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// 인덱스 1부터 1개의 요소를 제거하고 3, 4을 추가한다.</span>
+<span class="c1">// 지운 요소가 배열로 반환된다.</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span> <span class="c1">// 2</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">;)</span> <span class="c1">// [1, 3, 4, 3]</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> <span class="c1">// 인덱스 1부터 0개 요소를 제거하고 5를 추가한다.</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="c1">// 인덱스 1부터 2개 요소를 제거하고 아무것도 추가하지 않는다.</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypeslice">Array.prototype.slice</h3>
+
+<blockquote>
+  <p>인수로 전달된 범위의 요소들을 복사하여 배열로 반환한다.</p>
+
+  <p>원본은 변경되지 않는다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="c1">// arr[1] ~ arr[2]이전 (arr[2] 미포함) 까지 복사하여 반환한다.</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 인수 한개는 1 이후 부터 모두 복사</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 음수인 경우 끝에서부터 요소를 복사 [3]</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// [2, 3]</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">slice</span><span class="p">();</span> <span class="c1">// 인수가 없는 경우 복사본 생성 [1, 2, 3] (shallow copy)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypejoin">Array.prototype.join</h3>
+
+<blockquote>
+  <p>원본 배열의 모든 요소를 문자열로 변환 후, 구분자로 연결</p>
+
+  <p>구분자 default = ‘,’</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">join</span><span class="p">();</span> <span class="c1">// 1,2,3</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">''</span><span class="p">)</span> <span class="c1">// 123</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypereverse">Array.prototype.reverse</h3>
+
+<blockquote>
+  <p>원본 배열의 순서를 반대로 뒤집는다. 반환 값또한 변경된 배열</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">newArr</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">reverse</span><span class="p">();</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">);</span> <span class="c1">// [3, 2, 1]</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">newArr</span><span class="p">);</span> <span class="c1">// [3, 2, 3]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypefill">Array.prototype.fill</h3>
+
+<blockquote>
+  <p>배열의 처음부터 끝까지 인수로 전달받은 값으로 채운다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">)</span> <span class="c1">// [0, 0, 0]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypeincludes">Array.prototype.includes</h3>
+
+<blockquote>
+  <p>배열에 인수로 전달받은 값이 존재하는지 여부를 출력한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span> <span class="c1">// true</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypeflat">Array.prototype.flat</h3>
+
+<blockquote>
+  <p>ES10에서 도입된 flat 메서드</p>
+
+  <p>인수로 전달받은 값의 깊이만큼 재귀적으로 배열을 평탄화 한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">flat</span><span class="p">())</span> <span class="c1">// [1, 2, 3, 4, 5]</span>
+
+<span class="kd">const</span> <span class="nx">arr2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">]]]]];</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr2</span><span class="p">.</span><span class="nx">flat</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span> <span class="c1">// [1, 2, 3, [4, [5]]]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypesort">Array.prototype.sort</h3>
+
+<blockquote>
+  <p>많이 봤듯.. 정렬하는 함수이다.</p>
+
+  <p>오름차순 정렬으로, 내림차순으로 사용하고 싶은경우 reverse 메서드를 사용하여 요소의 순서를 뒤집는다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="arrayprototypeforeach">Array.prototype.forEach</h3>
+
+<blockquote>
+  <p>요소 하나하나 돌면서 콜백 함수를 실행한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">double</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="nx">double</span><span class="p">[</span><span class="nx">double</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="nx">item</span> <span class="o">*</span> <span class="mi">2</span><span class="p">});</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">double</span><span class="p">);</span> <span class="c1">// [2, 4 ,6]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypemap">Array.prototype.map</h3>
+
+<blockquote>
+  <p>콜백 함수의 반환값들로 구성된 새로운 배열을 반환한다.</p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">forEach</code>는 반환하지 않아서 직접 push (엄밀히 말하면 push 함수를 사용한 것은 아니지만..)한 것을 볼 수 있다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">double</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">item</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">double</span><span class="p">);</span> <span class="c1">// [2, 4, 6]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypefilter">Array.prototype.filter</h3>
+
+<blockquote>
+  <p>모든 요소를 순회하면서 콜백 함수를 호출한다. 콜백 함수의 반환 값이 true인 요소로만 구성된 새로운 배열을 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="kd">const</span> <span class="nx">oddArr</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">item</span> <span class="o">%</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">oddArr</span><span class="p">);</span> <span class="c1">// [1, 3]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypereduce">Array.prototype.reduce</h3>
+
+<blockquote>
+  <p>모든 요소를 순회하면서 누적된 값을 첫 번째 인수로 전달받아 결과적으로 하나의 결과값을 만들어 반환한다.</p>
+
+  <p>원본 배열은 변경되지 않는다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">sum</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">acc</span> <span class="o">+</span> <span class="nx">item</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sum</span><span class="p">)</span> <span class="c1">// 10</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">avg</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="p">{</span> <span class="nx">length</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">index</span> <span class="o">===</span> <span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">?</span> <span class="p">(</span><span class="nx">acc</span> <span class="o">+</span> <span class="nx">item</span><span class="p">)</span> <span class="o">/</span> <span class="nx">length</span> <span class="p">:</span> <span class="nx">acc</span> <span class="o">+</span> <span class="nx">item</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">avg</span><span class="p">);</span> <span class="c1">// 3</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypesome">Array.prototype.some</h3>
+
+<blockquote>
+  <p>배열의 모든 요소를 순회하면서 콜백 함수의 반환 값이 하나라도 true이면 true를 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">item</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">))</span> <span class="c1">// true</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypeevery">Array.prototype.every</h3>
+
+<blockquote>
+  <p>배열의 모든 요소를 순회하면서 콜백 함수의 반환 값이 모두 true이면 true를 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">every</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">item</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">))</span> <span class="c1">// false</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypefind">Array.prototype.find</h3>
+
+<blockquote>
+  <p>ES6에 도입된 find 메서드</p>
+
+  <p>배열의 요소를 순회하면서 콜백 함수의 반환 값이 처음으로 true가 나온 요소를 반환한다.</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">users</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">kim</span><span class="dl">'</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">lee</span><span class="dl">'</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">park</span><span class="dl">'</span><span class="p">},</span>
+	<span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">lee</span><span class="dl">'</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">lee</span><span class="dl">'</span><span class="p">))</span> <span class="c1">// { id: 2, name: 'lee' }</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="arrayprototypefindindex">Array.prototype.findIndex</h3>
+
+<blockquote>
+  <p>위와 동일하지만 요소가 아닌 index를 반환한다.</p>
+
+  <p>없으면 -1 반환</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">users</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">kim</span><span class="dl">'</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">lee</span><span class="dl">'</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">park</span><span class="dl">'</span><span class="p">},</span>
+	<span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">lee</span><span class="dl">'</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">users</span><span class="p">.</span><span class="nx">findIndex</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">lee</span><span class="dl">'</span><span class="p">))</span> <span class="c1">// 1</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+      
+      
+      
+      
+      
+  <a href="/javascript/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/javascript/2021/04/27/7_closure/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[JavaScript] 클로저</p>
+        </div>
+      </a>
+    
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[django] Model Relationship</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    
+<h1 id="django-model-relationship">[django] Model Relationship</h1>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/ko/3.1/ref/models/fields/#module-django.db.models.fields.related</p>
+</blockquote>
+
+<p><br /></p>
+
+<h2 id="foreign-key">Foreign Key</h2>
+
+<p><strong>개념</strong></p>
+
+<ul>
+  <li>외래 키(외부 키)</li>
+  <li>RDBMS에서 한 테이블의 필드 중 다른 테이블의 행을 식별할 수 있는 키</li>
+  <li>참조하는 테이블에서 1개의 키(속성 또는 속성의 집합)에 해당하고 이는 참조되는 측의 테이블의 기본 키를 가리킴</li>
+  <li>참조하는 테이블의 속성의 행 1개의 값은, 참조되는 측 테이블의 행 값에 대응
+    <ul>
+      <li>이 때문에 참조하는 테이블의 행에는, 참조되는 테이블에 나타나지 않는 값을 포함할 수 없음</li>
+    </ul>
+  </li>
+  <li>참조하는 테이블의 행 여러 개가, 참조되는 테이블의 동일한 행을 참조할 수 있음</li>
+</ul>
+
+<p><strong>특징</strong></p>
+
+<ul>
+  <li>키를 사용하여 부모 테이블의 유일한 값을 참조 (참조 무결성)</li>
+  <li>외래 키의 값이 부모 테이블의 기본 키 일 필요는 없지만 유일해야 함</li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="foreignkey-field">ForeignKey field</h2>
+
+<blockquote>
+  <p>A many-to-one relationship</p>
+</blockquote>
+
+<ul>
+  <li>2개의 필수 위치 인자가 필요
+    <ul>
+      <li>참조하는 model class</li>
+      <li>on_delete 옵션</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="1n-model-manager">1:N model manager</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/models.py
+</span>
+<span class="k">class</span> <span class="nc">Comment</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="p">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">content</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Article : Comment = 1 : N → 하나의 게시글에는 여러 개의 댓글이 달릴 수 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">on_delete</code></p>
+
+<ul>
+  <li>ForeignKey의 필수 인자이며, ForeignKey가 참조하고 있는 부모(Article) 객체가 사라졌을 때 달려 있는 댓글들을 어떻게 처리할 지 정의</li>
+  <li>Database Integrity(데이터 무결성)을 위해서 매우 중요한 설정이다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>possible values for <code class="language-plaintext highlighter-rouge">on_delete</code></strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">CASCADE</code> : <strong>부모 객체(참조 된 객체)가 삭제 됐을 때 이를 참조하는 객체도 삭제</strong></li>
+  <li><code class="language-plaintext highlighter-rouge">PROTECT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">SET_NULL</code></li>
+  <li><code class="language-plaintext highlighter-rouge">SET_DEFAULT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">SET()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">DO_NOTHING</code></li>
+  <li><code class="language-plaintext highlighter-rouge">RESTRICT</code></li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>migration</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py makemigrations
+<span class="c"># $ python manage.py sqlmigrate articles 0002</span>
+<span class="nv">$ </span>python manage.py migrate
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>데이터베이스 표현</strong></p>
+
+<ul>
+  <li>Django는 필드 이름에 <code class="language-plaintext highlighter-rouge">_id</code>를 추가하여 데이터베이스 필드 이름을 만듦</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Table 직접 확인하기</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">article_id</code> 라는 컬럼이 생성</li>
+  <li>만약 ForeignKey 를 article 이라고 하지 않고 <code class="language-plaintext highlighter-rouge">abcd = models.ForeignKey(..)</code> 형태로 생성 했다면 <code class="language-plaintext highlighter-rouge">abcd_id</code> 로 만들어진다.</li>
+  <li>이렇게되면 모델 관계를 파악하는 것이 어렵기 때문에 부모 클래스명의 소문자(단수형)로 작성하는 것이 바람직하다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>1 : N 관계 manager</strong></p>
+
+<ul>
+  <li><strong>Article(1)</strong> : <strong>Comment(N)</strong> : <code class="language-plaintext highlighter-rouge">comment_set</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">article.comment</code> 형태로는 가져올 수 없다.</li>
+      <li>게시글에 몇 개의 댓글이 있는지 Django ORM이 보장할 수 없기 때문</li>
+      <li>본질적으로는 Article 클래스에 Comment 와의 어떠한 관계도 연결하지 않음</li>
+    </ul>
+  </li>
+  <li><strong>Comment(N)</strong> : <strong>Article(1)</strong> : <code class="language-plaintext highlighter-rouge">article</code>
+    <ul>
+      <li>댓글의 경우 어떠한 댓글이든 반드시 자신이 참조하고 있는 게시글이 있으므로 <code class="language-plaintext highlighter-rouge">comment.article</code>와 같이 접근할 수 있음</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">related_name</code></strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/models/fields/#django.db.models.ForeignKey.related_name</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>위에서 확인한 것처럼 부모 테이블에서 역으로 참조할 때(the relation from the related object back to this one.) <code class="language-plaintext highlighter-rouge">모델이름_set</code> 이라는 형식으로 참조한다. (<strong>역참조</strong>)</p>
+  </li>
+  <li>
+    <p>related_name 값은 django 가 기본적으로 만들어 주는 <code class="language-plaintext highlighter-rouge">_set</code> manager를 임의로 변경할 수 있다.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/models.py
+</span>  
+<span class="k">class</span> <span class="nc">Comment</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="p">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">'comments'</span><span class="p">)</span>
+  <span class="p">...</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>위와 같이 변경하면 <code class="language-plaintext highlighter-rouge">article.comment_set</code> 은 더이상 사용할 수 없고 <code class="language-plaintext highlighter-rouge">article.comments</code> 로 대체된다.</p>
+  </li>
+  <li>
+    <p>1:N 관계에서는 거의 사용하지 않지만 M:N 관계에서는 반드시 사용해야 할 경우가 발생한다.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="comment">Comment</h2>
+
+<h3 id="create">CREATE</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># forms.py
+</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span><span class="p">,</span> <span class="n">Comment</span>
+
+
+<span class="k">class</span> <span class="nc">CommentForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">ModelForm</span><span class="p">):</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Comment</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s">'__all__'</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">ArticleForm</span><span class="p">,</span> <span class="n">CommentForm</span>
+
+
+<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">comment_form</span> <span class="o">=</span> <span class="n">CommentForm</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'article'</span><span class="p">:</span> <span class="n">article</span><span class="p">,</span>
+        <span class="s">'comment_form'</span><span class="p">:</span> <span class="n">comment_form</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/detail.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><strong>detail page 에 댓글 작성 form 추가</strong></p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+  
+{% extends 'base.html' %}
+  
+{% block content %}
+  ...
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'articles:index' %}"</span><span class="nt">&gt;</span>back<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    {% csrf_token %}
+    {{ comment_form }}
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+{% endblock %}
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>필드 출력 재설정</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/forms.py
+</span>  
+<span class="k">class</span> <span class="nc">CommentForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">ModelForm</span><span class="p">):</span>
+  
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Comment</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s">'article'</span><span class="p">,)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'&lt;int:pk&gt;/comments/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">comments_create</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'comments_create'</span><span class="p">),</span>
+<span class="n">save</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">save()</code> method</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.0/topics/forms/modelforms/#the-save-method</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>Create, but don’t save the new instance.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>  
+<span class="o">@</span><span class="n">require_POST</span>
+<span class="k">def</span> <span class="nf">comments_create</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">comment_form</span> <span class="o">=</span> <span class="n">CommentForm</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">comment_form</span><span class="p">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="n">comment</span> <span class="o">=</span> <span class="n">comment_form</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">comment</span><span class="p">.</span><span class="n">article</span> <span class="o">=</span> <span class="n">article</span>
+        <span class="n">comment</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'comment_form'</span><span class="p">:</span> <span class="n">comment_form</span><span class="p">,</span>
+        <span class="s">'article'</span><span class="p">:</span> <span class="n">article</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/detail.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+  
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{% url 'articles:comments_create' article.pk %}"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+  {% csrf_token %}
+  {{ comment_form }}
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li>댓글을 작성한 후 admin 페이지 혹은 sqlite 확장에서 확인</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="read">READ</h3>
+
+<ul>
+  <li>
+    <p>특정 article에 있는 모든 댓글을 가져온 후 template 으로 전달한다.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>  
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span><span class="p">,</span> <span class="n">Comment</span>
+  
+  
+<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">comment_form</span> <span class="o">=</span> <span class="n">CommentForm</span><span class="p">()</span>
+    <span class="n">comments</span> <span class="o">=</span> <span class="n">article</span><span class="p">.</span><span class="n">comment_set</span><span class="p">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'article'</span><span class="p">:</span> <span class="n">article</span><span class="p">,</span>
+        <span class="s">'comment_form'</span><span class="p">:</span> <span class="n">comment_form</span><span class="p">,</span>
+        <span class="s">'comments'</span><span class="p">:</span> <span class="n">comments</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/detail.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div>    </div>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  
+```html
+&lt;!-- articles/detail.html --&gt;
+  
+{% extends 'base.html' %}
+  
+{% block content %}
+  ...
+  &lt;a href="{% url 'articles:index' %}"&gt;back&lt;/a&gt;
+  &lt;hr&gt;
+  &lt;h4&gt;댓글 목록&lt;/h4&gt;
+  {% for comment in comments %}
+    &lt;li&gt;{{ comment.content }}&lt;/li&gt;
+  {% endfor %}
+  &lt;hr&gt;
+  ...
+{% endblock %}
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="delete">DELETE</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'&lt;int:article_pk&gt;/comments/&lt;int:comment_pk&gt;/delete/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">comments_delete</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'comments_delete'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="o">@</span><span class="n">require_POST</span>
+<span class="k">def</span> <span class="nf">comments_delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">article_pk</span><span class="p">,</span> <span class="n">comment_pk</span><span class="p">):</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Comment</span> <span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">comment_pk</span><span class="p">)</span>
+    <span class="n">comment</span><span class="p">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article_pk</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  ...
+  <span class="nt">&lt;h4&gt;</span>댓글 목록<span class="nt">&lt;/h4&gt;</span>
+  <span class="cp">{%</span> <span class="k">for</span> <span class="nv">comment</span> <span class="ow">in</span> <span class="nv">comments</span> <span class="cp">%}</span>
+    <span class="nt">&lt;li&gt;</span>
+      <span class="cp">{{</span> <span class="nv">comment.content</span> <span class="cp">}}</span>
+      <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:comments_delete'</span> <span class="nv">article.pk</span> <span class="nv">comment.pk</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">class=</span><span class="s">"d-inline"</span><span class="nt">&gt;</span>
+        <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"DELETE"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;/li&gt;</span>
+  <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+  <span class="nt">&lt;hr&gt;</span>
+	...
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="comment-관련-추가-사항">Comment 관련 추가 사항</h2>
+
+<h3 id="댓글-개수-출력">댓글 개수 출력</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 1. {{ comments|length }}
+</span>
+<span class="c1"># 2. {{ article.comment_set.all|length }}
+</span>
+<span class="c1"># 3. {{ comments.count }} 
+</span></code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+
+<span class="nt">&lt;h4&gt;</span>댓글 목록<span class="nt">&lt;/h4&gt;</span>
+<span class="cp">{%</span> <span class="k">if</span> <span class="nv">comments</span><span class="o">|</span><span class="nf">length</span> <span class="cp">%}</span>
+  <span class="nt">&lt;p&gt;&lt;b&gt;</span><span class="cp">{{</span> <span class="nv">comments</span><span class="o">|</span><span class="nf">length</span> <span class="cp">}}</span>개의 댓글이 있습니다.<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="댓글이-없는-경우-다른-문장-출력">댓글이 없는 경우 다른 문장 출력</h3>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">for empty</code> 활용</p>
+
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+  
+{% for comment in comments %}
+  <span class="nt">&lt;li&gt;</span>
+    {{ comment.content }}
+    <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{% url 'articles:comments_delete' article.pk comment.pk %}"</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">class=</span><span class="s">"d-inline"</span><span class="nt">&gt;</span>
+      {% csrf_token %}
+      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"DELETE"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+{% empty %}
+  <span class="nt">&lt;p&gt;&lt;b&gt;</span>댓글이 없어요<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
+{% endfor %}
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<h2 id="manytomany-field">ManyToMany Field</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># accounts/models.py
+</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">AbstractUser</span><span class="p">):</span>
+  <span class="n">followers</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s">'self'</span><span class="p">,</span> <span class="n">symmetrical</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">'followings'</span><span class="p">)</span>
+
+</code></pre></div></div>
+<ul>
+  <li>User : User = M : N -&gt; 사용자가 사용자를 팔로우 할 수 있다.
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">symmetrical=False</code></li>
+      <li>한 user가 다른 한 user를 팔로우 했다고 해서 둘이 서로 팔로우 관계라고 할 수 없다.</li>
+      <li><code class="language-plaintext highlighter-rouge">followers</code> = 나를 팔로우한 user를 참조하기 위한 manager</li>
+      <li><code class="language-plaintext highlighter-rouge">followings</code> = 내가 팔로우한 user를 참조하기 위한 manager</li>
+    </ul>
+  </li>
+</ul>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/django/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/django/2021/03/24/djangoauth/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[django] Auth</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/django/2021/03/31/sql/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[database] SQL</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

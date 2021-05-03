@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[django] Static files</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    
+<h1 id="django-static-files">[django] Static files</h1>
+
+<h2 id="static-files">Static files</h2>
+
+<blockquote>
+  <p>웹 사이트의 구성 요소 중에서 image, css, js 파일과 같이 해당 내용이 고정되어 응답을 할 때 별도의 처리 없이 파일 내용을 그대로 보여주면 되는 파일</p>
+
+  <p>https://docs.djangoproject.com/en/3.1/howto/static-files/#managing-static-files-e-g-images-javascript-css</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="static-files-구성">Static files 구성</h3>
+
+<ol>
+  <li>django.contrib.staticfiles 앱이 <code class="language-plaintext highlighter-rouge">INSTALLED_APPS</code>에 있는지 확인</li>
+  <li>setting.py에 <code class="language-plaintext highlighter-rouge">STATIC_URL</code> 정의</li>
+  <li>템플릿에서 static 템플릿 태그를 사용하여 static file이 있는 상대경로를 빌드</li>
+  <li>앱에 static file 저장하기 (<code class="language-plaintext highlighter-rouge">my_app/static/my_app/sample.jpg</code>)</li>
+</ol>
+
+<p><br /></p>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/index.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="nv">load</span> <span class="nv">static</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">static</span> <span class="s1">'articles/images/sample.png'</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">alt=</span><span class="s">"sample"</span><span class="nt">&gt;</span>
+  ...
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>이미지 파일 위치 - <code class="language-plaintext highlighter-rouge">articles/static/articles/images/</code></li>
+  <li>static file 기본 경로
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">app_name/static/</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="the-staticfiles-app">The staticfiles app</h3>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/contrib/staticfiles/#module-django.contrib.staticfiles</p>
+</blockquote>
+
+<p><strong><code class="language-plaintext highlighter-rouge">STATIC_ROOT</code></strong></p>
+
+<ul>
+  <li>
+    <p>Django 프로젝트에서 사용하는 모든 정적 파일을 한 곳에 모아넣는 경로</p>
+  </li>
+  <li>collectstatic이 배포를 위해 정적파일을 수집하는 절대 경로</li>
+  <li>DEBUG=True(개발 단계)로 설정되어 있으면 작용하지 않음</li>
+  <li>개발단계에서는 경로를 작성하지 않아도 문제없이 동작</li>
+  <li>즉, 실제 서비스 배포 환경에서 필요한 경로</li>
+</ul>
+
+<blockquote>
+  <p>[참고]</p>
+
+  <p><strong>collectstatic</strong></p>
+
+  <ul>
+    <li>프로젝트 배포 시 흩어져있는 정적 파일들을 모아 특정 디렉토리로 옮기는 작업</li>
+  </ul>
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py 예시
+</span>
+<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s">'staticfiles'</span>
+</code></pre></div>  </div>
+
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py collectstatic
+</code></pre></div>  </div>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">STATIC_URL</code></strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">STATIC_ROOT</code>에 있는 정적파일을 참조 할 때 사용할 URL
+    <ul>
+      <li>실제 파일이나 디렉토리가 아니며, URL로만 존재</li>
+    </ul>
+  </li>
+  <li>비어 있지 않은 값으로 설정 한다면 반드시 slash(/)로 끝나야 함</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">STATICFILES_DIRS</code></strong></p>
+
+<ul>
+  <li>
+    <p>app내의 static 디렉토리 경로를 사용하는 것(기본 경로) 외에 추가적인 정적 파일 경로 정의</p>
+
+    <div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- base.html --&gt;</span>
+  
+<span class="nt">&lt;head&gt;</span>
+  <span class="cp">{%</span> <span class="k">block</span> <span class="nv">css</span> <span class="cp">%}{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+<span class="nt">&lt;/head&gt;</span>
+</code></pre></div>    </div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py
+</span>  
+<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s">'crud'</span> <span class="o">/</span> <span class="s">'static'</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>    </div>
+
+    <div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/index.html --&gt;</span>
+  
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="nv">load</span> <span class="nv">static</span> <span class="cp">%}</span>
+  
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">css</span> <span class="cp">%}</span>
+  <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">static</span> <span class="s1">'stylesheets/style.css'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div>    </div>
+
+    <div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/* crud/static/stylesheets/style.css */</span>
+  
+<span class="nt">h1</span> <span class="p">{</span>
+    <span class="nl">color</span><span class="p">:</span> <span class="no">crimson</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>STATIC_URL 확인해보기</strong></p>
+
+<p><img src="/assets/images/04_django_staticfiles.assets/1.jpg" alt="1" /></p>
+
+<ul>
+  <li>개발자도구 - 네트워크 - 이미지파일 선택 - Request URL 확인</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="media">Media</h2>
+
+<blockquote>
+  <p>사용자가 웹에서 업로드하는 정적 파일</p>
+
+  <p>즉, 유저가 업로드 한 모든 정적 파일</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="이미지-업로드">이미지 업로드</h3>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/ko/3.1/ref/models/fields/#filefield</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">FileField</code> / <code class="language-plaintext highlighter-rouge">ImageField</code> 를 사용하기 위한 몇 가지 단계</strong></p>
+
+<ol>
+  <li>setting.py에 <code class="language-plaintext highlighter-rouge">MEDIA_ROOT</code>, <code class="language-plaintext highlighter-rouge">MEDIA_URL</code> 설정</li>
+  <li><code class="language-plaintext highlighter-rouge">upload_to</code> 속성을 정의하여 업로드 된 파일에 사용할 <code class="language-plaintext highlighter-rouge">MEDIA_ROOT</code>의 하위 경로를 지정
+    <ul>
+      <li>upload_to는 optional argument</li>
+    </ul>
+  </li>
+  <li>업로드 된 파일의 상대 URL은 django가 제공하는 <code class="language-plaintext highlighter-rouge">url</code> 속성을 통해 얻을 수 있음</li>
+</ol>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">MEDIA_ROOT</code></strong></p>
+
+<ul>
+  <li>사용자가 업로드 한 파일(미디어 파일)들을 보관할 디렉토리의 절대 경로</li>
+  <li>django는 성능을 위해 업로드 파일은 데이터베이스에 저장하지 않음
+    <ul>
+      <li><strong>데이터베이스에 저장되는 것은 파일 경로</strong></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">MEDIA_ROOT</code>는 <code class="language-plaintext highlighter-rouge">STATIC_ROOT</code>와 다른 경로로 지정을 해야 함</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py
+</span>
+<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s">'media'</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">MEDIA_URL </code></strong></p>
+
+<ul>
+  <li>
+    <p>업로드 된 파일의 주소(URL)를 만들어 주는 역할</p>
+
+    <ul>
+      <li>웹 서버 사용자가 사용하는 public URL</li>
+    </ul>
+  </li>
+  <li>
+    <p>비어 있지 않은 값으로 설정 한다면 반드시 slash(/)로 끝나야 함</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">MEDIA_URL</code>도 <code class="language-plaintext highlighter-rouge">STATIC_URL</code>과 경로가 달라야 함</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py
+</span>  
+<span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">'/media/'</span> 
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>개발 단계에서 사용자가 업로드한 미디어 파일 제공하기</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/howto/static-files/#serving-files-uploaded-by-a-user-during-development</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># crud/urls.py
+</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.conf.urls.static</span> <span class="kn">import</span> <span class="n">static</span>
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'articles/'</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">'articles.urls'</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'accounts/'</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">'accounts.urls'</span><span class="p">)),</span>
+<span class="p">]</span> <span class="o">+</span> <span class="n">static</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">MEDIA_URL</span><span class="p">,</span> <span class="n">document_root</span><span class="o">=</span><span class="n">settings</span><span class="p">.</span><span class="n">MEDIA_ROOT</span><span class="p">)</span>
+
+<span class="c1"># 업로드 된 파일의 URL == settings.MEDIA_URL
+# 위 URL을 통해 참조하는 파일의 실제 위치 == settings.MEDIA_ROOT
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="create">CREATE</h3>
+
+<p><strong>ImageField</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># views.py
+</span>
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">ImageField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>기존 컬럼 코드 사이에 작성해도 실제 테이블에 추가 될 때는 가장 우측(뒤)에 추가됨</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>Pillow
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py makemigrations
+<span class="nv">$ </span>python manage.py migrate
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">blank</code> - model field option</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/models/fields/#blank</p>
+</blockquote>
+
+<ul>
+  <li>True일 경우 해당 field는 blank(빈 값)를 허용</li>
+  <li>데이터베이스에는 <code class="language-plaintext highlighter-rouge">''</code> (빈 문자열)이 저장됨</li>
+  <li>유효성 검사와 관련이 있음</li>
+</ul>
+
+<p><br /></p>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- create.html --&gt;</span>
+
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+  <span class="cp">{{</span> <span class="nv">form.as_p</span> <span class="cp">}}</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># views.py
+</span>
+<span class="o">@</span><span class="n">require_http_methods</span><span class="p">([</span><span class="s">'GET'</span><span class="p">,</span> <span class="s">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">FILES</span><span class="p">)</span>
+        <span class="c1"># form = ArticleForm(data=request.POST, files=request.FILES)
+</span>        <span class="k">if</span> <span class="n">form</span><span class="p">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/create.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>form 태그 - <code class="language-plaintext highlighter-rouge">enctype(인코딩)</code> <strong>속성</strong></p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">apllication/x-www-form-urlencoded</code>
+    <ul>
+      <li>(기본값) 모든 문자 인코딩</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">multipart/form-data</code>
+    <ul>
+      <li>파일/이미지 업로드 시에 반드시 사용해야 함 (전송되는 데이터의 형식을 지정)</li>
+      <li><code class="language-plaintext highlighter-rouge">&lt;input type="file"&gt;</code>을 사용할 경우 사용</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">text/plain</code></li>
+</ol>
+
+<p><br /></p>
+
+<p>input 태그 - <code class="language-plaintext highlighter-rouge">accept</code> 속성</p>
+
+<ul>
+  <li>입력 허용할 파일 유형을 나타내는 문자열</li>
+  <li>이 문자열은 쉼표로 구분된 고유 파일 유형 지정자(unique file type specifiers)</li>
+  <li>하지만 파일 검증은 하지 못함 (이미지만 accept 해 놓더라도 비디오나 오디오 파일을 제출할 수 있음)</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="read">READ</h3>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- detail.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2</span> <span class="na">class=</span><span class="s">'text-center'</span><span class="nt">&gt;</span>DETAIL<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;h3&gt;</span><span class="cp">{{</span> <span class="nv">article.pk</span> <span class="cp">}}</span> 번 글<span class="nt">&lt;/h3&gt;</span>
+  <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"</span><span class="cp">{{</span> <span class="nv">article.image.url</span> <span class="cp">}}</span><span class="s">"</span> <span class="na">alt=</span><span class="s">"</span><span class="cp">{{</span> <span class="nv">article.image</span> <span class="cp">}}</span><span class="s">"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  ...
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">article.image.url</code>
+    <ul>
+      <li>업로드 파일의 상대 URL</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">article.image</code>
+    <ul>
+      <li>업로드 파일의 파일 이름</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>MEDIA_URL 확인해보기</strong></p>
+
+<p><img src="/assets/images/04_django_staticfiles.assets/2.jpg" alt="2" /></p>
+
+<p><br /></p>
+
+<h3 id="update">UPDATE</h3>
+
+<ul>
+  <li>이미지는 바이너리 데이터(하나의 덩어리)이기 때문에 텍스트처럼 일부만 수정 하는 것은 불가능</li>
+  <li>때문에 새로운 사진으로 덮어 씌우는 방식을 사용</li>
+</ul>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- update.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">"text-center"</span><span class="nt">&gt;</span>UPDATE<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">""</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nv">form.as_p</span> <span class="cp">}}</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:detail'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># views.py
+</span>
+<span class="o">@</span><span class="n">require_http_methods</span><span class="p">([</span><span class="s">'GET'</span><span class="p">,</span> <span class="s">'POST'</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">FILES</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">article</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="p">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">article</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+        <span class="s">'article'</span><span class="p">:</span> <span class="n">article</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/update.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<ul>
+  <li>이미지 필드 설정 이전에 작성되었던 과거 게시물들 + 새로운 게시글 작성시 이미지 없이 작성하는 게시물의 detail 페이지를 출력하지 못하는 문제 해결 (image 필드 값이 없기 때문)</li>
+</ul>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- detail.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>DETAIL<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;h2&gt;</span><span class="cp">{{</span> <span class="nv">article.pk</span> <span class="cp">}}</span> 번 글<span class="nt">&lt;/h2&gt;</span>
+  <span class="cp">{%</span> <span class="k">if</span> <span class="nv">article.image</span> <span class="cp">%}</span>
+    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"</span><span class="cp">{{</span> <span class="nv">article.image.url</span> <span class="cp">}}</span><span class="s">"</span> <span class="na">alt=</span><span class="s">"</span><span class="cp">{{</span> <span class="nv">article.image</span> <span class="cp">}}</span><span class="s">"</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+...
+</code></pre></div></div>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/django/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/django/2021/03/18/djangoform/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[django] form</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/django/2021/03/24/djangoauth/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[django] Auth</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

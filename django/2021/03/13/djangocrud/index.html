@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[django] CRUD</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    
+<h1 id="django-crud">[django] CRUD</h1>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">02_django_crud</code></p>
+</blockquote>
+
+<p><strong>템플릿 폴더 구조 및 url 분리</strong></p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">articles/urls.py</code> 파일 생성</p>
+  </li>
+  <li>
+    <p>프로젝트 폴더 url 설정</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">base.html</code> 설정</strong></p>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- crud/templates/base.html --&gt;</span>
+
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;title&gt;</span>Document<span class="nt">&lt;/title&gt;</span>
+  <span class="c">&lt;!-- Bootstrap CDN --&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="c">&lt;!-- Bootstrap CDN --&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># crud/settings.py
+</span>
+<span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span><span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s">'crud'</span> <span class="o">/</span> <span class="s">'templates'</span><span class="p">],</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>기본 페이지 설정</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s">'articles'</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'index'</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/index.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- templates/articles/index.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>Articles<span class="nt">&lt;/h1&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="read">READ</h2>
+
+<ul>
+  <li>게시글 전체 조회</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span>
+
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">articles</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'articles'</span><span class="p">:</span> <span class="n">articles</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/index.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--templates/articles/index.html--&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>Articles<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="cp">{%</span> <span class="k">for</span> <span class="nv">article</span> <span class="ow">in</span> <span class="nv">articles</span> <span class="cp">%}</span>
+    <span class="nt">&lt;p&gt;</span>글 번호: <span class="cp">{{</span> <span class="nv">article.pk</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>글 제목: <span class="cp">{{</span> <span class="nv">article.title</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>글 내용: <span class="cp">{{</span> <span class="nv">article.content</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;hr&gt;</span>
+  <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="create">CREATE</h2>
+
+<h3 id="new">New</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'new/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">new</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'new'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/new.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- templates/articles/new.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>NEW<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"#"</span> <span class="na">method=</span><span class="s">"GET"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"title"</span><span class="nt">&gt;</span>Title: <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"title"</span><span class="nt">&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"content"</span><span class="nt">&gt;</span>Content: <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;textarea</span> <span class="na">name=</span><span class="s">"content"</span> <span class="na">cols=</span><span class="s">"30"</span> <span class="na">rows=</span><span class="s">"5"</span><span class="nt">&gt;&lt;/textarea&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- templates/articles/index.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>Articles<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:new'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[new]<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span>  <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="create-1">Create</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># article/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'create/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">create</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'create'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">GET</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span> 
+    <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">GET</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'content'</span><span class="p">)</span>
+    
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/create.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- templates/articles/create.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>성공적으로 글이 작성되었습니다.<span class="nt">&lt;/h1&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- templates/articles/index.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>NEW<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:create'</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"GET"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"title"</span><span class="nt">&gt;</span>Title: <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"title"</span><span class="nt">&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"content"</span><span class="nt">&gt;</span>Content: <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;textarea</span> <span class="na">name=</span><span class="s">"content"</span> <span class="na">cols=</span><span class="s">"30"</span> <span class="na">rows=</span><span class="s">"5"</span><span class="nt">&gt;&lt;/textarea&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>게시글 정렬 순서 변경</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">#1</code> - DB로 부터 받은 쿼리셋을 이후에 파이썬이 변경 (Python이 조작)</li>
+  <li><code class="language-plaintext highlighter-rouge">#2</code>-  처음부터 내림차순 쿼리셋으로 받음 (DB가 조작)</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="c1"># 1. articles = Article.objects.all()[::-1]
+</span>    <span class="c1"># 2. articles = Artile.objects.order_by('-pk')  
+</span></code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h3 id="http-method---post">Http Method - POST</h3>
+
+<blockquote>
+  <p>https://developer.mozilla.org/ko/docs/Web/HTTP/Methods/POST</p>
+</blockquote>
+
+<ul>
+  <li><strong>3가지 이유에서 우리는 글을 작성할 때 GET 요청이 아닌 POST 요청을 해야 한다.</strong>
+    <ol>
+      <li>사용자는 Django에게 ‘<strong>HTML 파일 줘(GET)</strong>’ 가 아니라 ‘<strong>~한 레코드(글)을 생성해(POST)</strong>’ 이기 때문에 GET보다는 POST 요청이 맞다.</li>
+    </ol>
+  </li>
+</ul>
+
+<ol>
+  <li>
+    <p>데이터는 URL에 직접 노출되면 안된다. (우리가 주소창으로 접근하는 방식은 모두 GET 요청) query의 형태를 통해 DB schema를 유추할 수 있다.</p>
+  </li>
+  <li>
+    <p>모델(DB)을 건드리는 친구는 GET이 아닌 POST 요청! 왜? 중요하니까 <strong>최소한의 신원 확인</strong>이 필요하다!</p>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<p><strong>POST</strong></p>
+
+<ul>
+  <li>서버로 데이터를 전송할 때 사용</li>
+  <li>서버에 변경사항을 만듦
+    <ul>
+      <li>때문에 요청자에 대한 최소한의 검증을 하지 않으면 부작용을 일으킬 수 있음</li>
+      <li><code class="language-plaintext highlighter-rouge">csrf_token</code>을 통해서 요청자의 최소한의 신원확인</li>
+    </ul>
+  </li>
+  <li>리소스를 생성/변경하기 위해 데이터를 HTTP body에 담아 전송</li>
+  <li>CRUD에서 C/U/D 역할을 담당</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">GET</code></strong></p>
+
+<ul>
+  <li>특정 리소스를 가져오도록 요청할 때 사용</li>
+  <li>반드시 데이터를 가져올 때만 사용해야 함</li>
+  <li>DB에 변화를 주지 않음</li>
+  <li>CRUD에서 R 역할을 담당</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>DB 조작(GET/POST)</strong></p>
+
+<ul>
+  <li>GET 요청은 DB에서 데이터를 꺼내서 가져온다. 즉, DB에 변화를 주는 게 아니다.
+    <ul>
+      <li>즉, <strong>GET</strong>은 누가 요청해도 어차피 정보를 조회(HTML 파일을 얻는 것)하기 때문에 문제가 되지 않음.</li>
+    </ul>
+  </li>
+  <li>POST 요청은 DB에 조작(생성/수정/삭제)를 하는 것(디비에 변화를 준다)
+    <ul>
+      <li><strong>POST</strong>는 DB에 조작이 가해지기 때문에 요청자에 대한 최소한의 검증을 하지 않으면 아무나 DB에 접근해서 데이터에 조작을 가할 수 있다.</li>
+      <li><code class="language-plaintext highlighter-rouge">csrf_token</code>을 통해서 요청자의 최소한의 신원확인을 한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">new.html</code> 수정</strong></p>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- templates/articles/new.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>NEW<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:create'</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"title"</span><span class="nt">&gt;</span>Title: <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"title"</span><span class="nt">&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"content"</span><span class="nt">&gt;</span>Content: <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;textarea</span> <span class="na">name=</span><span class="s">"content"</span> <span class="na">cols=</span><span class="s">"30"</span> <span class="na">rows=</span><span class="s">"5"</span><span class="nt">&gt;&lt;/textarea&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span> 
+    <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'content'</span><span class="p">)</span> 
+
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/index.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>CSRF Token</strong></p>
+
+<blockquote>
+  <p><a href="https://ko.wikipedia.org/wiki/사이트_간_요청_위조">https://ko.wikipedia.org/wiki/%EC%82%AC%EC%9D%B4%ED%8A%B8<em>%EA%B0%84</em>%EC%9A%94%EC%B2%AD_%EC%9C%84%EC%A1%B0</a></p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>사이트 간 요청 위조(Cross-Site-Request-Fogery)</p>
+
+    <ul>
+      <li>웹 애플리케이션 취약점 중 하나로 <strong>사용자가 자신의 의지와 무관하게 공격자가 의도한 행동을 하여 특정 웹페이지를 보안에 취약하게 한다거나 수정, 삭제 등의 작업을 하게 만드는 공격 방법</strong>을 의미한다.</li>
+      <li><code class="language-plaintext highlighter-rouge">{% csrf_token %}</code> 을 설정하면 input type hidden 으로 특정한 hash 값이 들어있다.</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">{% csrf_token %}</code> 이 없다면?</li>
+  <li><code class="language-plaintext highlighter-rouge">403 forbidden</code> 에러: 서버에 요청은 도달했으나 서버가 접근을 거부할 때 반환하는 HTTP 응답 코드 / 오류 코드. 서버 자체 또는 서버에 있는 파일에 접근할 권한이 없을 경우에 발생
+    <ul>
+      <li>이러한 접근을 할 수 있도록 하는 것이 <code class="language-plaintext highlighter-rouge">{% csrf_token %}</code> → 사내 인트라넷 서버를 사내가 아닌 밖에서 접속하려고 할 때도 해당 HTTP 응답 코드가 뜬다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>게시글 작성 후 index로 되돌리기</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="p">...</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/index.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>문제점 발생
+    <ol>
+      <li>글을 작성 후 index 페이지가 출력되지만 게시글이 조회되지 않음</li>
+      <li>URL은 여전이 create에 머물러 있음
+        <ul>
+          <li>단순히 index 페이지만 render 되었을 뿐이고 url이 돌아가지 못했기 때문</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h3 id="redirect">Redirect</h3>
+
+<blockquote>
+  <p>Django shortcut function 중 하나이며 model, view name, absolute or relate URL을 인자로 받음</p>
+
+  <p>여기서 인자 view name은 URL pattern name으로 작성 될 수 있음</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>POST 요청은 HTML 문서를 렌더링 하는 것이 아니라 <strong>’~~ 좀 처리해줘(요청)’의 의미이기 때문에 요청을 처리하고 나서의 요청의 결과를 보기 위한 페이지로 바로 넘겨주는 것이 일반적</strong>이다.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>  
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+  
+  
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span> 
+    <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'content'</span><span class="p">)</span>
+      
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+      
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:index'</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>POST 요청으로 변경 후 변화하는 것</strong></p>
+
+<ul>
+  <li>POST 요청을 하게 되면 form을 통해 전송한 데이터를 받을 때도 <code class="language-plaintext highlighter-rouge">request.POST.get()</code> 로 받아야 함</li>
+  <li>글이 작성되면 실제로 주소 창에 내가 넘긴 데이터가 나타나지 않는다. (POST 요청은 HTTP body에 데이터를 전송함)</li>
+  <li>POST는 html을 요청하는 것이 아니기 때문에 html 파일을 받아볼 수 있는 곳으로 다시 redirect 한다.</li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="detail">DETAIL</h2>
+
+<p><strong>urls 설정</strong></p>
+
+<ul>
+  <li>개별 게시글 상세 페이지</li>
+  <li>글의 번호(pk)를 활용해서 각각의 페이지를 따로 구현해야 함</li>
+  <li>무엇을 활용할 수 있을까? → Variable Routing</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'&lt;int:pk&gt;/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'detail'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>views 설정</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'article'</span><span class="p">:</span> <span class="n">article</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/detail.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>templates 설정</strong></p>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- templates/articles/detail.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>DETAIL<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;h3&gt;</span><span class="cp">{{</span> <span class="nv">article.pk</span> <span class="cp">}}</span> 번째 글<span class="nt">&lt;/h3&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;p&gt;</span>제목: <span class="cp">{{</span> <span class="nv">article.title</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span>내용: <span class="cp">{{</span> <span class="nv">article.content</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span>작성 시각: <span class="cp">{{</span> <span class="nv">article.created_at</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span>수정 시각: <span class="cp">{{</span> <span class="nv">article.updated_at</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span>  <span class="cp">%}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>index 페이지에 게시글별 detail 링크작성</li>
+</ul>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c">&lt;!-- templates/articles/index.html --&gt;</span>
+  
+  <span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+  
+  <span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">"text-center"</span><span class="nt">&gt;</span>Articles<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:new'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[new]<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="cp">{%</span> <span class="k">for</span> <span class="nv">article</span> <span class="ow">in</span> <span class="nv">articles</span> <span class="cp">%}</span>
+    <span class="nt">&lt;p&gt;</span>글 번호: <span class="cp">{{</span> <span class="nv">article.pk</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>글 제목: <span class="cp">{{</span> <span class="nv">article.title</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>글 내용: <span class="cp">{{</span> <span class="nv">article.content</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+    **<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:detail'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[detail]<span class="nt">&lt;/a&gt;</span>**
+    <span class="nt">&lt;hr&gt;</span>
+  <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+  <span class="cp">{%</span> <span class="k">endblock</span>  <span class="cp">%}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>create 후 detail로 이동</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'content'</span><span class="p">)</span>
+
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="delete">DELETE</h2>
+
+<p><strong>urls 설정</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'&lt;int:pk&gt;/delete/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">delete</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'delete'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>views 설정</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:index'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>templates 설정</strong></p>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  ...
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:delete'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-danger"</span><span class="nt">&gt;</span>DELETE<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;&lt;br&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>그래서 POST 로 요청을 받기 위해 다음과 같이 조건을 만든다.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>  
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">article</span><span class="p">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:index'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="update">UPDATE</h2>
+
+<h3 id="edit">Edit</h3>
+
+<p><strong>urls 설정</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'&lt;int:pk&gt;/edit/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">delete</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'edit'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>views 설정</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'article'</span><span class="p">:</span> <span class="n">article</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'articles/edit.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>templates 설정</strong></p>
+
+<ul>
+  <li>수정은 기존에 입력 되어 있던 데이터를 보여주는 것이 좋기 때문에 html 태그의 <code class="language-plaintext highlighter-rouge">value</code> 속성을 사용</li>
+</ul>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/edit.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">"text-center"</span><span class="nt">&gt;</span>EDIT<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"#"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"title"</span><span class="nt">&gt;</span>Title: <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"title"</span> <span class="na">value=</span><span class="s">"</span><span class="cp">{{</span> <span class="nv">article.title</span> <span class="cp">}}</span><span class="s">"</span><span class="nt">&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"content"</span><span class="nt">&gt;</span>Content: <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;textarea</span> <span class="na">name=</span><span class="s">"content"</span> <span class="na">cols=</span><span class="s">"30"</span> <span class="na">rows=</span><span class="s">"5"</span><span class="nt">&gt;</span><span class="cp">{{</span> <span class="nv">article.content</span> <span class="cp">}}</span><span class="nt">&lt;/textarea&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">detail.html</code> 에 edit 으로 가는 링크 작성</p>
+
+    <div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/detail.html --&gt;</span>
+  
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+  
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  ...
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:edit'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span><span class="nt">&gt;</span>EDIT<span class="nt">&lt;/a&gt;&lt;br&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:delete'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-danger"</span><span class="nt">&gt;</span>DELETE<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;&lt;br&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:detail'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span>  <span class="cp">%}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="update-1">Update</h3>
+
+<p><strong>urls 설정</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/urls.py
+</span>
+<span class="n">path</span><span class="p">(</span><span class="s">'&lt;int:pk&gt;/update/'</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">update</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'update'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>views 설정</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/views.py
+</span>
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'title'</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">POST</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'content'</span><span class="p">)</span>
+    <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'articles:detail'</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-django highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- articles/edit.html --&gt;</span>
+
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h1&gt;</span>EDIT<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:update'</span> <span class="nv">article.pk</span> <span class="cp">%}</span><span class="s">"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    ...
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'articles:index'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>[back]<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</code></pre></div></div>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/django/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/django/2021/03/12/djangomodel/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[django] Model</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/django/2021/03/18/djangoform/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[django] form</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[django] Model</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="django-model">[django] Model</h1>
+
+<h2 id="model">Model</h2>
+
+<blockquote>
+  <p>웹 어플리케이션의 데이터를 구조화하고 조작하기 위한 도구</p>
+</blockquote>
+
+<p><strong>개념</strong></p>
+
+<ul>
+  <li>모델은 단일한 데이터에 대한 정보를 가짐</li>
+  <li>일반적으로 각각의 <strong>모델(클래스)</strong>는 하나의 데이터베이스 <strong>테이블과 매핑</strong></li>
+  <li>모델은 부가적인 메타데이터를 가진 <strong>DB의 구조(layout)를 의미</strong></li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="database">Database</h3>
+
+<blockquote>
+  <p>체계화된 데이터의 모임 (집합)</p>
+</blockquote>
+
+<p><strong>기본 구조</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">쿼리(Query)</code>
+    <ul>
+      <li>데이터를 조회하기 위한 명령어</li>
+      <li>(주로 테이블형 자료구조에서) 조건에 맞는 데이터를 추출하거나 조작하는 명령어</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">스키마 (Schema)</code> —&gt; 뼈대(Structure)
+    <ul>
+      <li>데이터베이스에서 자료의 구조, 표현 방법, 관계 등을 정의한 구조</li>
+      <li>데이터베이스 관리 시스템(DBMS)이 주어진 설정에 따라 데이터베이스 스키마를 생성하며, 데이터베이스 사용자가 자료를 저장, 조회, 삭제, 변경할 때 DBMS는 자신이 생성한 데이터베이스 스키마를 참조하여 명령을 수행</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">테이블 (Table)</code> —&gt; 관계(Relation) —&gt; 엑셀의 sheet
+    <ul>
+      <li>필드(field) : 속성, 컬럼(Column)
+        <ul>
+          <li>모델 안에 정의한 클래스에서 클래스 변수가 필드가 됨</li>
+        </ul>
+      </li>
+      <li>레코드(record) : 튜플, 행(Row)
+        <ul>
+          <li>우리가 ORM을 통해 해당하는 필드에 넣은 데이터(값)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h3 id="orm">ORM</h3>
+
+<blockquote>
+  <p>객체-관계 매핑</p>
+</blockquote>
+
+<p><strong>개념</strong></p>
+
+<ul>
+  <li>객체 지향 프로그래밍 언어를 사용하여 호환되지 않는 유형의 시스템간에(Django - SQL)데이터를 변환하는 프로그래밍 기술</li>
+  <li>OOP 프로그래밍에서 RDBMS을 연동할 때, 데이터베이스와 객체 지향 프로그래밍 언어 간의 호환되지 않는 데이터를 변환하는 프로그래밍 기법이다.</li>
+  <li>Django는 내장 Django ORM을 사용</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>장/단점</strong></p>
+
+<ul>
+  <li>장점
+    <ul>
+      <li>SQL을 몰라도 DB 연동이 가능하다. (SQL 문법을 몰라도 쿼리 조작 가능)</li>
+      <li>SQL의 절차적인 접근이 아닌 객체 지향적인 접근으로 인해 <code class="language-plaintext highlighter-rouge">생산성</code>이 증가한다.</li>
+      <li>ORM은 독립적으로 작성되어 있고, 해당 객체들을 재활용할 수 있다.
+        <ul>
+          <li>때문에 모델에서 가공된 데이터를 컨트롤러(view)에 의해 뷰(template)과 합쳐지는 형태로 디자인 패턴을 견고하게 다지는데 유리</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>단점
+    <ul>
+      <li>ORM 만으로 완전한 서비스를 구현하기 어려운 경우가 있다.</li>
+      <li>프로젝트의 복잡성이 커질 경우 설계 난이도가 상승할 수 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>정리</strong></p>
+
+<ul>
+  <li>객체 지향 프로그래밍에서 DB를 편리하게 관리하게 위해 ORM 프레임워크를 도입</li>
+  <li><strong>“우리는 DB를 객체(object)로 조작하기 위해 ORM을 사용한다.”</strong></li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>새 프로젝트 시작</strong></p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">01_django_model</code> 폴더 안에서 진행</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>django-admin startproject crud 
+<span class="nv">$ </span><span class="nb">cd </span>crud
+<span class="nv">$ </span>python manage.py startapp articles
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># crud/settings.py
+</span>
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'articles'</span><span class="p">,</span>	
+		<span class="p">...</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>models.py 정의</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/models.py
+</span>
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span> <span class="c1"># Model class 상속
+</span>    <span class="c1"># id는 기본적으로 처음 테이블 생성시 자동으로 만들어진다.
+</span>    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># 클래스 변수(DB의 필드)
+</span>    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">TextField</span><span class="p">()</span> 
+</code></pre></div></div>
+
+<ul>
+  <li>title과 content은 모델의 필드를 나타냄
+    <ul>
+      <li>각 <strong>필드</strong>는 클래스 속성으로 지정되어 있으며, 각 <strong>속성</strong>은 각 데이터베이스의 열에 매핑</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>사용 된 필드</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">CharField(max_length=None, **options)</code>
+    <ul>
+      <li>길이의 제한이 있는 문자열을 넣을 때 사용</li>
+      <li>CharField의 max_length는 필수 인자
+        <ul>
+          <li><strong>필드의 최대 길이(문자),</strong> 데이터베이스 레벨과 Django의 유효성 검사(값을 검증하는 것)에서 활용</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">TextField(**options)</code>
+    <ul>
+      <li>글자의 수가 많을 때 사용</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="migrations">Migrations</h2>
+
+<blockquote>
+  <p>django가 모델에 생긴 변화(필드를 추가했다던가 모델을 삭제했다던가 등)를 반영하는 방법</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong>makemigrations</strong></p>
+
+<blockquote>
+  <p>migration 파일은 데이터베이스 스키마를 위한 버전관리 시스템이라 생각하자</p>
+</blockquote>
+
+<ul>
+  <li>모델을 변경한 것에 기반한 새로운 migration(설계도, 이하 마이그레이션)만들 때 사용</li>
+  <li>모델을 활성화 하기 전에 DB 설계도(마이그레이션) 작성</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py makemigrations
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">0001_initial.py</code> 생성 확인</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>migrate</strong></p>
+
+<blockquote>
+  <p>설계도를 실제 DB에 반영하는 과정</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">migrate</code> 는 <code class="language-plaintext highlighter-rouge">makemigrations</code> 로 만든 설계도를 실제 <code class="language-plaintext highlighter-rouge">db.sqlite3</code> DB에 반영한다.</p>
+  </li>
+  <li>
+    <p>모델에서의 변경 사항들과 DB의 스키마가 동기화를 이룬다.</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py migrate
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>sqlmigrate</strong></p>
+
+<ul>
+  <li>
+    <p>해당 migrations 설계도가 SQL 문으로 어떻게 해석되어서 동작할지 미리 확인 할 수 있다.</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py sqlmigrate app_name 0001
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>showmigrations</strong></p>
+
+<ul>
+  <li>
+    <p>migrations 설계도들이 migrate 됐는지 안됐는지 여부를 확인 할 수 있다.</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py showmigrations
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>변경사항 반영</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py makemigrations
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>You are trying to add the field <span class="s1">'created_at'</span> with <span class="s1">'auto_now_add=True'</span> to article without a default<span class="p">;</span> the database needs something to populate existing rows.
+
+ 1<span class="o">)</span> Provide a one-off default now <span class="o">(</span>will be <span class="nb">set </span>on all existing rows<span class="o">)</span>
+ 2<span class="o">)</span> Quit, and <span class="nb">let </span>me add a default <span class="k">in </span>models.py
+Select an option: 1
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">1</code> 입력 후 enter (추가된 필드에 대한 default 값 설정)</li>
+</ul>
+
+<p><br /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Please enter the default value now, as valid Python
+You can accept the default <span class="s1">'timezone.now'</span> by pressing <span class="s1">'Enter'</span> or you can provide another value.
+The datetime and django.utils.timezone modules are available, so you can <span class="k">do </span>e.g. timezone.now
+Type <span class="s1">'exit'</span> to <span class="nb">exit </span>this prompt
+<span class="o">[</span>default: timezone.now] <span class="o">&gt;&gt;&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>그대로 <code class="language-plaintext highlighter-rouge">enter</code> (django가 timezone.now를 default 함수 값으로 자동 설정)</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py migrate
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">DateTimeField()</code></p>
+
+<ul>
+  <li>최초 생성 일자: <code class="language-plaintext highlighter-rouge">auto_now_add=True</code>
+    <ul>
+      <li>django ORM이 최초 insert(테이블에 데이터 입력)시에만 현재 날짜와 시간으로 갱신(테이블에 어떤 값을 최초로 넣을 때)</li>
+    </ul>
+  </li>
+  <li>최종 수정 일자: <code class="language-plaintext highlighter-rouge">auto_now=True</code>
+    <ul>
+      <li>django ORM이 save를 할 때마다 현재 날짜와 시간으로 갱신</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Model 중요 3단계</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">models.py</code> : 변경사항 발생 (생성 / 수정)</li>
+  <li><code class="language-plaintext highlighter-rouge">makemigrations</code> : migration 파일 만들기 (설계도)</li>
+  <li><code class="language-plaintext highlighter-rouge">migrate</code> : DB에 적용 (테이블 생성)</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>실제 DB 테이블 확인</strong></p>
+
+<ul>
+  <li>
+    <p>vs code extension - sqlite3 검색 후 설치</p>
+  </li>
+  <li>
+    <p>테이블을 확인해보면 <code class="language-plaintext highlighter-rouge">articles_article</code>이라는 이름으로 테이블 생성</p>
+
+    <ul>
+      <li>
+        <p>INSTALLED_APPS 중 몇몇은 최소 하나 이상의 DB 테이블을 사용하기 때문에 migrate 와 함께 테이블이 만들어진다.</p>
+      </li>
+      <li>
+        <p>테이블의 이름은 app의 이름과 model 의 이름이 조합(모두 소문자)되어 자동으로 생성된다. (소문자)</p>
+
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">app이름(articles)_소문자 모델이름(article)</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="database-api">Database API</h2>
+
+<blockquote>
+  <p>DB를 조작하기 위한 도구</p>
+
+  <p>django가 기본적으로 orm을 제공함에 따른 것으로 db를 편하게 조작할 수 있도록 도와줌</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong>Django shell</strong></p>
+
+<ul>
+  <li>
+    <p>일반 파이썬 쉘을 통해서는 장고 프로젝트 환경에 접근할 수 없음</p>
+  </li>
+  <li>
+    <p>그래서 장고 프로젝트 설정이 로딩된 파이썬 쉘을 활용</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>ipython django-extensions
+</code></pre></div>    </div>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># settings.py
+</span>  
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">...</span>
+    <span class="s">'django_extensions'</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">]</span>
+</code></pre></div>    </div>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py shell_plus
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>DB API 구문</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/models/querysets/#queryset-api-reference</p>
+
+  <p>https://docs.djangoproject.com/en/3.1/topics/db/queries/#making-queries</p>
+</blockquote>
+
+<p><img width="1517" alt="Screen Shot 2020-08-19 at 5 12 04 PM" src="https://user-images.githubusercontent.com/18046097/90609518-23395b80-e23f-11ea-8e04-abfc04a709f7.png" /></p>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">objects</code> Manager</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/topics/db/managers/#managers</p>
+
+  <p>Django 모델에 데이터베이스 쿼리 작업이 제공되는 인터페이스</p>
+</blockquote>
+
+<ul>
+  <li>Model Manager와 Django Model 사이의 <strong>Query 연산의 인터페이스 역할</strong> 을 해줌</li>
+  <li>즉, <code class="language-plaintext highlighter-rouge">models.py</code> 에 설정한 클래스(테이블)을 불러와서 사용할 때 DB와의 interface 역할을 하는 매니저</li>
+  <li>Django는 기본적으로 모든 Django 모델 클래스에 대해 ‘<code class="language-plaintext highlighter-rouge">objects</code>’ 라는 Manager(django.db.models.Manager) 객체를 자동으로 추가한다.</li>
+  <li>Manager(objects)를 통해 특정 데이터를 조작(메서드)할 수 있다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>QuerySet</strong></p>
+
+<blockquote>
+  <p>데이터베이스로부터 데이터를 읽고, 필터를 걸거나 정렬 등을 수행</p>
+
+  <p>쿼리(질문)를 DB에게 던져서 글을 읽거나, 생성하거나, 수정하거나, 삭제</p>
+</blockquote>
+
+<ul>
+  <li>데이터베이스에서 전달 받은 객체의 목록</li>
+  <li>django orm에서 발생한 자료형</li>
+  <li>objects를 사용하여 복수의 데이터를 가져오는 함수를 사용할 때 반환되는 객체</li>
+  <li>단일한 객체를 리턴할 때는 테이블(Class)의 인스턴스로 리턴됨</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="crud">CRUD</h3>
+
+<blockquote>
+  <p>대부분의 컴퓨터 소프트웨어가 가지는 기본적인 데이터 처리 기능인 
+Create(생성), Read(읽기), Update(갱신), Delete(삭제)를 묶어서 일컫는 말</p>
+
+  <p>이러한 4개의 조작을 모두 할 수 없다면 그 소프트웨어는 완전하다고 할 수 없다.</p>
+
+  <p>이들 기능은 매우 기본적이기 때문에, 한 묶음으로 설명되는 경우가 많다.</p>
+
+  <p>https://ko.wikipedia.org/wiki/CRUD</p>
+</blockquote>
+
+<p><br /></p>
+
+<h3 id="create">Create</h3>
+
+<blockquote>
+  <p>django shell_plus에서 진행</p>
+</blockquote>
+
+<p><strong>데이터 객체를 만드는(생성하는) 3가지 방법</strong></p>
+
+<p><strong>첫번째 방식</strong></p>
+
+<ul>
+  <li>ORM을 쓰는 이유는 DB 조작을 객체 지향 프로그래밍(클래스)처럼 하기 위해
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">article = Article()</code> :  클래스로부터 인스턴스 생성</li>
+      <li><code class="language-plaintext highlighter-rouge">article.title</code> : 해당 인스턴스 변수를 변경</li>
+      <li><code class="language-plaintext highlighter-rouge">article.save()</code> : 인스턴스로 메소드를 호출</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">()</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span>
+<span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="bp">None</span><span class="p">)</span><span class="o">&gt;</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">'first'</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">content</span> <span class="o">=</span> <span class="s">'django!'</span> 
+
+<span class="c1"># save 를 하지 않으면 아직 DB에 값이 저장되지 않음
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span>
+<span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="bp">None</span><span class="p">)</span><span class="o">&gt;</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">all</span><span class="p">()</span>                            
+<span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[]</span><span class="o">&gt;</span>
+
+<span class="c1"># save 를 하고 확인하면 저장된 것을 확인할 수 있다
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span>
+<span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">1</span><span class="p">)]</span><span class="o">&gt;</span>
+
+<span class="c1"># 인스턴스인 article을 활용하여 변수에 접근해보자
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span>
+<span class="s">'first'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">content</span>
+<span class="s">'django!'</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>두번째 방식</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">'second'</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s">'django!!'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span>
+<span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span>
+
+<span class="c1"># 값을 확인
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">pk</span>
+<span class="mi">2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span>
+<span class="s">'second'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">content</span>
+<span class="s">'django!!'</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>세번째 방식</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">create()</code> 를 사용하면 쿼리셋 객체를 생성하고 저장하는 로직이 한번의 스텝으로 가능</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">'third'</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s">'django!'</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">__str__</code></p>
+
+<ul>
+  <li>
+    <p>모든 모델마다 표준 파이썬 클래스의 메소드인 <strong>str</strong>() 을 정의하여 각각의 object가 사람이 읽을 수 있는 문자열을 반환(return)하도록 한다.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/models.py
+</span>  
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">title</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">save()</code></strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/models/instances/#saving-objects</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.save()</code> 메서드 호출을 통해 데이터를 DB에 저장한다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="read">Read</h3>
+
+<p><code class="language-plaintext highlighter-rouge">all()</code></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/models/querysets/#all</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">QuerySet</code> return</li>
+  <li>QuerySet은 리스트는 아니지만 리스트와 거의 비슷하게 동작</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">Article</span> <span class="nb">object</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="n">get</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">get()</code></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/models/querysets/#get</p>
+</blockquote>
+
+<ul>
+  <li>객체가 없으면 <code class="language-plaintext highlighter-rouge">DoesNotExist</code> 에러가 나오고 객체가 여러 개일 경우에 <code class="language-plaintext highlighter-rouge">MultipleObjectReturned</code> 오류를 띄움.</li>
+  <li>위와 같은 특징을 가지고 있기 때문에 unique 혹은 Not Null 특징을 가지고 있으면(ex. <code class="language-plaintext highlighter-rouge">pk</code>) 사용할 수 있다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">DoesNotExist</span><span class="p">:</span> <span class="n">Article</span> <span class="n">matching</span> <span class="n">query</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span><span class="p">.</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s">'django!'</span><span class="p">)</span>
+<span class="n">MultipleObjectsReturned</span><span class="p">:</span> <span class="n">get</span><span class="p">()</span> <span class="n">returned</span> <span class="n">more</span> <span class="n">than</span> <span class="n">one</span> <span class="n">Article</span> <span class="o">--</span> <span class="n">it</span> <span class="n">returned</span> <span class="mi">2</span><span class="err">!</span>
+<span class="o">**</span><span class="nb">filter</span><span class="p">()</span><span class="o">**</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="language-plaintext highlighter-rouge">filter()</code></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/ref/models/querysets/#filter</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>지정된 조회 매개 변수와 일치하는 객체를 포함하는 새 QuerySet을 반환</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s">'django!'</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">first</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">fourth</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span>
+  
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">'first'</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">first</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Field lookups</strong></p>
+
+<ul>
+  <li>
+    <p>SQL WHERE 절을 지정하는 방법</p>
+  </li>
+  <li>
+    <p>QuerySet 메서드 filter(), exclude() 및 get()에 대한 키워드 인수로 지정</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">pk__gt</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>The <code class="language-plaintext highlighter-rouge">pk</code> lookup shortcut</strong></p>
+
+<blockquote>
+  <p>https://docs.djangoproject.com/en/3.1/topics/db/queries/#the-pk-lookup-shortcut</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p>또한, 우리가 <code class="language-plaintext highlighter-rouge">.get(id=1)</code> 형태 뿐만 아니라 <code class="language-plaintext highlighter-rouge">.get(pk=1)</code> 로 사용할 수 있는 이유는(DB에는 id로 필드 이름이 지정 됨에도) <code class="language-plaintext highlighter-rouge">.get(pk=1)</code> 이<code class="language-plaintext highlighter-rouge">.get(id__exact=1)</code> 와 동일한 의미이기 때문이다.</p>
+  </li>
+  <li>
+    <p>pk는 <code class="language-plaintext highlighter-rouge">id__exact</code> 의 shortcut 이다.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">id__exact</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c1"># Explicit form
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c1"># __exact is implied
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">Blog</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> <span class="c1"># pk implies id__exact
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="update">Update</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span>
+<span class="s">'first'</span>
+
+<span class="c1"># 값을 변경하고 저장
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">'byebye'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="c1"># 정상적으로 변경된 것을 확인
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span>
+<span class="s">'byebye'</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h3 id="delete">Delete</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 삭제
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">article</span><span class="p">.</span><span class="n">delete</span><span class="p">()</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">{</span><span class="s">'articles.Article'</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+<span class="c1"># 다시 1번 글을 찾으려고 하면 없다고 나온다.
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">Article</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">DoesNotExist</span><span class="p">:</span> <span class="n">Article</span> <span class="n">matching</span> <span class="n">query</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span><span class="p">.</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="admin-site">Admin Site</h2>
+
+<blockquote>
+  <p>사용자가 아닌 서버의 관리자가 활용하기 위한 페이지</p>
+</blockquote>
+
+<p><strong>개념</strong></p>
+
+<ul>
+  <li>사용자가 아닌 서버의 관리자가 활용하기 위한 페이지</li>
+  <li>Article class를 <code class="language-plaintext highlighter-rouge">admin.py</code> 에 등록하고 관리</li>
+  <li>record 생성 여부 확인에 매우 유용하고 CRUD 로직을 확인하기에 편리하다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>관리자 생성</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py createsuperuser
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>관리자 계정 생성 후 서버를 실행한 다음 <code class="language-plaintext highlighter-rouge">/admin</code> 으로 가서 관리자 페이지 로그인</p>
+  </li>
+  <li>
+    <p>모델을 등록하지 않으면 기본적인 사용자 정보만 확인 할 수 있다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">admin.py</code> 로 가서 관리자 사이트에 등록하여 내가 만든 record를 보기 위해서는 Django 서버에 등록</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>model 등록</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/admin.py
+</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span>
+
+<span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>admin site확인</strong></p>
+
+<ul>
+  <li>admin 사이트에 방문해서 우리가 현재까지 작성한 글들을 확인</li>
+  <li><code class="language-plaintext highlighter-rouge">admin.py</code> 는 관리자 사이트에 Article 객체가 관리 인터페이스를 가지고 있다는 것을 알려주는 것</li>
+  <li>이렇게 admin 사이트에 등록된 모습이 어딘가 익숙하다?</li>
+  <li>바로 <code class="language-plaintext highlighter-rouge">models.py</code> 에 정의한 <code class="language-plaintext highlighter-rouge">__str__</code> 의 형태로 객체가 표현된다.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>ModelAdmin options</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">list_display</code></p>
+
+<ul>
+  <li>
+    <p>admin 페이지에서 우리가 models.py 정의한 각각의 속성(컬럼)들의 값(레코드)를 출력</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># articles/admin.py
+</span>  
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span>
+  
+<span class="k">class</span> <span class="nc">ArticleAdmin</span><span class="p">(</span><span class="n">admin</span><span class="p">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s">'pk'</span><span class="p">,</span> <span class="s">'title'</span><span class="p">,</span> <span class="s">'content'</span><span class="p">,</span> <span class="s">'created_at'</span><span class="p">,</span> <span class="s">'updated_at'</span><span class="p">,)</span>
+  
+<span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">ArticleAdmin</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/django/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/django/2021/03/10/djangoIntro/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[django] Intro</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/django/2021/03/13/djangocrud/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[django] CRUD</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>
