@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[JavaScript] async/await</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="js-asyncawait">[JS] async/await</h1>
+
+<p>ES8(ECMAScript 2017)에서는 비동기 처리를 동기 처리처럼 동작하도록 구현할 수 있는 <code class="language-plaintext highlighter-rouge">async/await</code>가 도입되었다.</p>
+
+<p>async/await는 프로미스를 기반으로 동작한다. async/await 를 사용하면 then, catch, finally 후속 처리 메서드를 사용할 필요 없이 마치 동기 처럼 프로미스를 사용할 수 있다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">asyncFunc</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// url이 있다고 가정</span>
+    <span class="c1">// fetch 함수를 사용하면 promise 객체가 반환된다.</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">toJson</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">toJson</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">asyncFunc</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="1-async-함수">1. async 함수</h2>
+
+<p>await 키워드는 async 함수 내에서 사용해야 한다. async 함수는 async 키워드를 사용해 정의하며 언제나 프로미스를 반환한다. async 함수가 명시적으로 프로미스를 반환하지 않더라도 암묵적으로 resolve하는 프로미스를 반환한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="nx">n</span><span class="p">;}</span>
+<span class="nx">foo</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">))</span> <span class="c1">// 1</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="2-await-키워드">2. await 키워드</h2>
+
+<p>await 키워드는 프로미스가 settled 상태 (비동기 처리가 수행된 상태)가 될 때까지 대기하다가 settled 상태가 되면 프로미스가 resolve한 처리 결과를 반환한다. await 키워드는 반드시 프로미스 앞에 사용해야 한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">await</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 'await'는 이 식의 형식에 영향을 주지 않습니다.</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">3000</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">3000</span><span class="p">));</span>
+    <span class="kd">const</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">3000</span><span class="p">));</span>
+    
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">);</span>
+    
+<span class="p">}</span>
+
+<span class="nx">foo</span><span class="p">();</span> <span class="c1">// 9초 후 1 2 3 이 출력된다.</span>
+</code></pre></div></div>
+
+<p>모든 프로미스에 await 키워드를 사용하는 것을 주의해야 한다. 위의 예시는 서로 연관이 없어 개별적으로 수행되는 비동기 처리이므로 앞의 비동기 처리가 완료될 때까지 대기할 필요가 없다. 따라서 다음과 같이 처리한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">all</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span>
+        <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">3000</span><span class="p">)),</span>
+        <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">3000</span><span class="p">)),</span>
+        <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">3000</span><span class="p">)),</span>
+    <span class="p">])</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">all</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">foo</span><span class="p">();</span> <span class="c1">// 약 3초 후 [1, 2, 3]이 출력된다.</span>
+</code></pre></div></div>
+
+<p>await 키워드는 <strong>앞선 비동기 처리의 결과를 가지고 다음 비동기 처리를 수행해야 하는 경우</strong> 사용하여 순차적으로 처리하게 하는 것이다.</p>
+
+<p><br /></p>
+
+<h2 id="3-에러-처리">3. 에러 처리</h2>
+
+<p>비동기 처리를 위한 콜백 패턴의 단점 중 하나는 에러 처리가 곤란하다는 것이다. 에러는 <strong>호출자</strong> 방향으로 전파된다. 즉, 콜 스택의 아래 방향으로 전파된다. 하지만 비동기 함수의 콜백 함수를 호출하는 것은 비동기 함수가 아니기 때문에 try catch문을 사용해 에러를 캐치할 수 없다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">hi</span><span class="dl">'</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 에러를 캐치하지 못한다.</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">에러 잡았다</span><span class="dl">'</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+C:\Users\ji yong kim\Desktop\js\test.js:3
+        throw new Error('hi');
+        ^
+
+Error: hi
+    at Timeout._onTimeout (C:\Users\ji yong kim\Desktop\js\test.js:3:15)
+    at listOnTimeout (internal/timers.js:554:17)
+    at processTimers (internal/timers.js:497:7)
+*/</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>async/await에서 에러 처리는 위와 다르게 try catch문을 사용할 수 있다. 콜백 함수를 인수로 전달받는 비동기 함수와 다르게 프로미스를 반환하는 비동기 함수는 명시적으로 호출할 수 있기 때문에 호출자가 명확하다.</p>
+
+<p>또한 async 함수 내에서 <strong>try catch 문을 사용해서 에러 처리를 하지 않으면 async 함수는 발생한 에러를 reject하는 프로미스를 반환한다.</strong> 따라서 후속 처리 메서드 catch를 사용해 에러를 캐치할 수도 있다.</p>
+
+    <div class="post-list-box">
+  
+  
+  
+    
+      
+      
+      
+      
+      
+  <a href="/javascript/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/javascript/2021/05/11/11_promise/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[JavaScript] 프로미스</p>
+        </div>
+      </a>
+    
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>

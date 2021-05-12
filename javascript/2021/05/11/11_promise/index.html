@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="SevenTwo's Devlog">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="글보다는 그림으로 표현하는 주니어 개발자의 블로그">
+  <meta property="og:image" content="/assets/images/seventwo_logo.png">
+  <meta property="og:url" content="https://jiyong1.github.io">
+  <title>[JavaScript] 프로미스</title>
+  <link rel="icon" href="/assets/images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/mdpost.css">
+  <script src="https://kit.fontawesome.com/63e1d65e2b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <script src="/assets/script/mode_init.js"></script>
+  
+<nav class="top-nav">
+  <div class="logo-con">
+    <img src="/assets/images/seventwo_logo.png" alt="seventwo 로고 이미지" class="logo-img">
+  </div>
+  <div class="b-name"><a href="/">SevenTwo</a></div>
+  <div class="toggle-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+  <div class="nav-list">
+    <ul>
+      
+        <li class="nav-items">
+          <a href="/" class="item other-link ">
+            Home
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/about/" class="item other-link ">
+            About
+          </a>
+        </li>
+      
+        <li class="nav-items">
+          <a href="/posts/" class="item other-link ">
+            Posts
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  <nav class="mode-con">
+  <div id="mode-btn">
+    <div class="mode-icon sun">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="mode-icon moon">
+      <i class="fas fa-moon"></i>
+    </div>
+    <!-- <div class="btn-circle"></div> -->
+    <script>
+      let btndiv = document.createElement('div');
+      let scheme = localStorage.getItem('scheme');
+      btndiv.dataset.mode = scheme;
+      btndiv.classList.add('btn-circle');
+
+      document.querySelector('#mode-btn').appendChild(btndiv);
+    </script>
+  </div>
+</nav>
+</nav>
+
+  <div class="container nav-margin">
+    <h1 id="js-프로미스">[JS] 프로미스</h1>
+
+<p>자바스크립트는 비동기 처리를 위한 하나의 패턴으로 <strong>콜백 함수</strong>를 사용한다. 하지만 콜백 패턴은 <strong>콜백 헬</strong>로 인해 가독성이 나쁘고 비동기 처리 중 발생한 에러의 처리가 곤란하며 여러 개의 비동기 처리를 한번에 하는데도 한계가 있다.</p>
+
+<p>위와 같은 단점을 보완하기 위해서 ES6에서 비동기 처리를 위한 패턴으로 <strong>프로미스(Promise)</strong>를 도입했다. 프로미스는 콜백 패턴의 단점을 보완하고 비동기 처리 시점을 명확하게 표현할 수 있다는 장점이 있다.</p>
+
+<p><br /></p>
+
+<h2 id="1-프로미스의-생성">1. 프로미스의 생성</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Promise</code>생성자 함수를 new 연산자와 함께 호출하면 프로미스 객체를 생성한다. Promise는 호스트 객체가 아닌 ECMAScript 사양에 정의된 표준 빌트인 객체이다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// GET 요청을 위한 비동기 함수</span>
+<span class="kd">const</span> <span class="nx">promiseGET</span> <span class="o">=</span> <span class="nx">url</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+        <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span> <span class="nx">url</span><span class="p">);</span>
+        <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+        
+        <span class="nx">xhr</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">resolve</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">response</span><span class="p">));</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">reject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="c1">// promiseGET 함수는 promise를 반환한다.</span>
+<span class="nx">promiseGET</span><span class="p">(</span><span class="dl">'</span><span class="s1">...</span><span class="dl">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p>프로미스는 다음과 같이 현재 비동기 처리가 어떤 상태인지 상태 정보를 갖는다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>프로미스의 상태 정보</th>
+      <th>의미</th>
+      <th>상태 변경 조건</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>pending</td>
+      <td>비동기 처리가 아직 수행되지 않은 상태</td>
+      <td>프로미스가 생성된 직후 기본 상태</td>
+    </tr>
+    <tr>
+      <td>fulfilled</td>
+      <td>비동기 처리가 수행된 상태 - 성공</td>
+      <td>resolve 함수 호출</td>
+    </tr>
+    <tr>
+      <td>rejected</td>
+      <td>비동기 처리가 수행된 상태 - 실패</td>
+      <td>reject 함수 호출</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h2 id="2-프로미스의-후속-처리-메서드">2. 프로미스의 후속 처리 메서드</h2>
+
+<p>프로미스의 비동기 처리 상태가 변화하면 이에 따라 후속 처리를 해야한다. 예를 들어, 프로미스가 fulfilled 상태가 되면 프로미스의 처리 결과를 가지고 무언가를 해야 하고, 프로미스가 rejected가 되면 프로미스의 처리 결과를 가지고 에러 처리를 해야한다.</p>
+
+<p><br /></p>
+
+<h3 id="21-promiseprototypethen">2.1 Promise.prototype.then</h3>
+
+<p>then 메서드는 두 개의 콜백 함수를 인수로 전달받는다.</p>
+
+<ol>
+  <li>첫 번째 콜백 함수는 프로미스가 fulfilled 상태가 되면 호출된다. 이때 콜백 함수는 프로미스의 비동기 처리 결과를 인수로 전달받는다.</li>
+  <li>두 번째 콜백 함수는 프로미스가 rejected 상태가 되면 호출된다. 이때 콜백 함수는 프로미스의 에러를 인수로 전달받는다.</li>
+</ol>
+
+<p>보통 catch를 사용하기 때문에 의아해 할 수 있으나 catch를 사용하는 것이 일반적이고, 원래 catch 메서드를 호출하면 내부적으로 then()을 호출한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">fulfilled</span><span class="dl">'</span><span class="p">))</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">),</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>then 메서드는 <strong>언제나 프로미스를 반환한다.</strong> 만약 then 메서드의 콜백 함수가 프로미스가 아닌 값을 반환하면 그 값을 암묵적으로 resolve 또는 reject하여 프로미스를 생성해 반환한다.</p>
+
+<p><br /></p>
+
+<h2 id="22-promiseprototypecatch">2.2 Promise.prototype.catch</h2>
+
+<p>catch 메서드의 콜백 함수는 프로미스가 rejected 상태인 경우만 호출된다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">reject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">hi</span><span class="dl">'</span><span class="p">)))</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+
+<span class="c1">// catch</span>
+<span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">reject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">hi</span><span class="dl">'</span><span class="p">)))</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>catch 메서드는 <code class="language-plaintext highlighter-rouge">then(undefined, onRejected)</code>와 동일하게 동작한다. 따라서 then과 마찬가지로 프로미스를 반환한다.</p>
+
+<p><br /></p>
+
+<h2 id="23-promiseprototypefinally">2.3 Promise.prototype.finally</h2>
+
+<p>finally 메서드는 하나의 콜백 함수를 인수로 받는다. finally 메서드의 콜백 함수는 프로미스의 성공, 실패와 상관 없이 무조건 호출된다. (이름과 같이..) 또한 then/catch와 마찬가지로 언제나 프로미스를 반환한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">reject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">hi</span><span class="dl">'</span><span class="p">)))</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+<span class="p">.</span><span class="k">finally</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">bye</span><span class="dl">'</span><span class="p">))</span>
+
+<span class="cm">/*
+Error: hi
+    at C:\Users\ji yong kim\Desktop\js\test.js:5:35
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\ji yong kim\Desktop\js\test.js:5:1)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)
+    at internal/main/run_main_module.js:17:47
+bye
+*/</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="3-프로미스-체이닝">3. 프로미스 체이닝</h2>
+
+<p>프로미스 메서드(then, catch, finally)는 언제나 프로미스를 반환하기 때문에 (반환하지 않더라도 암묵적으로 resolve 또는 reject하여 프로미스를 생성해 반환한다.) 연속적으로 호출할 수 있다. 이를 <strong>프로미스 체이닝 (promise chaining)</strong>이라고 한다.</p>
+
+<p>프로미스는 프로미스 체이닝을 통해 비동기 처리 결과를 전달받아 후속 처리를 하므로 콜백 패턴에서 발생하던 <strong>콜백 헬</strong>이 발생하지 않는다. 하지만 프로미스도 콜백 패턴을 사용하므로 콜백 함수를 사용하지 않는 것은 아니다. 결국 가독성이 안좋은건 동일하다..</p>
+
+<p>이러한 문제를 해결하기 위해 ES8에서 도입된 <strong>async/await</strong>를 통해 해결할 수 있다.</p>
+
+<p><br /></p>
+
+<h2 id="4-마이크로태스크-큐">4. 마이크로태스크 큐</h2>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">3</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="cm">/*
+2
+3
+1
+*/</span>
+</code></pre></div></div>
+
+<p>프로미스 후속 처리 메서드도 비동기로 처리하므로 1, 2, 3 순으로 출력될 것처럼 보이지만 <strong>2, 3, 1</strong> 순으로 출력된다. 그 이유는 프로미스의 후속 처리 메서드의 콜백 함수는 태스크 큐가 아닌 <strong>마이크로태스크 큐</strong>에 저장되기 때문이다.</p>
+
+<p>마이크로태스크 큐는 태스크 큐와 별도의 큐로 프로미스의 후속 처리 메서드의 콜백 함수가 일시 저장된다. 그 외의 비동기 함수의 콜백 함수나 이벤트 핸들러는 태스크 큐에 일시 저장된다.</p>
+
+<p><strong>마이크로태스크 큐는 태스크 큐보다 우선순위가 높다</strong>. 즉, 이벤트 루프는 콜 스택이 비면 먼저 마이크로태스크 큐에서 대기하고 있는 함수를 가져와 실행한다. 이후, 마이크로태스크 큐가 비면 태스크 큐에 대기하고 있는 함수를 가져와 실행한다.</p>
+
+<p><br /></p>
+
+<h2 id="5-fetch">5. fetch</h2>
+
+<p>fetch함수는 XMLHttpRequest 객체와 마찬가지로 HTTP 요청 전송 기능을 제공하는 클라이언트 사이드 Web API이다. fetch 함수는 사용법이 더 간단하고 프로미스를 지원하기 때문에 비동기 처리를 위한 콜백 패턴의 단점에서 자유롭다.</p>
+
+<p>fetch 함수에는 HTTP 요청을 전송할 URL과 HTTP 요청 메서드, HTTP 요청 헤더, 페이로드 등을 설정한 객체를 전달한다.</p>
+
+<p>fetch 함수는 HTTP 응답을 나타내는 Response 객체를 래핑한 Promise 객체를 반환한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">fetch</span><span class="p">(</span><span class="dl">'</span><span class="s1">https://jsonplaceholder.typicode.com/todos/1</span><span class="dl">'</span><span class="p">)</span>
+<span class="c1">// res는 HTTP 응답을 나타내는 Response 객체이다.</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">()</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">json</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">json</span><span class="p">))</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+</code></pre></div></div>
+
+
+    <div class="post-list-box">
+  
+  
+  
+    
+  
+    
+      
+      
+      
+      
+      
+  <a href="/javascript/" class="list-btn">카테고리 목록으로</a>
+  <div class="pn-btn-con">
+    
+      <a class="prev-btn pn-btn" href="/javascript/2021/05/10/10_asynchronous/">
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-left"></i>
+        </div>
+        <div class="btn-text">
+          <p class="small">이전 페이지</p>
+          <p>[JavaScript] 비동기 프로그래밍</p>
+        </div>
+      </a>
+    
+    
+      <a class="next-btn pn-btn" href="/javascript/2021/05/12/12_async_await/">
+        <div class="btn-text">
+          <p class="small">다음 페이지</p>
+          <p>[JavaScript] async/await</p>
+        </div>
+        <div class="btn-icon">
+          <i class="far fa-arrow-alt-circle-right"></i>
+        </div>
+      </a>
+    
+  </div>
+    
+</div>
+  </div>
+  <button class="up-arrow">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  <script src="/assets/script/nav.js"></script>
+  <script src="/assets/script/mode.js"></script>
+  <script src="/assets/script/up.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+</html>
